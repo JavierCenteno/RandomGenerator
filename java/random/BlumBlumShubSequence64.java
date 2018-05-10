@@ -69,15 +69,4 @@ public class BlumBlumShubSequence64 implements RandomSequence {
 		return current.longValue();
 	}
 
-	public static void main(String[] args) {
-		BlumBlumShubSequence64 prng = new BlumBlumShubSequence64(System.nanoTime());
-		int[] results = new int[100];
-		for(int i = 0; i < 10000000; ++i) {
-			++results[prng.nextUniformInteger(100)];
-		}
-		for(int i : results) {
-			System.out.println(i);
-		}
-	}
-
 }
