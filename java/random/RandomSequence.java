@@ -168,21 +168,21 @@ public interface RandomSequence {
 	 *            Standard deviation of the distribution.
 	 * @return A random byte with a normal distribution.
 	 */
-	public default byte nextNormalByte(byte mean, byte standardDeviation) {
+	public default byte nextNormalByte(double mean, double standardDeviation) {
 		return (byte) nextNormalLong(mean, standardDeviation);
 	}
 
 	/**
 	 * Get a random byte with a lognormal distribution.
 	 * 
-	 * @param mean
+	 * @param logMean
 	 *            Mean of the natural logarithm of the distribution.
-	 * @param standardDeviation
+	 * @param logStandardDeviation
 	 *            Standard deviation of the natural logarithm of the distribution.
 	 * @return A random byte with a lognormal distribution.
 	 */
-	public default byte nextLognormalInteger(byte naturalLogarithmMean, byte naturalLogarithmStandardDeviation) {
-		return (byte) nextLognormalLong(naturalLogarithmMean, naturalLogarithmStandardDeviation);
+	public default byte nextLognormalByte(double logMean, double logStandardDeviation) {
+		return (byte) nextLognormalLong(logMean, logStandardDeviation);
 	}
 
 	/**
@@ -214,7 +214,7 @@ public interface RandomSequence {
 	 * @throws IllegalArgumentException
 	 *             If shape is not larger than 0 or scale is not larger than 0.
 	 */
-	public default byte nextParetoByte(byte shape, byte scale) {
+	public default byte nextParetoByte(double shape, double scale) {
 		return (byte) nextParetoLong(shape, scale);
 	}
 
@@ -229,7 +229,7 @@ public interface RandomSequence {
 	 * @throws IllegalArgumentException
 	 *             If shape is not larger than 0 or scale is not larger than 0.
 	 */
-	public default byte nextWeibullByte(byte shape, byte scale) {
+	public default byte nextWeibullByte(double shape, double scale) {
 		return (byte) nextWeibullLong(shape, scale);
 	}
 
@@ -242,7 +242,7 @@ public interface RandomSequence {
 	 * @throws IllegalArgumentException
 	 *             If scale is not larger than 0.
 	 */
-	public default byte nextExponentialByte(byte scale) {
+	public default byte nextExponentialByte(double scale) {
 		return (byte) nextExponentialLong(scale);
 	}
 
@@ -257,7 +257,7 @@ public interface RandomSequence {
 	 * @throws IllegalArgumentException
 	 *             If shape is not larger than 0 or scale is not larger than 0.
 	 */
-	public default byte nextGammaByte(byte shape, byte scale) {
+	public default byte nextGammaByte(double shape, double scale) {
 		return (byte) nextGammaLong(shape, scale);
 	}
 
@@ -273,8 +273,21 @@ public interface RandomSequence {
 	 *             If shapeAlpha is not larger than 0 or shapeBeta is not larger
 	 *             than 0.
 	 */
-	public default byte nextBetaByte(byte shapeAlpha, byte shapeBeta) {
+	public default byte nextBetaByte(double shapeAlpha, double shapeBeta) {
 		return (byte) nextBetaLong(shapeAlpha, shapeBeta);
+	}
+
+	/**
+	 * Get a random byte with a poisson distribution.
+	 * 
+	 * @param rate
+	 *            Rate parameter of the distribution.
+	 * @return A random byte with a poisson distribution.
+	 * @throws IllegalArgumentException
+	 *             If rate is not larger than 0.
+	 */
+	public default byte nextPoissonByte(double rate) {
+		return (byte) nextPoissonLong(rate);
 	}
 
 	// -----------------------------------------------------------------------------
@@ -343,21 +356,21 @@ public interface RandomSequence {
 	 *            Standard deviation of the distribution.
 	 * @return A random short integer with a normal distribution.
 	 */
-	public default short nextNormalInteger(short mean, short standardDeviation) {
+	public default short nextNormalShort(double mean, double standardDeviation) {
 		return (short) nextNormalLong(mean, standardDeviation);
 	}
 
 	/**
 	 * Get a random short integer with a lognormal distribution.
 	 * 
-	 * @param mean
+	 * @param logMean
 	 *            Mean of the natural logarithm of the distribution.
-	 * @param standardDeviation
+	 * @param logStandardDeviation
 	 *            Standard deviation of the natural logarithm of the distribution.
 	 * @return A random short integer with a lognormal distribution.
 	 */
-	public default short nextLognormalInteger(short naturalLogarithmMean, short naturalLogarithmStandardDeviation) {
-		return (short) nextLognormalLong(naturalLogarithmMean, naturalLogarithmStandardDeviation);
+	public default short nextLognormalShort(double logMean, double logStandardDeviation) {
+		return (short) nextLognormalLong(logMean, logStandardDeviation);
 	}
 
 	/**
@@ -389,7 +402,7 @@ public interface RandomSequence {
 	 * @throws IllegalArgumentException
 	 *             If shape is not larger than 0 or scale is not larger than 0.
 	 */
-	public default short nextParetoShort(short shape, short scale) {
+	public default short nextParetoShort(double shape, double scale) {
 		return (short) nextParetoLong(shape, scale);
 	}
 
@@ -404,7 +417,7 @@ public interface RandomSequence {
 	 * @throws IllegalArgumentException
 	 *             If shape is not larger than 0 or scale is not larger than 0.
 	 */
-	public default short nextWeibullShort(short shape, short scale) {
+	public default short nextWeibullShort(double shape, double scale) {
 		return (short) nextWeibullLong(shape, scale);
 	}
 
@@ -417,7 +430,7 @@ public interface RandomSequence {
 	 * @throws IllegalArgumentException
 	 *             If scale is not larger than 0.
 	 */
-	public default short nextExponentialShort(short scale) {
+	public default short nextExponentialShort(double scale) {
 		return (short) nextExponentialLong(scale);
 	}
 
@@ -432,7 +445,7 @@ public interface RandomSequence {
 	 * @throws IllegalArgumentException
 	 *             If shape is not larger than 0 or scale is not larger than 0.
 	 */
-	public default short nextGammaShort(short shape, short scale) {
+	public default short nextGammaShort(double shape, double scale) {
 		return (short) nextGammaLong(shape, scale);
 	}
 
@@ -448,8 +461,21 @@ public interface RandomSequence {
 	 *             If shapeAlpha is not larger than 0 or shapeBeta is not larger
 	 *             than 0.
 	 */
-	public default short nextBetaShort(short shapeAlpha, short shapeBeta) {
+	public default short nextBetaShort(double shapeAlpha, double shapeBeta) {
 		return (short) nextBetaLong(shapeAlpha, shapeBeta);
+	}
+
+	/**
+	 * Get a random short integer with a poisson distribution.
+	 * 
+	 * @param rate
+	 *            Rate parameter of the distribution.
+	 * @return A random short integer with a poisson distribution.
+	 * @throws IllegalArgumentException
+	 *             If rate is not larger than 0.
+	 */
+	public default short nextPoissonShort(double rate) {
+		return (short) nextPoissonLong(rate);
 	}
 
 	// -----------------------------------------------------------------------------
@@ -518,21 +544,21 @@ public interface RandomSequence {
 	 *            Standard deviation of the distribution.
 	 * @return A random integer with a normal distribution.
 	 */
-	public default int nextNormalInteger(int mean, int standardDeviation) {
+	public default int nextNormalInteger(double mean, double standardDeviation) {
 		return (int) nextNormalLong(mean, standardDeviation);
 	}
 
 	/**
 	 * Get a random integer with a lognormal distribution.
 	 * 
-	 * @param mean
+	 * @param logMean
 	 *            Mean of the natural logarithm of the distribution.
-	 * @param standardDeviation
+	 * @param logStandardDeviation
 	 *            Standard deviation of the natural logarithm of the distribution.
 	 * @return A random integer with a lognormal distribution.
 	 */
-	public default int nextLognormalInteger(int naturalLogarithmMean, int naturalLogarithmStandardDeviation) {
-		return (int) nextLognormalLong(naturalLogarithmMean, naturalLogarithmStandardDeviation);
+	public default int nextLognormalInteger(double logMean, double logStandardDeviation) {
+		return (int) nextLognormalLong(logMean, logStandardDeviation);
 	}
 
 	/**
@@ -564,7 +590,7 @@ public interface RandomSequence {
 	 * @throws IllegalArgumentException
 	 *             If shape is not larger than 0 or scale is not larger than 0.
 	 */
-	public default int nextParetoInteger(int shape, int scale) {
+	public default int nextParetoInteger(double shape, double scale) {
 		return (int) nextParetoLong(shape, scale);
 	}
 
@@ -579,7 +605,7 @@ public interface RandomSequence {
 	 * @throws IllegalArgumentException
 	 *             If shape is not larger than 0 or scale is not larger than 0.
 	 */
-	public default int nextWeibullInteger(int shape, int scale) {
+	public default int nextWeibullInteger(double shape, double scale) {
 		return (int) nextWeibullLong(shape, scale);
 	}
 
@@ -592,7 +618,7 @@ public interface RandomSequence {
 	 * @throws IllegalArgumentException
 	 *             If scale is not larger than 0.
 	 */
-	public default int nextExponentialInteger(int scale) {
+	public default int nextExponentialInteger(double scale) {
 		return (int) nextExponentialLong(scale);
 	}
 
@@ -607,7 +633,7 @@ public interface RandomSequence {
 	 * @throws IllegalArgumentException
 	 *             If shape is not larger than 0 or scale is not larger than 0.
 	 */
-	public default int nextGammaInteger(int shape, int scale) {
+	public default int nextGammaInteger(double shape, double scale) {
 		return (int) nextGammaLong(shape, scale);
 	}
 
@@ -623,8 +649,21 @@ public interface RandomSequence {
 	 *             If shapeAlpha is not larger than 0 or shapeBeta is not larger
 	 *             than 0.
 	 */
-	public default int nextBetaInteger(int shapeAlpha, int shapeBeta) {
+	public default int nextBetaInteger(double shapeAlpha, double shapeBeta) {
 		return (int) nextBetaLong(shapeAlpha, shapeBeta);
+	}
+
+	/**
+	 * Get a random integer with a poisson distribution.
+	 * 
+	 * @param rate
+	 *            Rate parameter of the distribution.
+	 * @return A random integer with a poisson distribution.
+	 * @throws IllegalArgumentException
+	 *             If rate is not larger than 0.
+	 */
+	public default long nextPoissonInteger(double rate) {
+		return (int) nextPoissonLong(rate);
 	}
 
 	// -----------------------------------------------------------------------------
@@ -723,23 +762,21 @@ public interface RandomSequence {
 	 *            Standard deviation of the distribution.
 	 * @return A random long integer with a normal distribution.
 	 */
-	public default long nextNormalLong(long mean, long standardDeviation) {
-		double doubleMean = (double) mean;
-		double doubleStandardDeviation = (double) standardDeviation;
-		return Math.round(nextNormalDouble(doubleMean, doubleStandardDeviation));
+	public default long nextNormalLong(double mean, double standardDeviation) {
+		return Math.round(nextNormalDouble(mean, standardDeviation));
 	}
 
 	/**
 	 * Get a random long integer with a lognormal distribution.
 	 * 
-	 * @param mean
+	 * @param logMean
 	 *            Mean of the natural logarithm of the distribution.
-	 * @param standardDeviation
+	 * @param logStandardDeviation
 	 *            Standard deviation of the natural logarithm of the distribution.
 	 * @return A random long integer with a lognormal distribution.
 	 */
-	public default long nextLognormalLong(long naturalLogarithmMean, long naturalLogarithmStandardDeviation) {
-		return (long) nextLognormalDouble(naturalLogarithmMean, naturalLogarithmStandardDeviation);
+	public default long nextLognormalLong(double logMean, double logStandardDeviation) {
+		return (long) nextLognormalDouble(logMean, logStandardDeviation);
 	}
 
 	/**
@@ -776,7 +813,7 @@ public interface RandomSequence {
 	 * @throws IllegalArgumentException
 	 *             If shape is not larger than 0 or scale is not larger than 0.
 	 */
-	public default long nextParetoLong(long shape, long scale) {
+	public default long nextParetoLong(double shape, double scale) {
 		return (long) nextParetoDouble(shape, scale);
 	}
 
@@ -791,7 +828,7 @@ public interface RandomSequence {
 	 * @throws IllegalArgumentException
 	 *             If shape is not larger than 0 or scale is not larger than 0.
 	 */
-	public default long nextWeibullLong(long shape, long scale) {
+	public default long nextWeibullLong(double shape, double scale) {
 		return (long) nextWeibullDouble(shape, scale);
 	}
 
@@ -804,7 +841,7 @@ public interface RandomSequence {
 	 * @throws IllegalArgumentException
 	 *             If scale is not larger than 0.
 	 */
-	public default long nextExponentialLong(long scale) {
+	public default long nextExponentialLong(double scale) {
 		return (long) nextExponentialDouble(scale);
 	}
 
@@ -819,7 +856,7 @@ public interface RandomSequence {
 	 * @throws IllegalArgumentException
 	 *             If shape is not larger than 0 or scale is not larger than 0.
 	 */
-	public default long nextGammaLong(long shape, long scale) {
+	public default long nextGammaLong(double shape, double scale) {
 		return (long) nextGammaDouble(shape, scale);
 	}
 
@@ -835,8 +872,44 @@ public interface RandomSequence {
 	 *             If shapeAlpha is not larger than 0 or shapeBeta is not larger
 	 *             than 0.
 	 */
-	public default long nextBetaLong(long shapeAlpha, long shapeBeta) {
+	public default long nextBetaLong(double shapeAlpha, double shapeBeta) {
 		return (long) nextBetaDouble(shapeAlpha, shapeBeta);
+	}
+
+	/**
+	 * Get a random long integer with a poisson distribution.
+	 * 
+	 * @param rate
+	 *            Rate parameter of the distribution.
+	 * @return A random long integer with a poisson distribution.
+	 * @throws IllegalArgumentException
+	 *             If rate is not larger than 0.
+	 */
+	public default long nextPoissonLong(double rate) {
+		if (0 >= rate) {
+			throw new IllegalArgumentException();
+		}
+		double l = rate;
+		long k = -1;
+		double p = 1.0;
+		do {
+			k = k + 1;
+			double u;
+			do {
+				u = nextUniformDouble();
+			} while (u == 0.0 || u == 1.0);
+			p = p * u;
+			while (p < 1.0 && l > 0.0) {
+				if (l > 500.0) {
+					p = p * Math.pow(Math.E, 500.0);
+					l = l - 500.0;
+				} else {
+					p = p * Math.pow(Math.E, l);
+					l = 0.0;
+				}
+			}
+		} while (p > 1.0);
+		return k;
 	}
 
 	// -----------------------------------------------------------------------------
@@ -962,21 +1035,21 @@ public interface RandomSequence {
 	 *            Standard deviation of the distribution.
 	 * @return A random floating point with a normal distribution.
 	 */
-	public default float nextNormalFloat(float mean, float standardDeviation) {
+	public default float nextNormalFloat(double mean, double standardDeviation) {
 		return (float) nextNormalDouble(mean, standardDeviation);
 	}
 
 	/**
 	 * Get a random floating point with a lognormal distribution.
 	 * 
-	 * @param mean
+	 * @param logMean
 	 *            Mean of the natural logarithm of the distribution.
-	 * @param standardDeviation
+	 * @param logStandardDeviation
 	 *            Standard deviation of the natural logarithm of the distribution.
 	 * @return A random floating point with a lognormal distribution.
 	 */
-	public default float nextLognormalFloat(float naturalLogarithmMean, float naturalLogarithmStandardDeviation) {
-		return (float) nextLognormalDouble(naturalLogarithmMean, naturalLogarithmStandardDeviation);
+	public default float nextLognormalFloat(double logMean, double logStandardDeviation) {
+		return (float) nextLognormalDouble(logMean, logStandardDeviation);
 	}
 
 	/**
@@ -1016,7 +1089,7 @@ public interface RandomSequence {
 	 * @throws IllegalArgumentException
 	 *             If shape is not larger than 0 or scale is not larger than 0.
 	 */
-	public default float nextParetoFloat(float shape, float scale) {
+	public default float nextParetoFloat(double shape, double scale) {
 		return (float) nextParetoDouble(shape, scale);
 	}
 
@@ -1031,7 +1104,7 @@ public interface RandomSequence {
 	 * @throws IllegalArgumentException
 	 *             If shape is not larger than 0 or scale is not larger than 0.
 	 */
-	public default float nextWeibullFloat(float shape, float scale) {
+	public default float nextWeibullFloat(double shape, double scale) {
 		return (float) nextWeibullDouble(shape, scale);
 	}
 
@@ -1044,7 +1117,7 @@ public interface RandomSequence {
 	 * @throws IllegalArgumentException
 	 *             If scale is not larger than 0.
 	 */
-	public default float nextExponentialFloat(float scale) {
+	public default float nextExponentialFloat(double scale) {
 		return (float) nextExponentialDouble(scale);
 	}
 
@@ -1059,7 +1132,7 @@ public interface RandomSequence {
 	 * @throws IllegalArgumentException
 	 *             If shape is not larger than 0 or scale is not larger than 0.
 	 */
-	public default float nextGammaFloat(float shape, float scale) {
+	public default float nextGammaFloat(double shape, double scale) {
 		return (float) nextGammaDouble(shape, scale);
 	}
 
@@ -1075,7 +1148,7 @@ public interface RandomSequence {
 	 *             If shapeAlpha is not larger than 0 or shapeBeta is not larger
 	 *             than 0.
 	 */
-	public default float nextBetaFloat(float shapeAlpha, float shapeBeta) {
+	public default float nextBetaFloat(double shapeAlpha, double shapeBeta) {
 		return (float) nextBetaDouble(shapeAlpha, shapeBeta);
 	}
 
@@ -1219,14 +1292,14 @@ public interface RandomSequence {
 	/**
 	 * Get a random double floating point with a lognormal distribution.
 	 * 
-	 * @param mean
+	 * @param logMean
 	 *            Mean of the natural logarithm of the distribution.
-	 * @param standardDeviation
+	 * @param logStandardDeviation
 	 *            Standard deviation of the natural logarithm of the distribution.
 	 * @return A random double floating point with a lognormal distribution.
 	 */
-	public default double nextLognormalDouble(double naturalLogarithmMean, double naturalLogarithmStandardDeviation) {
-		return Math.exp(nextNormalDouble(naturalLogarithmMean, naturalLogarithmStandardDeviation));
+	public default double nextLognormalDouble(double logMean, double logStandardDeviation) {
+		return Math.exp(nextNormalDouble(logMean, logStandardDeviation));
 	}
 
 	/**
