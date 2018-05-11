@@ -10,7 +10,7 @@ This project offers an API for random number generation and some implementations
 
 ## Usage
 
-All methods are defined based on `nextUniformLong()`, so this API can be implemented by simply defining that method.
+All methods are defined based on `nextUniformLong()`, so this API can be implemented by simply implementing that method.
 
 ## Methods
 
@@ -27,3 +27,4 @@ Distributions include:
 * Exponential distribution
 * Gamma distribution
 * Beta distribution
+* Poisson distribution
