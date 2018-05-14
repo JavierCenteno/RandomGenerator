@@ -103,6 +103,20 @@ public interface RandomSequence {
 	}
 
 	// -----------------------------------------------------------------------------
+	// Bit methods
+
+	/**
+	 * Get a long integer containing a number of random bits.
+	 * 
+	 * @param bits
+	 *            Number of bits to return.
+	 * @return A long integer containing a number of random bits.
+	 */
+	public default long nextBits(int bits) {
+		return nextUniformLong() >>> (64 - bits);
+	}
+
+	// -----------------------------------------------------------------------------
 	// Byte methods
 
 	/**
