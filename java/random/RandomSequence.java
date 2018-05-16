@@ -77,7 +77,7 @@ public interface RandomSequence {
 	 * @return A random boolean.
 	 */
 	public default boolean nextBoolean() {
-		return nextUniformLong() < 0;
+		return nextUniformByte() < 0;
 	}
 
 	/**
@@ -125,7 +125,7 @@ public interface RandomSequence {
 	 * @return A random byte.
 	 */
 	public default byte nextUniformByte() {
-		return (byte) nextUniformLong();
+		return (byte) nextUniformShort();
 	}
 
 	/**
@@ -138,7 +138,7 @@ public interface RandomSequence {
 	 *             If max is not larger than 0.
 	 */
 	public default byte nextUniformByte(byte max) {
-		return (byte) nextUniformLong(max);
+		return (byte) nextUniformShort(max);
 	}
 
 	/**
@@ -153,7 +153,7 @@ public interface RandomSequence {
 	 *             If min is not smaller than max.
 	 */
 	public default byte nextUniformByte(byte min, byte max) {
-		return (byte) nextUniformLong(min, max);
+		return (byte) nextUniformShort(min, max);
 	}
 
 	/**
@@ -170,7 +170,7 @@ public interface RandomSequence {
 	 *             If min is not smaller than max.
 	 */
 	public default byte nextBatesByte(byte min, byte max, int number) {
-		return (byte) nextBatesLong(min, max, number);
+		return (byte) nextBatesShort(min, max, number);
 	}
 
 	/**
@@ -183,7 +183,7 @@ public interface RandomSequence {
 	 * @return A random byte with a normal distribution.
 	 */
 	public default byte nextNormalByte(double mean, double standardDeviation) {
-		return (byte) nextNormalLong(mean, standardDeviation);
+		return (byte) nextNormalShort(mean, standardDeviation);
 	}
 
 	/**
@@ -196,7 +196,7 @@ public interface RandomSequence {
 	 * @return A random byte with a lognormal distribution.
 	 */
 	public default byte nextLognormalByte(double logMean, double logStandardDeviation) {
-		return (byte) nextLognormalLong(logMean, logStandardDeviation);
+		return (byte) nextLognormalShort(logMean, logStandardDeviation);
 	}
 
 	/**
@@ -214,7 +214,7 @@ public interface RandomSequence {
 	 *             smaller than max.
 	 */
 	public default byte nextTriangularByte(byte min, byte max, byte mode) {
-		return (byte) nextTriangularLong(min, max, mode);
+		return (byte) nextTriangularShort(min, max, mode);
 	}
 
 	/**
@@ -229,7 +229,7 @@ public interface RandomSequence {
 	 *             If shape is not larger than 0 or scale is not larger than 0.
 	 */
 	public default byte nextParetoByte(double shape, double scale) {
-		return (byte) nextParetoLong(shape, scale);
+		return (byte) nextParetoShort(shape, scale);
 	}
 
 	/**
@@ -244,7 +244,7 @@ public interface RandomSequence {
 	 *             If shape is not larger than 0 or scale is not larger than 0.
 	 */
 	public default byte nextWeibullByte(double shape, double scale) {
-		return (byte) nextWeibullLong(shape, scale);
+		return (byte) nextWeibullShort(shape, scale);
 	}
 
 	/**
@@ -257,7 +257,7 @@ public interface RandomSequence {
 	 *             If scale is not larger than 0.
 	 */
 	public default byte nextExponentialByte(double scale) {
-		return (byte) nextExponentialLong(scale);
+		return (byte) nextExponentialShort(scale);
 	}
 
 	/**
@@ -272,7 +272,7 @@ public interface RandomSequence {
 	 *             If shape is not larger than 0 or scale is not larger than 0.
 	 */
 	public default byte nextGammaByte(double shape, double scale) {
-		return (byte) nextGammaLong(shape, scale);
+		return (byte) nextGammaShort(shape, scale);
 	}
 
 	/**
@@ -288,7 +288,7 @@ public interface RandomSequence {
 	 *             than 0.
 	 */
 	public default byte nextBetaByte(double shapeAlpha, double shapeBeta) {
-		return (byte) nextBetaLong(shapeAlpha, shapeBeta);
+		return (byte) nextBetaShort(shapeAlpha, shapeBeta);
 	}
 
 	/**
@@ -301,7 +301,7 @@ public interface RandomSequence {
 	 *             If rate is not larger than 0.
 	 */
 	public default byte nextPoissonByte(double rate) {
-		return (byte) nextPoissonLong(rate);
+		return (byte) nextPoissonShort(rate);
 	}
 
 	// -----------------------------------------------------------------------------
@@ -313,7 +313,7 @@ public interface RandomSequence {
 	 * @return A random short integer.
 	 */
 	public default short nextUniformShort() {
-		return (short) nextUniformLong();
+		return (short) nextUniformInteger();
 	}
 
 	/**
@@ -326,7 +326,7 @@ public interface RandomSequence {
 	 *             If max is not larger than 0.
 	 */
 	public default short nextUniformShort(short max) {
-		return (short) nextUniformLong(max);
+		return (short) nextUniformInteger(max);
 	}
 
 	/**
@@ -341,7 +341,7 @@ public interface RandomSequence {
 	 *             If min is not smaller than max.
 	 */
 	public default short nextUniformShort(short min, short max) {
-		return (short) nextUniformLong(min, max);
+		return (short) nextUniformInteger(min, max);
 	}
 
 	/**
@@ -358,7 +358,7 @@ public interface RandomSequence {
 	 *             If min is not smaller than max.
 	 */
 	public default short nextBatesShort(short min, short max, int number) {
-		return (short) nextBatesLong(min, max, number);
+		return (short) nextBatesInteger(min, max, number);
 	}
 
 	/**
@@ -371,7 +371,7 @@ public interface RandomSequence {
 	 * @return A random short integer with a normal distribution.
 	 */
 	public default short nextNormalShort(double mean, double standardDeviation) {
-		return (short) nextNormalLong(mean, standardDeviation);
+		return (short) nextNormalInteger(mean, standardDeviation);
 	}
 
 	/**
@@ -384,7 +384,7 @@ public interface RandomSequence {
 	 * @return A random short integer with a lognormal distribution.
 	 */
 	public default short nextLognormalShort(double logMean, double logStandardDeviation) {
-		return (short) nextLognormalLong(logMean, logStandardDeviation);
+		return (short) nextLognormalInteger(logMean, logStandardDeviation);
 	}
 
 	/**
@@ -402,7 +402,7 @@ public interface RandomSequence {
 	 *             smaller than max.
 	 */
 	public default short nextTriangularShort(short min, short max, short mode) {
-		return (short) nextTriangularLong(min, max, mode);
+		return (short) nextTriangularInteger(min, max, mode);
 	}
 
 	/**
@@ -417,7 +417,7 @@ public interface RandomSequence {
 	 *             If shape is not larger than 0 or scale is not larger than 0.
 	 */
 	public default short nextParetoShort(double shape, double scale) {
-		return (short) nextParetoLong(shape, scale);
+		return (short) nextParetoInteger(shape, scale);
 	}
 
 	/**
@@ -432,7 +432,7 @@ public interface RandomSequence {
 	 *             If shape is not larger than 0 or scale is not larger than 0.
 	 */
 	public default short nextWeibullShort(double shape, double scale) {
-		return (short) nextWeibullLong(shape, scale);
+		return (short) nextWeibullInteger(shape, scale);
 	}
 
 	/**
@@ -445,7 +445,7 @@ public interface RandomSequence {
 	 *             If scale is not larger than 0.
 	 */
 	public default short nextExponentialShort(double scale) {
-		return (short) nextExponentialLong(scale);
+		return (short) nextExponentialInteger(scale);
 	}
 
 	/**
@@ -460,7 +460,7 @@ public interface RandomSequence {
 	 *             If shape is not larger than 0 or scale is not larger than 0.
 	 */
 	public default short nextGammaShort(double shape, double scale) {
-		return (short) nextGammaLong(shape, scale);
+		return (short) nextGammaInteger(shape, scale);
 	}
 
 	/**
@@ -476,7 +476,7 @@ public interface RandomSequence {
 	 *             than 0.
 	 */
 	public default short nextBetaShort(double shapeAlpha, double shapeBeta) {
-		return (short) nextBetaLong(shapeAlpha, shapeBeta);
+		return (short) nextBetaInteger(shapeAlpha, shapeBeta);
 	}
 
 	/**
@@ -489,7 +489,7 @@ public interface RandomSequence {
 	 *             If rate is not larger than 0.
 	 */
 	public default short nextPoissonShort(double rate) {
-		return (short) nextPoissonLong(rate);
+		return (short) nextPoissonInteger(rate);
 	}
 
 	// -----------------------------------------------------------------------------
@@ -935,7 +935,7 @@ public interface RandomSequence {
 	 * @return A random floating point in the range [0.0, 1.0].
 	 */
 	public default float nextUniformFloat() {
-		return nextUniformLong((1L << 24) + 1) / (float) (1L << 24);
+		return nextUniformInteger((1 << 24) + 1) / (float) (1L << 24);
 	}
 
 	/**
