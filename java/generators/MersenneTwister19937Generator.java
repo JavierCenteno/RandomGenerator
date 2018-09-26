@@ -25,18 +25,20 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package random;
+package generators;
+
+import api.RandomGenerator;
 
 /**
  * Implementation of a Mersenne Twister 19937 PRNG with a state of 64 bits.
  * 
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
- * @see random.RandomSequence
+ * @see api.RandomGenerator
  * @since 1.0
  * 
  */
-public class MersenneTwister19937Sequence64 implements RandomSequence {
+public class MersenneTwister19937Generator implements RandomGenerator {
 
 	// -----------------------------------------------------------------------------
 	// Class fields
@@ -56,7 +58,7 @@ public class MersenneTwister19937Sequence64 implements RandomSequence {
 	// -----------------------------------------------------------------------------
 	// Instance initializers
 
-	public MersenneTwister19937Sequence64(long seed) {
+	public MersenneTwister19937Generator(byte[] seed) {
 		setSeed(seed);
 	}
 
@@ -64,10 +66,22 @@ public class MersenneTwister19937Sequence64 implements RandomSequence {
 	// Instance methods
 
 	@Override
-	public void setSeed(long seed) {
+	public void setSeed(byte[] seed) {
+		// Turn seed into a long
+		long longSeed;
+		long seed0 = ((long) state[0]) << 56;
+		long seed1 = ((long) state[0]) << 48;
+		long seed2 = ((long) state[0]) << 40;
+		long seed3 = ((long) state[0]) << 32;
+		long seed4 = ((long) state[0]) << 24;
+		long seed5 = ((long) state[0]) << 16;
+		long seed6 = ((long) state[0]) << 8;
+		long seed7 = (long) state[0];
+		longSeed = (seed0 & seed1 & seed2 & seed3 & seed4 & seed5 & seed6 & seed7);
+		// Initialize generator with the long seed
 		state = new long[STATE_SIZE];
 		index = 0;
-		state[index] = seed;
+		state[index] = longSeed;
 		while (index < STATE_SIZE - 1) {
 			long state_i = state[index];
 			state_i ^= state_i >>> 12;
@@ -82,17 +96,45 @@ public class MersenneTwister19937Sequence64 implements RandomSequence {
 	}
 
 	@Override
-	public long[] getState() {
-		return state;
+	public byte[] getState() {
+		int i = 0;
+		int j = 0;
+		byte[] byteState = new byte[STATE_SIZE * 8];
+		while (i < state.length) {
+			byteState[j++] = (byte) (state[i] << 56);
+			byteState[j++] = (byte) (state[i] << 48);
+			byteState[j++] = (byte) (state[i] << 40);
+			byteState[j++] = (byte) (state[i] << 32);
+			byteState[j++] = (byte) (state[i] << 24);
+			byteState[j++] = (byte) (state[i] << 16);
+			byteState[j++] = (byte) (state[i] << 8);
+			byteState[j++] = (byte) (state[i]);
+			i++;
+		}
+		return byteState;
 	}
 
 	@Override
-	public void setState(long[] state) {
-		this.state = state;
+	public void setState(byte[] state) {
+		int i = 0;
+		int j = 0;
+		long[] longState = new long[STATE_SIZE];
+		while (i < longState.length) {
+			long _0 = ((long) state[j++]) << 56;
+			long _1 = ((long) state[j++]) << 48;
+			long _2 = ((long) state[j++]) << 40;
+			long _3 = ((long) state[j++]) << 32;
+			long _4 = ((long) state[j++]) << 24;
+			long _5 = ((long) state[j++]) << 16;
+			long _6 = ((long) state[j++]) << 8;
+			long _7 = (long) state[j++];
+			longState[i++] = (_0 & _1 & _2 & _3 & _4 & _5 & _6 & _7);
+		}
+		this.state = longState;
 	}
 
 	@Override
-	public long nextUniformLong() {
+	public long getRandomUniformLong() {
 		if (index == STATE_SIZE) {
 			int i = 0;
 			while (i < SHIFT_SIZE) {

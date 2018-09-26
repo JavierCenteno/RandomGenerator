@@ -6,4 +6,4 @@
  * @since 1.0
  * 
  */
-package random;
+package generators;

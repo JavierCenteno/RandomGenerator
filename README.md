@@ -1,4 +1,4 @@
-# RandomSequence
+# RandomGenerator
 
 ## About
 
@@ -10,7 +10,7 @@ This project offers an API for random number generation and some implementations
 
 ## Usage
 
-All methods are defined based on `nextUniformLong()`, so this API can be implemented by simply implementing that method.
+The `api` package contains the `RandomGenerator` interface. In order to use it, you just need to implement the non-default methods. The `api` package also contains partial implementations for generators with states of different sizes: `Abstract8RandomGenerator` for generators with 8 bit states, `Abstract16RandomGenerator` for generators with 16 bit states, `Abstract32RandomGenerator` for generators with 32 bit states and `Abstract64RandomGenerator` for generators with 64 bit states.
 
 ## Methods
 
@@ -28,3 +28,7 @@ Distributions include:
 * Gamma distribution
 * Beta distribution
 * Poisson distribution
+
+## Generators
+
+The `generators` package contains a few implementations of the API with some well known random number generators.

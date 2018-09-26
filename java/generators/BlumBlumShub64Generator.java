@@ -1,17 +1,19 @@
-package random;
+package generators;
 
 import java.math.BigInteger;
+
+import api.RandomGenerator;
 
 /**
  * Implementation of a blum blum shub PRNG with a state of 64 bits.
  * 
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
- * @see random.RandomSequence
+ * @see api.RandomGenerator
  * @since 1.0
  * 
  */
-public class BlumBlumShubSequence64 implements RandomSequence {
+public class BlumBlumShub64Generator implements RandomGenerator {
 
 	// -----------------------------------------------------------------------------
 	// Class fields
@@ -34,30 +36,30 @@ public class BlumBlumShubSequence64 implements RandomSequence {
 	// -----------------------------------------------------------------------------
 	// Instance initializers
 
-	public BlumBlumShubSequence64(long seed) {
-		this.current = BigInteger.valueOf(seed);
+	public BlumBlumShub64Generator(byte[] seed) {
+		setSeed(seed);
 	}
 
 	// -----------------------------------------------------------------------------
 	// Instance methods
 
 	@Override
-	public void setSeed(long seed) {
-		this.current = BigInteger.valueOf(seed);
+	public void setSeed(byte[] seed) {
+		setState(seed);
 	}
 
 	@Override
-	public long[] getState() {
-		return new long[] { current.longValue() };
+	public byte[] getState() {
+		return current.toByteArray();
 	}
 
 	@Override
-	public void setState(long[] state) {
-		this.current = BigInteger.valueOf(state[0]);
+	public void setState(byte[] state) {
+		this.current = new BigInteger(state);
 	}
 
 	@Override
-	public long nextUniformLong() {
+	public long getRandomUniformLong() {
 		/*
 		 * This generator generates numbers in [0, 2^64 + 1). We generate numbers until
 		 * we have a number that isn't 2^64, that is, we have a number in [0, 2^64),

@@ -1,27 +1,28 @@
-package random;
+package generators;
+
+import api.Abstract64RandomGenerator;
 
 /**
  * Implementation of a xorshift PRNG with a state of 64 bits.
  * 
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
- * @see random.RandomSequence
+ * @see api.RandomGenerator
  * @since 1.0
  * 
  */
-public class XorshiftSequence64 implements RandomSequence {
+public class Xorshift64Generator extends Abstract64RandomGenerator {
 
 	// -----------------------------------------------------------------------------
 	// Instance fields
 
-	protected long current;
 	protected final int[] coefficients;
 
 	// -----------------------------------------------------------------------------
 	// Instance initializers
 
-	public XorshiftSequence64(long seed, int[] coefficients) {
-		this.current = seed;
+	public Xorshift64Generator(byte[] seed, int[] coefficients) {
+		super(seed);
 		this.coefficients = coefficients;
 	}
 
@@ -29,30 +30,15 @@ public class XorshiftSequence64 implements RandomSequence {
 	// Instance methods
 
 	@Override
-	public void setSeed(long seed) {
-		this.current = seed;
-	}
-
-	@Override
-	public long[] getState() {
-		return new long[] { current };
-	}
-
-	@Override
-	public void setState(long[] state) {
-		this.current = state[0];
-	}
-
-	@Override
-	public long nextUniformLong() {
+	public long getRandomUniformLong() {
 		for (int i = 0; i < coefficients.length; ++i) {
 			if (coefficients[i] > 0) {
-				current ^= current >>> coefficients[i];
+				this.state ^= this.state >>> coefficients[i];
 			} else {
-				current ^= current << -coefficients[i];
+				this.state ^= this.state << -coefficients[i];
 			}
 		}
-		return current;
+		return this.state;
 	}
 
 }

@@ -1,16 +1,16 @@
-package random;
+package generators;
 
 /**
  * Implementation of a xorshift+ PRNG with a state of 64 bits.
  * 
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
- * @see random.RandomSequence
- * @see random.XorshiftSequence64
+ * @see api.RandomGenerator
+ * @see generators.Xorshift64Generator
  * @since 1.0
  * 
  */
-public class XorshiftPlusSequence64 extends XorshiftSequence64 {
+public class XorshiftPlus64Generator extends Xorshift64Generator {
 
 	// -----------------------------------------------------------------------------
 	// Instance fields
@@ -20,7 +20,7 @@ public class XorshiftPlusSequence64 extends XorshiftSequence64 {
 	// -----------------------------------------------------------------------------
 	// Instance initializers
 
-	public XorshiftPlusSequence64(long seed, int[] coefficients, long increment) {
+	public XorshiftPlus64Generator(byte[] seed, int[] coefficients, long increment) {
 		super(seed, coefficients);
 		this.increment = increment;
 	}
@@ -29,10 +29,10 @@ public class XorshiftPlusSequence64 extends XorshiftSequence64 {
 	// Instance methods
 
 	@Override
-	public long nextUniformLong() {
-		super.nextUniformLong();
-		current += increment;
-		return current;
+	public long getRandomUniformLong() {
+		super.getRandomUniformLong();
+		this.state += increment;
+		return this.state;
 	}
 
 }
