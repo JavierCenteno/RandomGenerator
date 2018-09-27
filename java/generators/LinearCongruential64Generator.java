@@ -1,5 +1,7 @@
 package generators;
 
+import java.security.SecureRandom;
+
 import api.Abstract64RandomGenerator;
 
 /**
@@ -14,18 +16,25 @@ import api.Abstract64RandomGenerator;
 public class LinearCongruential64Generator extends Abstract64RandomGenerator {
 
 	// -----------------------------------------------------------------------------
-	// Instance fields
-
-	private final long multiplier;
-	private final long increment;
-
-	// -----------------------------------------------------------------------------
 	// Instance initializers
 
-	public LinearCongruential64Generator(byte[] seed, long multiplier, long increment) {
+	/**
+	 * Constructs a generator with a randomly chosen seed as given by SecureRandom.
+	 * 
+	 * @see SecureRandom
+	 */
+	public LinearCongruential64Generator() {
+		super();
+	}
+
+	/**
+	 * Constructs a generator with the given seed.
+	 * 
+	 * @param seed
+	 *                 A seed.
+	 */
+	public LinearCongruential64Generator(byte[] seed) {
 		super(seed);
-		this.multiplier = multiplier;
-		this.increment = increment;
 	}
 
 	// -----------------------------------------------------------------------------
@@ -33,7 +42,7 @@ public class LinearCongruential64Generator extends Abstract64RandomGenerator {
 
 	@Override
 	public long getRandomUniformLong() {
-		return this.state = this.state * multiplier + increment;
+		return this.state = this.state * 6364136223846793005L + 1442695040888963407L;
 	}
 
 }

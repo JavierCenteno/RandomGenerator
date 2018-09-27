@@ -1,6 +1,7 @@
 package generators;
 
 import java.math.BigInteger;
+import java.security.SecureRandom;
 
 import api.RandomGenerator;
 
@@ -36,6 +37,21 @@ public class BlumBlumShub64Generator implements RandomGenerator {
 	// -----------------------------------------------------------------------------
 	// Instance initializers
 
+	/**
+	 * Constructs a generator with a randomly chosen seed as given by SecureRandom.
+	 * 
+	 * @see SecureRandom
+	 */
+	public BlumBlumShub64Generator() {
+		setSeed(SecureRandom.getSeed(8));
+	}
+
+	/**
+	 * Constructs a generator with the given seed.
+	 * 
+	 * @param seed
+	 *                 A seed.
+	 */
 	public BlumBlumShub64Generator(byte[] seed) {
 		setSeed(seed);
 	}

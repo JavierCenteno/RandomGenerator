@@ -2,10 +2,10 @@ package generators;
 
 import java.security.SecureRandom;
 
-import api.Abstract64RandomGenerator;
+import api.Abstract32RandomGenerator;
 
 /**
- * Implementation of a xorshift PRNG with a state of 64 bits.
+ * Implementation of a linear congruential PRNG with a state of 64 bits.
  * 
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
@@ -13,7 +13,7 @@ import api.Abstract64RandomGenerator;
  * @since 1.0
  * 
  */
-public class Xorshift64Generator extends Abstract64RandomGenerator {
+public class LinearCongruential32Generator extends Abstract32RandomGenerator {
 
 	// -----------------------------------------------------------------------------
 	// Instance initializers
@@ -23,7 +23,7 @@ public class Xorshift64Generator extends Abstract64RandomGenerator {
 	 * 
 	 * @see SecureRandom
 	 */
-	public Xorshift64Generator() {
+	public LinearCongruential32Generator() {
 		super();
 	}
 
@@ -33,7 +33,7 @@ public class Xorshift64Generator extends Abstract64RandomGenerator {
 	 * @param seed
 	 *                 A seed.
 	 */
-	public Xorshift64Generator(byte[] seed) {
+	public LinearCongruential32Generator(byte[] seed) {
 		super(seed);
 	}
 
@@ -41,11 +41,8 @@ public class Xorshift64Generator extends Abstract64RandomGenerator {
 	// Instance methods
 
 	@Override
-	public long getRandomUniformLong() {
-		this.state ^= this.state >>> 12;
-		this.state ^= this.state << 25;
-		this.state ^= this.state >>> 27;
-		return this.state;
+	public int getRandomUniformInteger() {
+		return this.state = this.state * 134775813 + 1;
 	}
 
 }

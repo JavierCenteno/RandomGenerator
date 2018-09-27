@@ -1,5 +1,7 @@
 package generators;
 
+import java.security.SecureRandom;
+
 import api.Abstract16RandomGenerator;
 
 /**
@@ -15,14 +17,23 @@ import api.Abstract16RandomGenerator;
 public class Lehmer16Generator extends Abstract16RandomGenerator {
 
 	// -----------------------------------------------------------------------------
-	// Class fields
-
-	private static final int N = 65537;
-	private static final int G = 75;
-
-	// -----------------------------------------------------------------------------
 	// Instance initializers
 
+	/**
+	 * Constructs a generator with a randomly chosen seed as given by SecureRandom.
+	 * 
+	 * @see SecureRandom
+	 */
+	public Lehmer16Generator() {
+		super();
+	}
+
+	/**
+	 * Constructs a generator with the given seed.
+	 * 
+	 * @param seed
+	 *                 A seed.
+	 */
 	public Lehmer16Generator(byte[] seed) {
 		super(seed);
 	}
@@ -34,7 +45,7 @@ public class Lehmer16Generator extends Abstract16RandomGenerator {
 	public short getRandomUniformShort() {
 		int next = this.state;
 		do {
-			next = G * next % N;
+			next = 75 * next % 65537;
 		} while (next == 65536);
 		return this.state = (short) next;
 	}

@@ -18,6 +18,8 @@
 
 package api;
 
+import java.security.SecureRandom;
+
 /**
  * This class offers a partial implementation of RandomGenerator for a generator
  * with 32 bits of state.
@@ -40,6 +42,21 @@ public abstract class Abstract32RandomGenerator implements RandomGenerator {
 	// -----------------------------------------------------------------------------
 	// Instance initializers
 
+	/**
+	 * Constructs a generator with a randomly chosen seed as given by SecureRandom.
+	 * 
+	 * @see SecureRandom
+	 */
+	public Abstract32RandomGenerator() {
+		this(SecureRandom.getSeed(4));
+	}
+
+	/**
+	 * Constructs a generator with the given seed.
+	 * 
+	 * @param seed
+	 *                 A seed.
+	 */
 	public Abstract32RandomGenerator(byte[] seed) {
 		setSeed(seed);
 	}

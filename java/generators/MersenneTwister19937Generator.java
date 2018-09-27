@@ -27,6 +27,8 @@
  */
 package generators;
 
+import java.security.SecureRandom;
+
 import api.RandomGenerator;
 
 /**
@@ -58,6 +60,21 @@ public class MersenneTwister19937Generator implements RandomGenerator {
 	// -----------------------------------------------------------------------------
 	// Instance initializers
 
+	/**
+	 * Constructs a generator with a randomly chosen seed as given by SecureRandom.
+	 * 
+	 * @see SecureRandom
+	 */
+	public MersenneTwister19937Generator() {
+		setSeed(SecureRandom.getSeed(8));
+	}
+
+	/**
+	 * Constructs a generator with the given seed.
+	 * 
+	 * @param seed
+	 *                 A seed.
+	 */
 	public MersenneTwister19937Generator(byte[] seed) {
 		setSeed(seed);
 	}

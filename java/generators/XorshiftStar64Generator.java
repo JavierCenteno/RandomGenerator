@@ -1,5 +1,9 @@
 package generators;
 
+import java.security.SecureRandom;
+
+import api.Abstract64RandomGenerator;
+
 /**
  * Implementation of a xorshift* PRNG with a state of 64 bits.
  * 
@@ -10,21 +14,28 @@ package generators;
  * @since 1.0
  * 
  */
-public class XorshiftStar64Generator extends Xorshift64Generator {
-
-	// -----------------------------------------------------------------------------
-	// Instance fields
-
-	private final long multiplier;
-	private final long increment;
+public class XorshiftStar64Generator extends Abstract64RandomGenerator {
 
 	// -----------------------------------------------------------------------------
 	// Instance initializers
 
-	public XorshiftStar64Generator(byte[] seed, int[] coefficients, long multiplier, long increment) {
-		super(seed, coefficients);
-		this.multiplier = multiplier;
-		this.increment = increment;
+	/**
+	 * Constructs a generator with a randomly chosen seed as given by SecureRandom.
+	 * 
+	 * @see SecureRandom
+	 */
+	public XorshiftStar64Generator() {
+		super();
+	}
+
+	/**
+	 * Constructs a generator with the given seed.
+	 * 
+	 * @param seed
+	 *                 A seed.
+	 */
+	public XorshiftStar64Generator(byte[] seed) {
+		super(seed);
 	}
 
 	// -----------------------------------------------------------------------------
@@ -32,10 +43,10 @@ public class XorshiftStar64Generator extends Xorshift64Generator {
 
 	@Override
 	public long getRandomUniformLong() {
-		super.getRandomUniformLong();
-		this.state *= multiplier;
-		this.state += increment;
-		return this.state;
+		this.state ^= this.state >>> 12;
+		this.state ^= this.state << 25;
+		this.state ^= this.state >>> 27;
+		return this.state * 0x2545F4914F6CDD1DL;
 	}
 
 }
