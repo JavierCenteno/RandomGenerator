@@ -78,7 +78,7 @@ public interface RandomGenerator {
 
 			@Override
 			public void setSeed(long seed) {
-				throw new UnsupportedOperationException();
+				// Ignore the seed that the Random() constructor will try to impose on us.
 			}
 
 			@Override
