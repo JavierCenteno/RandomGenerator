@@ -20,6 +20,7 @@ package api;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -31,6 +32,113 @@ import java.util.Set;
  * 
  */
 public interface RandomGenerator {
+
+	// -----------------------------------------------------------------------------
+	// Random methods
+
+	/**
+	 * This method returns a Random object that wraps this generator.
+	 * 
+	 * @see Random
+	 * @return A Random object that wraps this generator.
+	 */
+	public default Random getRandom() {
+		/**
+		 * This class wraps a RandomGenerator using the standard library Random so you
+		 * can pass generators implemented with RandomGenerator to methods that require
+		 * a Random object.
+		 * 
+		 * @see Random
+		 * @author Javier Centeno Vega <jacenve@telefonica.net>
+		 * @version 1.0
+		 * @since 1.0
+		 * 
+		 */
+		class RandomWrapper extends Random {
+
+			// -----------------------------------------------------------------------------
+			// Class fields
+
+			private static final long serialVersionUID = 1L;
+
+			// -----------------------------------------------------------------------------
+			// Instance fields
+
+			RandomGenerator source;
+
+			// -----------------------------------------------------------------------------
+			// Instance initializers
+
+			public RandomWrapper(RandomGenerator source) {
+				this.source = source;
+			}
+
+			// -----------------------------------------------------------------------------
+			// Instance methods
+
+			@Override
+			public void setSeed(long seed) {
+				throw new UnsupportedOperationException();
+			}
+
+			@Override
+			public int next(int bits) {
+				return source.getRandomIntegerBits(bits);
+			}
+
+			@Override
+			public void nextBytes(byte[] bytes) {
+				for (int i = 0; i < bytes.length; ++i) {
+					bytes[i] = source.getRandomUniformByte();
+				}
+			}
+
+			@Override
+			public int nextInt() {
+				return source.getRandomUniformInteger();
+			}
+
+			@Override
+			public int nextInt(int n) {
+				return source.getRandomUniformInteger(n);
+			}
+
+			@Override
+			public long nextLong() {
+				return source.getRandomUniformLong();
+			}
+
+			@Override
+			public boolean nextBoolean() {
+				return source.getRandomBoolean();
+			}
+
+			@Override
+			public float nextFloat() {
+				float result;
+				do {
+					result = source.getRandomUniformFloat();
+				} while (result == 1.0f);
+				return result;
+			}
+
+			@Override
+			public double nextDouble() {
+				double result;
+				do {
+					result = source.getRandomUniformDouble();
+				} while (result == 1.0d);
+				return result;
+			}
+
+			@Override
+			public double nextGaussian() {
+				return source.getRandomNormalDouble(0.0d, 1.0d);
+			}
+
+		}
+		return new RandomWrapper(this);
+	}
 
 	// -----------------------------------------------------------------------------
 	// Seed methods
