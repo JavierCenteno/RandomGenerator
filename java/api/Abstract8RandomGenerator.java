@@ -86,7 +86,7 @@ public abstract class Abstract8RandomGenerator implements RandomGenerator {
 	public short getRandomUniformShort() {
 		short _0 = getRandomUniformByte();
 		short _1 = getRandomUniformByte();
-		return (short) (_0 << 8 & _1);
+		return (short) (_0 << 8 | _1);
 	}
 
 	@Override
@@ -95,7 +95,7 @@ public abstract class Abstract8RandomGenerator implements RandomGenerator {
 		int _1 = getRandomUniformByte();
 		int _2 = getRandomUniformByte();
 		int _3 = getRandomUniformByte();
-		return _0 << 24 & _1 << 16 & _2 << 8 & _3;
+		return _0 << 24 | _1 << 16 | _2 << 8 | _3;
 	}
 
 	@Override
@@ -108,7 +108,7 @@ public abstract class Abstract8RandomGenerator implements RandomGenerator {
 		long _5 = getRandomUniformByte();
 		long _6 = getRandomUniformByte();
 		long _7 = getRandomUniformByte();
-		return _0 << 56 & _1 << 48 & _2 << 40 & _3 << 32 & _4 << 24 & _5 << 16 & _6 << 8 & _7;
+		return _0 << 56 | _1 << 48 | _2 << 40 | _3 << 32 | _4 << 24 | _5 << 16 | _6 << 8 | _7;
 	}
 
 }

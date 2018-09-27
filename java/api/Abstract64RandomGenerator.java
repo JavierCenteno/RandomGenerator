@@ -92,7 +92,7 @@ public abstract class Abstract64RandomGenerator implements RandomGenerator {
 		long _5 = ((long) state[5]) << 16;
 		long _6 = ((long) state[6]) << 8;
 		long _7 = (long) state[7];
-		this.state = (_0 & _1 & _2 & _3 & _4 & _5 & _6 & _7);
+		this.state = (_0 | _1 | _2 | _3 | _4 | _5 | _6 | _7);
 	}
 
 	@Override

@@ -86,15 +86,15 @@ public class MersenneTwister19937Generator implements RandomGenerator {
 	public void setSeed(byte[] seed) {
 		// Turn seed into a long
 		long longSeed;
-		long seed0 = ((long) state[0]) << 56;
-		long seed1 = ((long) state[0]) << 48;
-		long seed2 = ((long) state[0]) << 40;
-		long seed3 = ((long) state[0]) << 32;
-		long seed4 = ((long) state[0]) << 24;
-		long seed5 = ((long) state[0]) << 16;
-		long seed6 = ((long) state[0]) << 8;
-		long seed7 = (long) state[0];
-		longSeed = (seed0 & seed1 & seed2 & seed3 & seed4 & seed5 & seed6 & seed7);
+		long seed0 = ((long) seed[0]) << 56;
+		long seed1 = ((long) seed[1]) << 48;
+		long seed2 = ((long) seed[2]) << 40;
+		long seed3 = ((long) seed[3]) << 32;
+		long seed4 = ((long) seed[4]) << 24;
+		long seed5 = ((long) seed[5]) << 16;
+		long seed6 = ((long) seed[6]) << 8;
+		long seed7 = (long) seed[7];
+		longSeed = (seed0 | seed1 | seed2 | seed3 | seed4 | seed5 | seed6 | seed7);
 		// Initialize generator with the long seed
 		state = new long[STATE_SIZE];
 		index = 0;

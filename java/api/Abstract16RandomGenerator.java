@@ -80,7 +80,7 @@ public abstract class Abstract16RandomGenerator implements RandomGenerator {
 	public void setState(byte[] state) {
 		short _0 = (short) (state[0] << 8);
 		short _1 = (short) (state[1]);
-		this.state = (short) (_0 & _1);
+		this.state = (short) (_0 | _1);
 	}
 
 	@Override
@@ -95,7 +95,7 @@ public abstract class Abstract16RandomGenerator implements RandomGenerator {
 	public int getRandomUniformInteger() {
 		int _0 = getRandomUniformShort();
 		int _1 = getRandomUniformShort();
-		return _0 << 16 & _1;
+		return _0 << 16 | _1;
 	}
 
 	@Override
@@ -104,7 +104,7 @@ public abstract class Abstract16RandomGenerator implements RandomGenerator {
 		long _1 = getRandomUniformShort();
 		long _2 = getRandomUniformShort();
 		long _3 = getRandomUniformShort();
-		return _0 << 48 & _1 << 32 & _2 << 16 & _3;
+		return _0 << 48 | _1 << 32 | _2 << 16 | _3;
 	}
 
 }

@@ -84,7 +84,7 @@ public abstract class Abstract32RandomGenerator implements RandomGenerator {
 		int _1 = (int) (state[1] << 16);
 		int _2 = (int) (state[2] << 8);
 		int _3 = (int) (state[3]);
-		this.state = (_0 & _1 & _2 & _3);
+		this.state = (_0 | _1 | _2 | _3);
 	}
 
 	@Override
@@ -104,7 +104,7 @@ public abstract class Abstract32RandomGenerator implements RandomGenerator {
 	public long getRandomUniformLong() {
 		long _0 = getRandomUniformInteger();
 		long _1 = getRandomUniformInteger();
-		return _0 << 32 & _1;
+		return _0 << 32 | _1;
 	}
 
 }
