@@ -12,6 +12,10 @@ This project offers an API for random number generation and some implementations
 
 The `api` package contains the `RandomGenerator` interface. In order to use it, you just need to implement the non-default methods. The `api` package also contains partial implementations for generators with states of different sizes: `Abstract8RandomGenerator` for generators with 8 bit states, `Abstract16RandomGenerator` for generators with 16 bit states, `Abstract32RandomGenerator` for generators with 32 bit states and `Abstract64RandomGenerator` for generators with 64 bit states.
 
+## Standard library compatibility
+
+The `RandomGenerator` interface includes a default method that returns the generator wrapped in a `java.util.Random` object so that generators created using this API can be passed to methods that take an instance of the standard library's `Random` as an argument.
+
 ## Methods
 
 This API includes methods to get and set the state of a generator, generate each type of value with different distributions and parameters, pick elements from collections and shuffle them.
