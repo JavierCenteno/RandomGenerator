@@ -84,26 +84,26 @@ public abstract class Abstract16RandomGenerator implements RandomGenerator {
 	}
 
 	@Override
-	public byte getRandomUniformByte() {
-		return (byte) getRandomUniformShort();
+	public byte generateUniformByte() {
+		return (byte) generateUniformShort();
 	}
 
 	@Override
-	public abstract short getRandomUniformShort();
+	public abstract short generateUniformShort();
 
 	@Override
-	public int getRandomUniformInteger() {
-		int _0 = getRandomUniformShort();
-		int _1 = getRandomUniformShort();
+	public int generateUniformInteger() {
+		int _0 = generateUniformShort();
+		int _1 = generateUniformShort();
 		return _0 << 16 | _1;
 	}
 
 	@Override
-	public long getRandomUniformLong() {
-		long _0 = getRandomUniformShort();
-		long _1 = getRandomUniformShort();
-		long _2 = getRandomUniformShort();
-		long _3 = getRandomUniformShort();
+	public long generateUniformLong() {
+		long _0 = generateUniformShort();
+		long _1 = generateUniformShort();
+		long _2 = generateUniformShort();
+		long _3 = generateUniformShort();
 		return _0 << 48 | _1 << 32 | _2 << 16 | _3;
 	}
 

@@ -42,7 +42,7 @@ public class Lehmer16Generator extends Abstract16RandomGenerator {
 	// Instance methods
 
 	@Override
-	public short getRandomUniformShort() {
+	public short generateUniformShort() {
 		int next = this.state;
 		do {
 			next = 75 * next % 65537;

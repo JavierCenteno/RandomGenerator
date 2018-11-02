@@ -75,7 +75,7 @@ public class BlumBlumShub64Generator implements RandomGenerator {
 	}
 
 	@Override
-	public long getRandomUniformLong() {
+	public long generateUniformLong() {
 		/*
 		 * This generator generates numbers in [0, 2^64 + 1). We generate numbers until
 		 * we have a number that isn't 2^64, that is, we have a number in [0, 2^64),

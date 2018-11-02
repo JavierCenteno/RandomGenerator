@@ -41,7 +41,7 @@ public class LinearCongruential64Generator extends Abstract64RandomGenerator {
 	// Instance methods
 
 	@Override
-	public long getRandomUniformLong() {
+	public long generateUniformLong() {
 		return this.state = this.state * 6364136223846793005L + 1442695040888963407L;
 	}
 

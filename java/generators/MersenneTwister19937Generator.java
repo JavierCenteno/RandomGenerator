@@ -151,7 +151,7 @@ public class MersenneTwister19937Generator implements RandomGenerator {
 	}
 
 	@Override
-	public long getRandomUniformLong() {
+	public long generateUniformLong() {
 		if (index == STATE_SIZE) {
 			int i = 0;
 			while (i < SHIFT_SIZE) {

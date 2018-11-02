@@ -41,7 +41,7 @@ public class LinearCongruential32Generator extends Abstract32RandomGenerator {
 	// Instance methods
 
 	@Override
-	public int getRandomUniformInteger() {
+	public int generateUniformInteger() {
 		return this.state = this.state * 134775813 + 1;
 	}
 

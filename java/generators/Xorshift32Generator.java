@@ -41,7 +41,7 @@ public class Xorshift32Generator extends Abstract32RandomGenerator {
 	// Instance methods
 
 	@Override
-	public int getRandomUniformInteger() {
+	public int generateUniformInteger() {
 		this.state ^= this.state << 13;
 		this.state ^= this.state >>> 17;
 		this.state ^= this.state << 5;

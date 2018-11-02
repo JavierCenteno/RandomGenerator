@@ -83,41 +83,41 @@ public interface RandomGenerator {
 
 			@Override
 			public int next(int bits) {
-				return source.getRandomIntegerBits(bits);
+				return source.generateIntegerBits(bits);
 			}
 
 			@Override
 			public void nextBytes(byte[] bytes) {
 				for (int i = 0; i < bytes.length; ++i) {
-					bytes[i] = source.getRandomUniformByte();
+					bytes[i] = source.generateUniformByte();
 				}
 			}
 
 			@Override
 			public int nextInt() {
-				return source.getRandomUniformInteger();
+				return source.generateUniformInteger();
 			}
 
 			@Override
 			public int nextInt(int n) {
-				return source.getRandomUniformInteger(n);
+				return source.generateUniformInteger(n);
 			}
 
 			@Override
 			public long nextLong() {
-				return source.getRandomUniformLong();
+				return source.generateUniformLong();
 			}
 
 			@Override
 			public boolean nextBoolean() {
-				return source.getRandomBoolean();
+				return source.generateBoolean();
 			}
 
 			@Override
 			public float nextFloat() {
 				float result;
 				do {
-					result = source.getRandomUniformFloat();
+					result = source.generateUniformFloat();
 				} while (result == 1.0f);
 				return result;
 			}
@@ -126,14 +126,14 @@ public interface RandomGenerator {
 			public double nextDouble() {
 				double result;
 				do {
-					result = source.getRandomUniformDouble();
+					result = source.generateUniformDouble();
 				} while (result == 1.0d);
 				return result;
 			}
 
 			@Override
 			public double nextGaussian() {
-				return source.getRandomNormalDouble(0.0d, 1.0d);
+				return source.generateNormalDouble(0.0d, 1.0d);
 			}
 
 		}
@@ -179,8 +179,8 @@ public interface RandomGenerator {
 	 * 
 	 * @return A random boolean.
 	 */
-	public default boolean getRandomBoolean() {
-		return getRandomUniformByte() < 0;
+	public default boolean generateBoolean() {
+		return generateUniformByte() < 0;
 	}
 
 	/**
@@ -190,8 +190,8 @@ public interface RandomGenerator {
 	 *                        Probability that this will return true.
 	 * @return A random boolean.
 	 */
-	public default boolean getRandomBoolean(float probability) {
-		return getRandomUniformFloat() < probability;
+	public default boolean generateBoolean(float probability) {
+		return generateUniformFloat() < probability;
 	}
 
 	/**
@@ -201,8 +201,8 @@ public interface RandomGenerator {
 	 *                        Probability that this will return true.
 	 * @return A random boolean.
 	 */
-	public default boolean getRandomBoolean(double probability) {
-		return getRandomUniformDouble() < probability;
+	public default boolean generateBoolean(double probability) {
+		return generateUniformDouble() < probability;
 	}
 
 	// -----------------------------------------------------------------------------
@@ -217,12 +217,12 @@ public interface RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If bits is not between 0 and 8.
 	 */
-	public default byte getRandomByteBits(int bits) {
+	public default byte generateByteBits(int bits) {
 		int shift = Byte.SIZE - bits;
 		if (shift < 0 || bits < 0) {
 			throw new IllegalArgumentException();
 		}
-		return (byte) (getRandomUniformByte() >>> shift);
+		return (byte) (generateUniformByte() >>> shift);
 	}
 
 	/**
@@ -234,12 +234,12 @@ public interface RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If bits is not between 0 and 8.
 	 */
-	public default short getRandomShortBits(int bits) {
+	public default short generateShortBits(int bits) {
 		int shift = Short.SIZE - bits;
 		if (shift < 0 || bits < 0) {
 			throw new IllegalArgumentException();
 		}
-		return (short) (getRandomUniformShort() >>> shift);
+		return (short) (generateUniformShort() >>> shift);
 	}
 
 	/**
@@ -251,12 +251,12 @@ public interface RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If bits is not between 0 and 8.
 	 */
-	public default int getRandomIntegerBits(int bits) {
+	public default int generateIntegerBits(int bits) {
 		int shift = Integer.SIZE - bits;
 		if (shift < 0 || bits < 0) {
 			throw new IllegalArgumentException();
 		}
-		return getRandomUniformInteger() >>> shift;
+		return generateUniformInteger() >>> shift;
 	}
 
 	/**
@@ -268,52 +268,73 @@ public interface RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If bits is not between 0 and 8.
 	 */
-	public default long getRandomLongBits(int bits) {
+	public default long generateLongBits(int bits) {
 		int shift = Long.SIZE - bits;
 		if (shift < 0 || bits < 0) {
 			throw new IllegalArgumentException();
 		}
-		return getRandomUniformLong() >>> shift;
+		return generateUniformLong() >>> shift;
 	}
 
 	// -----------------------------------------------------------------------------
 	// Byte methods
 
 	/**
-	 * Get a random byte.
-	 * 
-	 * @return A random byte.
+	 * @see RandomGenerator#generateUniformByte()
 	 */
-	public default byte getRandomUniformByte() {
-		return (byte) getRandomUniformShort();
+	public default byte generateByte() {
+		return generateUniformByte();
 	}
 
 	/**
-	 * Get a random byte between 0 and a number.
+	 * @see RandomGenerator#generateUniformByte(byte)
+	 */
+	public default byte generateByte(byte max) {
+		return generateUniformByte(max);
+	}
+
+	/**
+	 * @see RandomGenerator#generateUniformByte(byte, byte)
+	 */
+	public default byte generateByte(byte min, byte max) {
+		return generateUniformByte(min, max);
+	}
+
+	/**
+	 * Get a random byte with a uniform distribution.
+	 * 
+	 * @return A random byte with a uniform distribution.
+	 */
+	public default byte generateUniformByte() {
+		return (byte) generateUniformShort();
+	}
+
+	/**
+	 * Get a random byte with a uniform distribution between 0 and a number.
 	 * 
 	 * @param max
 	 *                Maximum value of the number, exclusive.
-	 * @return A random byte between 0 and a number.
+	 * @return A random byte with a uniform distribution between 0 and a number.
 	 * @throws IllegalArgumentException
 	 *                                      If max is not larger than 0.
 	 */
-	public default byte getRandomUniformByte(byte max) {
-		return (byte) getRandomUniformShort(max);
+	public default byte generateUniformByte(byte max) {
+		return (byte) generateUniformShort(max);
 	}
 
 	/**
-	 * Get a random byte between two numbers.
+	 * Get a random byte with a uniform distribution between two numbers.
 	 * 
 	 * @param min
 	 *                Minimum value of the number, inclusive.
 	 * @param max
 	 *                Maximum value of the number, exclusive.
-	 * @return A random byte between two numbers.
+	 * @return A random byte with a uniform distribution between two numbers.
 	 * @throws IllegalArgumentException
 	 *                                      If min is not smaller than max.
 	 */
-	public default byte getRandomUniformByte(byte min, byte max) {
-		return (byte) getRandomUniformShort(min, max);
+	public default byte generateUniformByte(byte min, byte max) {
+		return (byte) generateUniformShort(min, max);
 	}
 
 	/**
@@ -329,8 +350,8 @@ public interface RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If min is not smaller than max.
 	 */
-	public default byte getRandomBatesByte(byte min, byte max, int number) {
-		return (byte) getRandomBatesShort(min, max, number);
+	public default byte generateBatesByte(byte min, byte max, int number) {
+		return (byte) generateBatesShort(min, max, number);
 	}
 
 	/**
@@ -342,8 +363,8 @@ public interface RandomGenerator {
 	 *                              Standard deviation of the distribution.
 	 * @return A random byte with a normal distribution.
 	 */
-	public default byte getRandomNormalByte(double mean, double standardDeviation) {
-		return (byte) getRandomNormalShort(mean, standardDeviation);
+	public default byte generateNormalByte(double mean, double standardDeviation) {
+		return (byte) generateNormalShort(mean, standardDeviation);
 	}
 
 	/**
@@ -357,8 +378,8 @@ public interface RandomGenerator {
 	 *                                 of the distribution.
 	 * @return A random byte with a lognormal distribution.
 	 */
-	public default byte getRandomLognormalByte(double logMean, double logStandardDeviation) {
-		return (byte) getRandomLognormalShort(logMean, logStandardDeviation);
+	public default byte generateLognormalByte(double logMean, double logStandardDeviation) {
+		return (byte) generateLognormalShort(logMean, logStandardDeviation);
 	}
 
 	/**
@@ -375,8 +396,8 @@ public interface RandomGenerator {
 	 *                                      If min is not smaller than or equal to
 	 *                                      mode and mode is not smaller than max.
 	 */
-	public default byte getRandomTriangularByte(byte min, byte max, byte mode) {
-		return (byte) getRandomTriangularShort(min, max, mode);
+	public default byte generateTriangularByte(byte min, byte max, byte mode) {
+		return (byte) generateTriangularShort(min, max, mode);
 	}
 
 	/**
@@ -391,8 +412,8 @@ public interface RandomGenerator {
 	 *                                      If shape is not larger than 0 or scale
 	 *                                      is not larger than 0.
 	 */
-	public default byte getRandomParetoByte(double shape, double scale) {
-		return (byte) getRandomParetoShort(shape, scale);
+	public default byte generateParetoByte(double shape, double scale) {
+		return (byte) generateParetoShort(shape, scale);
 	}
 
 	/**
@@ -407,8 +428,8 @@ public interface RandomGenerator {
 	 *                                      If shape is not larger than 0 or scale
 	 *                                      is not larger than 0.
 	 */
-	public default byte getRandomWeibullByte(double shape, double scale) {
-		return (byte) getRandomWeibullShort(shape, scale);
+	public default byte generateWeibullByte(double shape, double scale) {
+		return (byte) generateWeibullShort(shape, scale);
 	}
 
 	/**
@@ -420,8 +441,8 @@ public interface RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If scale is not larger than 0.
 	 */
-	public default byte getRandomExponentialByte(double scale) {
-		return (byte) getRandomExponentialShort(scale);
+	public default byte generateExponentialByte(double scale) {
+		return (byte) generateExponentialShort(scale);
 	}
 
 	/**
@@ -436,8 +457,8 @@ public interface RandomGenerator {
 	 *                                      If shape is not larger than 0 or scale
 	 *                                      is not larger than 0.
 	 */
-	public default byte getRandomGammaByte(double shape, double scale) {
-		return (byte) getRandomGammaShort(shape, scale);
+	public default byte generateGammaByte(double shape, double scale) {
+		return (byte) generateGammaShort(shape, scale);
 	}
 
 	/**
@@ -452,8 +473,8 @@ public interface RandomGenerator {
 	 *                                      If shapeAlpha is not larger than 0 or
 	 *                                      shapeBeta is not larger than 0.
 	 */
-	public default byte getRandomBetaByte(double shapeAlpha, double shapeBeta) {
-		return (byte) getRandomBetaShort(shapeAlpha, shapeBeta);
+	public default byte generateBetaByte(double shapeAlpha, double shapeBeta) {
+		return (byte) generateBetaShort(shapeAlpha, shapeBeta);
 	}
 
 	/**
@@ -465,48 +486,69 @@ public interface RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If rate is not larger than 0.
 	 */
-	public default byte getRandomPoissonByte(double rate) {
-		return (byte) getRandomPoissonShort(rate);
+	public default byte generatePoissonByte(double rate) {
+		return (byte) generatePoissonShort(rate);
 	}
 
 	// -----------------------------------------------------------------------------
 	// Short integer methods
 
 	/**
-	 * Get a random short integer.
-	 * 
-	 * @return A random short integer.
+	 * @see RandomGenerator#generateUniformShort()
 	 */
-	public default short getRandomUniformShort() {
-		return (short) getRandomUniformInteger();
+	public default short generateShort() {
+		return generateUniformShort();
 	}
 
 	/**
-	 * Get a random short integer between 0 and a number.
+	 * @see RandomGenerator#generateUniformShort(short)
+	 */
+	public default short generateShort(short max) {
+		return generateUniformShort(max);
+	}
+
+	/**
+	 * @see RandomGenerator#generateUniformShort(short, short)
+	 */
+	public default short generateShort(short min, short max) {
+		return generateUniformShort(min, max);
+	}
+
+	/**
+	 * Get a random short integer with a uniform distribution.
+	 * 
+	 * @return A random short integer with a uniform distribution.
+	 */
+	public default short generateUniformShort() {
+		return (short) generateUniformInteger();
+	}
+
+	/**
+	 * Get a random short integer with a uniform distribution between 0 and a number.
 	 * 
 	 * @param max
 	 *                Maximum value of the number, exclusive.
-	 * @return A random short integer between 0 and a number.
+	 * @return A random short integer with a uniform distribution between 0 and a number.
 	 * @throws IllegalArgumentException
 	 *                                      If max is not larger than 0.
 	 */
-	public default short getRandomUniformShort(short max) {
-		return (short) getRandomUniformInteger(max);
+	public default short generateUniformShort(short max) {
+		return (short) generateUniformInteger(max);
 	}
 
 	/**
-	 * Get a random short integer between two numbers.
+	 * Get a random short integer with a uniform distribution between two numbers.
 	 * 
 	 * @param min
 	 *                Minimum value of the number, inclusive.
 	 * @param max
 	 *                Maximum value of the number, exclusive.
-	 * @return A random short integer between two numbers.
+	 * @return A random short integer with a uniform distribution between two numbers.
 	 * @throws IllegalArgumentException
 	 *                                      If min is not smaller than max.
 	 */
-	public default short getRandomUniformShort(short min, short max) {
-		return (short) getRandomUniformInteger(min, max);
+	public default short generateUniformShort(short min, short max) {
+		return (short) generateUniformInteger(min, max);
 	}
 
 	/**
@@ -522,8 +564,8 @@ public interface RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If min is not smaller than max.
 	 */
-	public default short getRandomBatesShort(short min, short max, int number) {
-		return (short) getRandomBatesInteger(min, max, number);
+	public default short generateBatesShort(short min, short max, int number) {
+		return (short) generateBatesInteger(min, max, number);
 	}
 
 	/**
@@ -535,8 +577,8 @@ public interface RandomGenerator {
 	 *                              Standard deviation of the distribution.
 	 * @return A random short integer with a normal distribution.
 	 */
-	public default short getRandomNormalShort(double mean, double standardDeviation) {
-		return (short) getRandomNormalInteger(mean, standardDeviation);
+	public default short generateNormalShort(double mean, double standardDeviation) {
+		return (short) generateNormalInteger(mean, standardDeviation);
 	}
 
 	/**
@@ -550,8 +592,8 @@ public interface RandomGenerator {
 	 *                                 of the distribution.
 	 * @return A random short integer with a lognormal distribution.
 	 */
-	public default short getRandomLognormalShort(double logMean, double logStandardDeviation) {
-		return (short) getRandomLognormalInteger(logMean, logStandardDeviation);
+	public default short generateLognormalShort(double logMean, double logStandardDeviation) {
+		return (short) generateLognormalInteger(logMean, logStandardDeviation);
 	}
 
 	/**
@@ -568,8 +610,8 @@ public interface RandomGenerator {
 	 *                                      If min is not smaller than or equal to
 	 *                                      mode and mode is not smaller than max.
 	 */
-	public default short getRandomTriangularShort(short min, short max, short mode) {
-		return (short) getRandomTriangularInteger(min, max, mode);
+	public default short generateTriangularShort(short min, short max, short mode) {
+		return (short) generateTriangularInteger(min, max, mode);
 	}
 
 	/**
@@ -584,8 +626,8 @@ public interface RandomGenerator {
 	 *                                      If shape is not larger than 0 or scale
 	 *                                      is not larger than 0.
 	 */
-	public default short getRandomParetoShort(double shape, double scale) {
-		return (short) getRandomParetoInteger(shape, scale);
+	public default short generateParetoShort(double shape, double scale) {
+		return (short) generateParetoInteger(shape, scale);
 	}
 
 	/**
@@ -600,8 +642,8 @@ public interface RandomGenerator {
 	 *                                      If shape is not larger than 0 or scale
 	 *                                      is not larger than 0.
 	 */
-	public default short getRandomWeibullShort(double shape, double scale) {
-		return (short) getRandomWeibullInteger(shape, scale);
+	public default short generateWeibullShort(double shape, double scale) {
+		return (short) generateWeibullInteger(shape, scale);
 	}
 
 	/**
@@ -613,8 +655,8 @@ public interface RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If scale is not larger than 0.
 	 */
-	public default short getRandomExponentialShort(double scale) {
-		return (short) getRandomExponentialInteger(scale);
+	public default short generateExponentialShort(double scale) {
+		return (short) generateExponentialInteger(scale);
 	}
 
 	/**
@@ -629,8 +671,8 @@ public interface RandomGenerator {
 	 *                                      If shape is not larger than 0 or scale
 	 *                                      is not larger than 0.
 	 */
-	public default short getRandomGammaShort(double shape, double scale) {
-		return (short) getRandomGammaInteger(shape, scale);
+	public default short generateGammaShort(double shape, double scale) {
+		return (short) generateGammaInteger(shape, scale);
 	}
 
 	/**
@@ -645,8 +687,8 @@ public interface RandomGenerator {
 	 *                                      If shapeAlpha is not larger than 0 or
 	 *                                      shapeBeta is not larger than 0.
 	 */
-	public default short getRandomBetaShort(double shapeAlpha, double shapeBeta) {
-		return (short) getRandomBetaInteger(shapeAlpha, shapeBeta);
+	public default short generateBetaShort(double shapeAlpha, double shapeBeta) {
+		return (short) generateBetaInteger(shapeAlpha, shapeBeta);
 	}
 
 	/**
@@ -658,48 +700,69 @@ public interface RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If rate is not larger than 0.
 	 */
-	public default short getRandomPoissonShort(double rate) {
-		return (short) getRandomPoissonInteger(rate);
+	public default short generatePoissonShort(double rate) {
+		return (short) generatePoissonInteger(rate);
 	}
 
 	// -----------------------------------------------------------------------------
 	// Integer methods
 
 	/**
-	 * Get a random integer.
-	 * 
-	 * @return A random integer.
+	 * @see RandomGenerator#generateUniformInteger()
 	 */
-	public default int getRandomUniformInteger() {
-		return (int) getRandomUniformLong();
+	public default int generateInteger() {
+		return generateUniformInteger();
 	}
 
 	/**
-	 * Get a random integer between 0 and a number.
+	 * @see RandomGenerator#generateUniformInteger(int)
+	 */
+	public default int generateInteger(int max) {
+		return generateUniformInteger(max);
+	}
+
+	/**
+	 * @see RandomGenerator#generateUniformInteger(int, int)
+	 */
+	public default int generateInteger(int min, int max) {
+		return generateUniformInteger(min, max);
+	}
+
+	/**
+	 * Get a random integer with a uniform distribution.
+	 * 
+	 * @return A random integer with a uniform distribution.
+	 */
+	public default int generateUniformInteger() {
+		return (int) generateUniformLong();
+	}
+
+	/**
+	 * Get a random integer with a uniform distribution between 0 and a number.
 	 * 
 	 * @param max
 	 *                Maximum value of the number, exclusive.
-	 * @return A random integer between 0 and a number.
+	 * @return A random integer with a uniform distribution between 0 and a number.
 	 * @throws IllegalArgumentException
 	 *                                      If max is not larger than 0.
 	 */
-	public default int getRandomUniformInteger(int max) {
-		return (int) getRandomUniformLong(max);
+	public default int generateUniformInteger(int max) {
+		return (int) generateUniformLong(max);
 	}
 
 	/**
-	 * Get a random integer between two numbers.
+	 * Get a random integer with a uniform distribution between two numbers.
 	 * 
 	 * @param min
 	 *                Minimum value of the number, inclusive.
 	 * @param max
 	 *                Maximum value of the number, exclusive.
-	 * @return A random integer between two numbers.
+	 * @return A random integer with a uniform distribution between two numbers.
 	 * @throws IllegalArgumentException
 	 *                                      If min is not smaller than max.
 	 */
-	public default int getRandomUniformInteger(int min, int max) {
-		return (int) getRandomUniformLong(min, max);
+	public default int generateUniformInteger(int min, int max) {
+		return (int) generateUniformLong(min, max);
 	}
 
 	/**
@@ -715,8 +778,8 @@ public interface RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If min is not smaller than max.
 	 */
-	public default int getRandomBatesInteger(int min, int max, int number) {
-		return (int) getRandomBatesLong(min, max, number);
+	public default int generateBatesInteger(int min, int max, int number) {
+		return (int) generateBatesLong(min, max, number);
 	}
 
 	/**
@@ -728,8 +791,8 @@ public interface RandomGenerator {
 	 *                              Standard deviation of the distribution.
 	 * @return A random integer with a normal distribution.
 	 */
-	public default int getRandomNormalInteger(double mean, double standardDeviation) {
-		return (int) getRandomNormalLong(mean, standardDeviation);
+	public default int generateNormalInteger(double mean, double standardDeviation) {
+		return (int) generateNormalLong(mean, standardDeviation);
 	}
 
 	/**
@@ -743,8 +806,8 @@ public interface RandomGenerator {
 	 *                                 of the distribution.
 	 * @return A random integer with a lognormal distribution.
 	 */
-	public default int getRandomLognormalInteger(double logMean, double logStandardDeviation) {
-		return (int) getRandomLognormalLong(logMean, logStandardDeviation);
+	public default int generateLognormalInteger(double logMean, double logStandardDeviation) {
+		return (int) generateLognormalLong(logMean, logStandardDeviation);
 	}
 
 	/**
@@ -761,8 +824,8 @@ public interface RandomGenerator {
 	 *                                      If min is not smaller than or equal to
 	 *                                      mode and mode is not smaller than max.
 	 */
-	public default int getRandomTriangularInteger(int min, int max, int mode) {
-		return (int) getRandomTriangularLong(min, max, mode);
+	public default int generateTriangularInteger(int min, int max, int mode) {
+		return (int) generateTriangularLong(min, max, mode);
 	}
 
 	/**
@@ -777,8 +840,8 @@ public interface RandomGenerator {
 	 *                                      If shape is not larger than 0 or scale
 	 *                                      is not larger than 0.
 	 */
-	public default int getRandomParetoInteger(double shape, double scale) {
-		return (int) getRandomParetoLong(shape, scale);
+	public default int generateParetoInteger(double shape, double scale) {
+		return (int) generateParetoLong(shape, scale);
 	}
 
 	/**
@@ -793,8 +856,8 @@ public interface RandomGenerator {
 	 *                                      If shape is not larger than 0 or scale
 	 *                                      is not larger than 0.
 	 */
-	public default int getRandomWeibullInteger(double shape, double scale) {
-		return (int) getRandomWeibullLong(shape, scale);
+	public default int generateWeibullInteger(double shape, double scale) {
+		return (int) generateWeibullLong(shape, scale);
 	}
 
 	/**
@@ -806,8 +869,8 @@ public interface RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If scale is not larger than 0.
 	 */
-	public default int getRandomExponentialInteger(double scale) {
-		return (int) getRandomExponentialLong(scale);
+	public default int generateExponentialInteger(double scale) {
+		return (int) generateExponentialLong(scale);
 	}
 
 	/**
@@ -822,8 +885,8 @@ public interface RandomGenerator {
 	 *                                      If shape is not larger than 0 or scale
 	 *                                      is not larger than 0.
 	 */
-	public default int getRandomGammaInteger(double shape, double scale) {
-		return (int) getRandomGammaLong(shape, scale);
+	public default int generateGammaInteger(double shape, double scale) {
+		return (int) generateGammaLong(shape, scale);
 	}
 
 	/**
@@ -838,8 +901,8 @@ public interface RandomGenerator {
 	 *                                      If shapeAlpha is not larger than 0 or
 	 *                                      shapeBeta is not larger than 0.
 	 */
-	public default int getRandomBetaInteger(double shapeAlpha, double shapeBeta) {
-		return (int) getRandomBetaLong(shapeAlpha, shapeBeta);
+	public default int generateBetaInteger(double shapeAlpha, double shapeBeta) {
+		return (int) generateBetaLong(shapeAlpha, shapeBeta);
 	}
 
 	/**
@@ -851,30 +914,51 @@ public interface RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If rate is not larger than 0.
 	 */
-	public default int getRandomPoissonInteger(double rate) {
-		return (int) getRandomPoissonLong(rate);
+	public default int generatePoissonInteger(double rate) {
+		return (int) generatePoissonLong(rate);
 	}
 
 	// -----------------------------------------------------------------------------
 	// Long integer methods
 
 	/**
-	 * Get a random long integer.
-	 * 
-	 * @return A random long integer.
+	 * @see RandomGenerator#generateUniformLong()
 	 */
-	public long getRandomUniformLong();
+	public default long generateLong() {
+		return generateUniformLong();
+	}
 
 	/**
-	 * Get a random long integer between 0 and a number.
+	 * @see RandomGenerator#generateUniformLong(long)
+	 */
+	public default long generateLong(long max) {
+		return generateUniformLong(max);
+	}
+
+	/**
+	 * @see RandomGenerator#generateUniformLong(long, long)
+	 */
+	public default long generateLong(long min, long max) {
+		return generateUniformLong(min, max);
+	}
+
+	/**
+	 * Get a random long integer with a uniform distribution.
+	 * 
+	 * @return A random long integer with a uniform distribution.
+	 */
+	public long generateUniformLong();
+
+	/**
+	 * Get a random long integer with a uniform distribution between 0 and a number.
 	 * 
 	 * @param max
 	 *                Maximum value of the number, exclusive.
-	 * @return A random long integer between 0 and a number.
+	 * @return A random long integer with a uniform distribution between 0 and a number.
 	 * @throws IllegalArgumentException
 	 *                                      If max is not larger than 0.
 	 */
-	public default long getRandomUniformLong(long max) {
+	public default long generateUniformLong(long max) {
 		if (0 >= max) {
 			throw new IllegalArgumentException();
 		}
@@ -885,27 +969,27 @@ public interface RandomGenerator {
 		// Maximum value without modulo bias, inclusive
 		long unbiasedMaximum = Long.MAX_VALUE - moduloBias;
 		do {
-			result = getRandomUniformLong() & 0x7F_FF_FF_FF_FF_FF_FF_FFL;
+			result = generateUniformLong() & 0x7F_FF_FF_FF_FF_FF_FF_FFL;
 		} while (result > unbiasedMaximum);
 		return result % max;
 	}
 
 	/**
-	 * Get a random long integer between two numbers.
+	 * Get a random long integer with a uniform distribution between two numbers.
 	 * 
 	 * @param min
 	 *                Minimum value of the number, inclusive.
 	 * @param max
 	 *                Maximum value of the number, exclusive.
-	 * @return A random long integer between two numbers.
+	 * @return A random long integer with a uniform distribution between two numbers.
 	 * @throws IllegalArgumentException
 	 *                                      If min is not smaller than max.
 	 */
-	public default long getRandomUniformLong(long min, long max) {
+	public default long generateUniformLong(long min, long max) {
 		if (min >= max) {
 			throw new IllegalArgumentException();
 		}
-		return getRandomUniformLong(max - min) + min;
+		return generateUniformLong(max - min) + min;
 	}
 
 	/**
@@ -921,14 +1005,14 @@ public interface RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If min is not smaller than max.
 	 */
-	public default long getRandomBatesLong(long min, long max, int number) {
+	public default long generateBatesLong(long min, long max, int number) {
 		if (min >= max) {
 			throw new IllegalArgumentException();
 		}
 		int res = 0;
 		long range = max - min;
 		for (int i = 0; i < number; ++i) {
-			res += getRandomUniformLong(range);
+			res += generateUniformLong(range);
 		}
 		/*
 		 * Improve the distribution of random numbers. Up until here, res is in [0,
@@ -936,7 +1020,7 @@ public interface RandomGenerator {
 		 * res will be in [0, range * number - 1]. After dividing res by number, res
 		 * will be in [0, range - 1].
 		 */
-		res += getRandomUniformLong(number);
+		res += generateUniformLong(number);
 		res /= number;
 		res += min;
 		return res;
@@ -951,8 +1035,8 @@ public interface RandomGenerator {
 	 *                              Standard deviation of the distribution.
 	 * @return A random long integer with a normal distribution.
 	 */
-	public default long getRandomNormalLong(double mean, double standardDeviation) {
-		return Math.round(getRandomNormalDouble(mean, standardDeviation));
+	public default long generateNormalLong(double mean, double standardDeviation) {
+		return Math.round(generateNormalDouble(mean, standardDeviation));
 	}
 
 	/**
@@ -966,8 +1050,8 @@ public interface RandomGenerator {
 	 *                                 of the distribution.
 	 * @return A random long integer with a lognormal distribution.
 	 */
-	public default long getRandomLognormalLong(double logMean, double logStandardDeviation) {
-		return (long) getRandomLognormalDouble(logMean, logStandardDeviation);
+	public default long generateLognormalLong(double logMean, double logStandardDeviation) {
+		return (long) generateLognormalDouble(logMean, logStandardDeviation);
 	}
 
 	/**
@@ -984,13 +1068,13 @@ public interface RandomGenerator {
 	 *                                      If min is not smaller than or equal to
 	 *                                      mode and mode is not smaller than max.
 	 */
-	public default long getRandomTriangularLong(long min, long max, long mode) {
+	public default long generateTriangularLong(long min, long max, long mode) {
 		double doubleMin = (double) min;
 		double doubleMax = (double) max;
 		double doubleMode = (double) mode;
 		// Improve the distribution when switching between long and double
 		doubleMode = doubleMode * (doubleMax / (doubleMax - 1));
-		return (long) (getRandomTriangularDouble(doubleMin, doubleMax, doubleMode));
+		return (long) (generateTriangularDouble(doubleMin, doubleMax, doubleMode));
 	}
 
 	/**
@@ -1005,8 +1089,8 @@ public interface RandomGenerator {
 	 *                                      If shape is not larger than 0 or scale
 	 *                                      is not larger than 0.
 	 */
-	public default long getRandomParetoLong(double shape, double scale) {
-		return (long) getRandomParetoDouble(shape, scale);
+	public default long generateParetoLong(double shape, double scale) {
+		return (long) generateParetoDouble(shape, scale);
 	}
 
 	/**
@@ -1021,8 +1105,8 @@ public interface RandomGenerator {
 	 *                                      If shape is not larger than 0 or scale
 	 *                                      is not larger than 0.
 	 */
-	public default long getRandomWeibullLong(double shape, double scale) {
-		return (long) getRandomWeibullDouble(shape, scale);
+	public default long generateWeibullLong(double shape, double scale) {
+		return (long) generateWeibullDouble(shape, scale);
 	}
 
 	/**
@@ -1034,8 +1118,8 @@ public interface RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If scale is not larger than 0.
 	 */
-	public default long getRandomExponentialLong(double scale) {
-		return (long) getRandomExponentialDouble(scale);
+	public default long generateExponentialLong(double scale) {
+		return (long) generateExponentialDouble(scale);
 	}
 
 	/**
@@ -1050,8 +1134,8 @@ public interface RandomGenerator {
 	 *                                      If shape is not larger than 0 or scale
 	 *                                      is not larger than 0.
 	 */
-	public default long getRandomGammaLong(double shape, double scale) {
-		return (long) getRandomGammaDouble(shape, scale);
+	public default long generateGammaLong(double shape, double scale) {
+		return (long) generateGammaDouble(shape, scale);
 	}
 
 	/**
@@ -1066,8 +1150,8 @@ public interface RandomGenerator {
 	 *                                      If shapeAlpha is not larger than 0 or
 	 *                                      shapeBeta is not larger than 0.
 	 */
-	public default long getRandomBetaLong(double shapeAlpha, double shapeBeta) {
-		return (long) getRandomBetaDouble(shapeAlpha, shapeBeta);
+	public default long generateBetaLong(double shapeAlpha, double shapeBeta) {
+		return (long) generateBetaDouble(shapeAlpha, shapeBeta);
 	}
 
 	/**
@@ -1079,7 +1163,7 @@ public interface RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If rate is not larger than 0.
 	 */
-	public default long getRandomPoissonLong(double rate) {
+	public default long generatePoissonLong(double rate) {
 		if (0 >= rate) {
 			throw new IllegalArgumentException();
 		}
@@ -1090,7 +1174,7 @@ public interface RandomGenerator {
 			k = k + 1;
 			double u;
 			do {
-				u = getRandomUniformDouble();
+				u = generateUniformDouble();
 			} while (u == 0.0 || u == 1.0);
 			p = p * u;
 			while (p < 1.0 && l > 0.0) {
@@ -1110,46 +1194,67 @@ public interface RandomGenerator {
 	// Floating point methods
 
 	/**
-	 * Get a random floating point in the range [0.0, 1.0].
-	 * 
-	 * @return A random floating point in the range [0.0, 1.0].
+	 * @see RandomGenerator#generateUniformFloat()
 	 */
-	public default float getRandomUniformFloat() {
-		return getRandomUniformInteger((1 << 24) + 1) / (float) (1L << 24);
+	public default float generateFloat() {
+		return generateUniformFloat();
 	}
 
 	/**
-	 * Get a random floating point between 0 and a number.
+	 * @see RandomGenerator#generateUniformFloat(float)
+	 */
+	public default float generateFloat(float max) {
+		return generateUniformFloat(max);
+	}
+
+	/**
+	 * @see RandomGenerator#generateUniformFloat(float, float)
+	 */
+	public default float generateFloat(float min, float max) {
+		return generateUniformFloat(min, max);
+	}
+
+	/**
+	 * Get a random floating point with a uniform distribution in the range [0.0, 1.0].
+	 * 
+	 * @return A random floating point with a uniform distribution in the range [0.0, 1.0].
+	 */
+	public default float generateUniformFloat() {
+		return generateUniformInteger((1 << 24) + 1) / (float) (1L << 24);
+	}
+
+	/**
+	 * Get a random floating point with a uniform distribution between 0 and a number.
 	 * 
 	 * @param max
 	 *                Maximum value of the number, inclusive.
-	 * @return A random floating point between 0 and a number.
+	 * @return A random floating point with a uniform distribution between 0 and a number.
 	 * @throws IllegalArgumentException
 	 *                                      If max is not larger than 0.
 	 */
-	public default float getRandomUniformFloat(float max) {
+	public default float generateUniformFloat(float max) {
 		if (0 >= max) {
 			throw new IllegalArgumentException();
 		}
-		return getRandomUniformFloat() * max;
+		return generateUniformFloat() * max;
 	}
 
 	/**
-	 * Get a random floating point between two numbers.
+	 * Get a random floating point with a uniform distribution between two numbers.
 	 * 
 	 * @param min
 	 *                Minimum value of the number, inclusive.
 	 * @param max
 	 *                Maximum value of the number, inclusive.
-	 * @return A random floating point between two numbers.
+	 * @return A random floating point with a uniform distribution between two numbers.
 	 * @throws IllegalArgumentException
 	 *                                      If min is not smaller than max.
 	 */
-	public default float getRandomUniformFloat(float min, float max) {
+	public default float generateUniformFloat(float min, float max) {
 		if (min >= max) {
 			throw new IllegalArgumentException();
 		}
-		return min + getRandomUniformFloat(max - min);
+		return min + generateUniformFloat(max - min);
 	}
 
 	/**
@@ -1161,10 +1266,10 @@ public interface RandomGenerator {
 	 * @return A random floating point with a Bates distribution in the range [0.0,
 	 *         1.0].
 	 */
-	public default float getRandomBatesFloat(int number) {
+	public default float generateBatesFloat(int number) {
 		float res = 0;
 		for (int i = 0; i < number; ++i) {
-			res += getRandomUniformFloat();
+			res += generateUniformFloat();
 		}
 		res /= number;
 		return res;
@@ -1182,13 +1287,13 @@ public interface RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If max is not larger than 0.
 	 */
-	public default float getRandomBatesFloat(float max, int number) {
+	public default float generateBatesFloat(float max, int number) {
 		if (0 >= max) {
 			throw new IllegalArgumentException();
 		}
 		float res = 0;
 		for (int i = 0; i < number; ++i) {
-			res += getRandomUniformFloat(max);
+			res += generateUniformFloat(max);
 		}
 		res /= number;
 		return res;
@@ -1208,13 +1313,13 @@ public interface RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If min is not smaller than max.
 	 */
-	public default float getRandomBatesFloat(float min, float max, int number) {
+	public default float generateBatesFloat(float min, float max, int number) {
 		if (min >= max) {
 			throw new IllegalArgumentException();
 		}
 		float res = 0;
 		for (int i = 0; i < number; ++i) {
-			res += getRandomUniformFloat(min, max);
+			res += generateUniformFloat(min, max);
 		}
 		res /= number;
 		return res;
@@ -1229,8 +1334,8 @@ public interface RandomGenerator {
 	 *                              Standard deviation of the distribution.
 	 * @return A random floating point with a normal distribution.
 	 */
-	public default float getRandomNormalFloat(double mean, double standardDeviation) {
-		return (float) getRandomNormalDouble(mean, standardDeviation);
+	public default float generateNormalFloat(double mean, double standardDeviation) {
+		return (float) generateNormalDouble(mean, standardDeviation);
 	}
 
 	/**
@@ -1244,8 +1349,8 @@ public interface RandomGenerator {
 	 *                                 of the distribution.
 	 * @return A random floating point with a lognormal distribution.
 	 */
-	public default float getRandomLognormalFloat(double logMean, double logStandardDeviation) {
-		return (float) getRandomLognormalDouble(logMean, logStandardDeviation);
+	public default float generateLognormalFloat(double logMean, double logStandardDeviation) {
+		return (float) generateLognormalDouble(logMean, logStandardDeviation);
 	}
 
 	/**
@@ -1262,11 +1367,11 @@ public interface RandomGenerator {
 	 *                                      If min is not smaller than or equal to
 	 *                                      mode and mode is not smaller than max.
 	 */
-	public default float getRandomTriangularFloat(float min, float max, float mode) {
+	public default float generateTriangularFloat(float min, float max, float mode) {
 		if (!(min < mode && mode < max)) {
 			throw new IllegalArgumentException();
 		}
-		float uniformFloat = getRandomUniformFloat(min, max);
+		float uniformFloat = generateUniformFloat(min, max);
 		if (uniformFloat < mode) {
 			return (float) (min + Math.sqrt(uniformFloat * (mode - min)));
 		} else {
@@ -1286,8 +1391,8 @@ public interface RandomGenerator {
 	 *                                      If shape is not larger than 0 or scale
 	 *                                      is not larger than 0.
 	 */
-	public default float getRandomParetoFloat(double shape, double scale) {
-		return (float) getRandomParetoDouble(shape, scale);
+	public default float generateParetoFloat(double shape, double scale) {
+		return (float) generateParetoDouble(shape, scale);
 	}
 
 	/**
@@ -1302,8 +1407,8 @@ public interface RandomGenerator {
 	 *                                      If shape is not larger than 0 or scale
 	 *                                      is not larger than 0.
 	 */
-	public default float getRandomWeibullFloat(double shape, double scale) {
-		return (float) getRandomWeibullDouble(shape, scale);
+	public default float generateWeibullFloat(double shape, double scale) {
+		return (float) generateWeibullDouble(shape, scale);
 	}
 
 	/**
@@ -1315,8 +1420,8 @@ public interface RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If scale is not larger than 0.
 	 */
-	public default float getRandomExponentialFloat(double scale) {
-		return (float) getRandomExponentialDouble(scale);
+	public default float generateExponentialFloat(double scale) {
+		return (float) generateExponentialDouble(scale);
 	}
 
 	/**
@@ -1331,8 +1436,8 @@ public interface RandomGenerator {
 	 *                                      If shape is not larger than 0 or scale
 	 *                                      is not larger than 0.
 	 */
-	public default float getRandomGammaFloat(double shape, double scale) {
-		return (float) getRandomGammaDouble(shape, scale);
+	public default float generateGammaFloat(double shape, double scale) {
+		return (float) generateGammaDouble(shape, scale);
 	}
 
 	/**
@@ -1347,54 +1452,75 @@ public interface RandomGenerator {
 	 *                                      If shapeAlpha is not larger than 0 or
 	 *                                      shapeBeta is not larger than 0.
 	 */
-	public default float getRandomBetaFloat(double shapeAlpha, double shapeBeta) {
-		return (float) getRandomBetaDouble(shapeAlpha, shapeBeta);
+	public default float generateBetaFloat(double shapeAlpha, double shapeBeta) {
+		return (float) generateBetaDouble(shapeAlpha, shapeBeta);
 	}
 
 	// -----------------------------------------------------------------------------
 	// Double floating point methods
 
 	/**
-	 * Get a random double floating point in the range [0.0, 1.0].
-	 * 
-	 * @return A random double floating point in the range [0.0, 1.0].
+	 * @see RandomGenerator#generateUniformDouble()
 	 */
-	public default double getRandomUniformDouble() {
-		return getRandomUniformLong((1L << 53) + 1) / (double) (1L << 53);
+	public default double generateDouble() {
+		return generateUniformDouble();
 	}
 
 	/**
-	 * Get a random double floating point between 0 and a number.
+	 * @see RandomGenerator#generateUniformDouble(double)
+	 */
+	public default double generateDouble(float max) {
+		return generateUniformDouble(max);
+	}
+
+	/**
+	 * @see RandomGenerator#generateUniformDouble(double, double)
+	 */
+	public default double generateDouble(double min, double max) {
+		return generateUniformDouble(min, max);
+	}
+
+	/**
+	 * Get a random double floating point with a uniform distribution in the range [0.0, 1.0].
+	 * 
+	 * @return A random double floating point with a uniform distribution in the range [0.0, 1.0].
+	 */
+	public default double generateUniformDouble() {
+		return generateUniformLong((1L << 53) + 1) / (double) (1L << 53);
+	}
+
+	/**
+	 * Get a random double floating point with a uniform distribution between 0 and a number.
 	 * 
 	 * @param max
 	 *                Maximum value of the number, inclusive.
-	 * @return A random double floating point between 0 and a number.
+	 * @return A random double floating point with a uniform distribution between 0 and a number.
 	 * @throws IllegalArgumentException
 	 *                                      If max is not larger than 0.
 	 */
-	public default double getRandomUniformDouble(double max) {
+	public default double generateUniformDouble(double max) {
 		if (0 >= max) {
 			throw new IllegalArgumentException();
 		}
-		return getRandomUniformDouble() * max;
+		return generateUniformDouble() * max;
 	}
 
 	/**
-	 * Get a random double floating point between two numbers.
+	 * Get a random double floating point with a uniform distribution between two numbers.
 	 * 
 	 * @param min
 	 *                Minimum value of the number, inclusive.
 	 * @param max
 	 *                Maximum value of the number, inclusive.
-	 * @return A random double floating point between two numbers.
+	 * @return A random double floating point with a uniform distribution between two numbers.
 	 * @throws IllegalArgumentException
 	 *                                      If min is not smaller than max.
 	 */
-	public default double getRandomUniformDouble(double min, double max) {
+	public default double generateUniformDouble(double min, double max) {
 		if (min >= max) {
 			throw new IllegalArgumentException();
 		}
-		return min + getRandomUniformDouble(max - min);
+		return min + generateUniformDouble(max - min);
 	}
 
 	/**
@@ -1406,10 +1532,10 @@ public interface RandomGenerator {
 	 * @return A random double floating point with a Bates distribution in the range
 	 *         [0.0, 1.0].
 	 */
-	public default double getRandomBatesDouble(int number) {
+	public default double generateBatesDouble(int number) {
 		double res = 0;
 		for (int i = 0; i < number; ++i) {
-			res += getRandomUniformDouble();
+			res += generateUniformDouble();
 		}
 		res /= number;
 		return res;
@@ -1428,13 +1554,13 @@ public interface RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If max is not larger than 0.
 	 */
-	public default double getRandomBatesDouble(double max, int number) {
+	public default double generateBatesDouble(double max, int number) {
 		if (0 >= max) {
 			throw new IllegalArgumentException();
 		}
 		double res = 0;
 		for (int i = 0; i < number; ++i) {
-			res += getRandomUniformDouble(max);
+			res += generateUniformDouble(max);
 		}
 		res /= number;
 		return res;
@@ -1455,13 +1581,13 @@ public interface RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If min is not smaller than max.
 	 */
-	public default double getRandomBatesDouble(double min, double max, int number) {
+	public default double generateBatesDouble(double min, double max, int number) {
 		if (min >= max) {
 			throw new IllegalArgumentException();
 		}
 		double res = 0;
 		for (int i = 0; i < number; ++i) {
-			res += getRandomUniformDouble(min, max);
+			res += generateUniformDouble(min, max);
 		}
 		res /= number;
 		return res;
@@ -1476,13 +1602,13 @@ public interface RandomGenerator {
 	 *                              Standard deviation of the distribution.
 	 * @return A random double floating point with a normal distribution.
 	 */
-	public default double getRandomNormalDouble(double mean, double standardDeviation) {
+	public default double generateNormalDouble(double mean, double standardDeviation) {
 		double random1;
 		double random2;
 		double squareSum;
 		do {
-			random1 = getRandomUniformDouble(-1, 1);
-			random2 = getRandomUniformDouble(-1, 1);
+			random1 = generateUniformDouble(-1, 1);
+			random2 = generateUniformDouble(-1, 1);
 			squareSum = random1 * random1 + random2 * random2;
 		} while (squareSum >= 1 || squareSum == 0);
 		return standardDeviation * random1 * Math.sqrt(-2 * Math.log(squareSum) / squareSum) + mean;
@@ -1499,8 +1625,8 @@ public interface RandomGenerator {
 	 *                                 of the distribution.
 	 * @return A random double floating point with a lognormal distribution.
 	 */
-	public default double getRandomLognormalDouble(double logMean, double logStandardDeviation) {
-		return Math.exp(getRandomNormalDouble(logMean, logStandardDeviation));
+	public default double generateLognormalDouble(double logMean, double logStandardDeviation) {
+		return Math.exp(generateNormalDouble(logMean, logStandardDeviation));
 	}
 
 	/**
@@ -1517,11 +1643,11 @@ public interface RandomGenerator {
 	 *                                      If min is not smaller than or equal to
 	 *                                      mode and mode is not smaller than max.
 	 */
-	public default double getRandomTriangularDouble(double min, double max, double mode) {
+	public default double generateTriangularDouble(double min, double max, double mode) {
 		if (!(min <= mode && mode <= max)) {
 			throw new IllegalArgumentException();
 		}
-		double uniformDouble = getRandomUniformDouble(min, max);
+		double uniformDouble = generateUniformDouble(min, max);
 		if (uniformDouble < mode) {
 			return (min + Math.sqrt(uniformDouble * (mode - min)));
 		} else {
@@ -1541,13 +1667,13 @@ public interface RandomGenerator {
 	 *                                      If shape is not larger than 0 or scale
 	 *                                      is not larger than 0.
 	 */
-	public default double getRandomParetoDouble(double shape, double scale) {
+	public default double generateParetoDouble(double shape, double scale) {
 		if (0 >= shape || 0 >= scale) {
 			throw new IllegalArgumentException();
 		}
 		double random;
 		do {
-			random = getRandomUniformDouble();
+			random = generateUniformDouble();
 		} while (random == 0);
 		return scale / Math.pow(random, 1 / shape);
 	}
@@ -1564,13 +1690,13 @@ public interface RandomGenerator {
 	 *                                      If shape is not larger than 0 or scale
 	 *                                      is not larger than 0.
 	 */
-	public default double getRandomWeibullDouble(double shape, double scale) {
+	public default double generateWeibullDouble(double shape, double scale) {
 		if (0 >= shape || 0 >= scale) {
 			throw new IllegalArgumentException();
 		}
 		double random;
 		do {
-			random = getRandomUniformDouble();
+			random = generateUniformDouble();
 		} while (random == 0);
 		return scale * Math.pow(-Math.log(random), 1 / shape);
 	}
@@ -1584,10 +1710,10 @@ public interface RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If scale is not larger than 0.
 	 */
-	public default double getRandomExponentialDouble(double scale) {
+	public default double generateExponentialDouble(double scale) {
 		double uniform;
 		do {
-			uniform = getRandomUniformDouble();
+			uniform = generateUniformDouble();
 		} while (uniform == 0);
 		return Math.log(uniform) * scale;
 	}
@@ -1604,7 +1730,7 @@ public interface RandomGenerator {
 	 *                                      If shape is not larger than 0 or scale
 	 *                                      is not larger than 0.
 	 */
-	public default double getRandomGammaDouble(double shape, double scale) {
+	public default double generateGammaDouble(double shape, double scale) {
 		if (0 >= shape || 0 >= scale) {
 			throw new IllegalArgumentException();
 		}
@@ -1616,24 +1742,24 @@ public interface RandomGenerator {
 			double uniform;
 			double normal;
 			do {
-				normal = getRandomNormalDouble(0, 1);
+				normal = generateNormalDouble(0, 1);
 				v = (1 + c * normal);
 				v = v * v * v;
 				dv = d * v;
 				// Generate uniform in (0, 1]
 				do {
-					uniform = getRandomUniformDouble();
+					uniform = generateUniformDouble();
 				} while (uniform == 0);
 			} while (v <= 0 || Math.log(uniform) >= 0.5 * normal * normal + d - dv + d * Math.log(v));
 			return dv * scale;
 		} else if (shape == 1) {
-			return getRandomExponentialDouble(scale);
+			return generateExponentialDouble(scale);
 		} else {
 			double uniform;
 			do {
-				uniform = getRandomUniformDouble();
+				uniform = generateUniformDouble();
 			} while (uniform == 0);
-			return getRandomGammaDouble(shape + 1, scale) * Math.pow(uniform, 1 / shape);
+			return generateGammaDouble(shape + 1, scale) * Math.pow(uniform, 1 / shape);
 		}
 	}
 
@@ -1649,12 +1775,12 @@ public interface RandomGenerator {
 	 *                                      If shapeAlpha is not larger than 0 or
 	 *                                      shapeBeta is not larger than 0.
 	 */
-	public default double getRandomBetaDouble(double shapeAlpha, double shapeBeta) {
-		double gamma = getRandomGammaDouble(shapeAlpha, 1.0);
+	public default double generateBetaDouble(double shapeAlpha, double shapeBeta) {
+		double gamma = generateGammaDouble(shapeAlpha, 1.0);
 		if (gamma == 0) {
 			return 0;
 		} else {
-			return gamma / (gamma + getRandomGammaDouble(shapeBeta, 1.0));
+			return gamma / (gamma + generateGammaDouble(shapeBeta, 1.0));
 		}
 	}
 
@@ -1668,8 +1794,8 @@ public interface RandomGenerator {
 	 *                     A string of characters this method will pick from.
 	 * @return A random character from the given String.
 	 */
-	public default char getRandomCharacter(String alphabet) {
-		return alphabet.charAt(getRandomUniformInteger(alphabet.length()));
+	public default char generateCharacter(String alphabet) {
+		return alphabet.charAt(generateUniformInteger(alphabet.length()));
 	}
 
 	// -----------------------------------------------------------------------------
@@ -1682,10 +1808,10 @@ public interface RandomGenerator {
 	 *                     A string of characters this method will pick from.
 	 * @return A random String from characters picked from the given String.
 	 */
-	public default String getRandomString(String alphabet, int lenght) {
+	public default String generateString(String alphabet, int lenght) {
 		StringBuilder stringBuilder = new StringBuilder(lenght);
 		for (int i = 0; i < lenght; ++i) {
-			stringBuilder.append(getRandomCharacter(alphabet));
+			stringBuilder.append(generateCharacter(alphabet));
 		}
 		return stringBuilder.toString();
 	}
@@ -1700,8 +1826,8 @@ public interface RandomGenerator {
 	 *                     An array of elements.
 	 * @return A random element from an array.
 	 */
-	public default <T> T getRandomElement(T[] elements) {
-		int index = getRandomUniformInteger(elements.length);
+	public default <T> T pick(T[] elements) {
+		int index = generateUniformInteger(elements.length);
 		return elements[index];
 	}
 
@@ -1714,7 +1840,7 @@ public interface RandomGenerator {
 	 */
 	public default <T> T[] shuffle(T[] elements) {
 		for (int i = 0; i < elements.length; ++i) {
-			int j = getRandomUniformInteger(elements.length);
+			int j = generateUniformInteger(elements.length);
 			T temporary = elements[i];
 			elements[i] = elements[j];
 			elements[j] = temporary;
@@ -1732,8 +1858,8 @@ public interface RandomGenerator {
 	 *                     A list of elements.
 	 * @return A random element from a list.
 	 */
-	public default <T> T getRandomElement(List<T> elements) {
-		int index = getRandomUniformInteger(elements.size());
+	public default <T> T pick(List<T> elements) {
+		int index = generateUniformInteger(elements.size());
 		return elements.get(index);
 	}
 
@@ -1746,7 +1872,7 @@ public interface RandomGenerator {
 	 */
 	public default <T> List<T> shuffle(List<T> elements) {
 		for (int i = 0; i < elements.size(); ++i) {
-			int j = getRandomUniformInteger(elements.size());
+			int j = generateUniformInteger(elements.size());
 			T temporary = elements.get(i);
 			elements.set(i, elements.get(j));
 			elements.set(j, temporary);
@@ -1761,8 +1887,8 @@ public interface RandomGenerator {
 	 *                     A set of elements.
 	 * @return A random element from a set.
 	 */
-	public default <T> T getRandomElement(Set<T> elements) {
-		int index = getRandomUniformInteger(elements.size());
+	public default <T> T pick(Set<T> elements) {
+		int index = generateUniformInteger(elements.size());
 		Iterator<T> iterator = elements.iterator();
 		while (index > 0) {
 			iterator.next();

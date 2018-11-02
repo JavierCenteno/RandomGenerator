@@ -88,22 +88,22 @@ public abstract class Abstract32RandomGenerator implements RandomGenerator {
 	}
 
 	@Override
-	public byte getRandomUniformByte() {
-		return (byte) getRandomUniformInteger();
+	public byte generateUniformByte() {
+		return (byte) generateUniformInteger();
 	}
 
 	@Override
-	public short getRandomUniformShort() {
-		return (short) getRandomUniformInteger();
+	public short generateUniformShort() {
+		return (short) generateUniformInteger();
 	}
 
 	@Override
-	public abstract int getRandomUniformInteger();
+	public abstract int generateUniformInteger();
 
 	@Override
-	public long getRandomUniformLong() {
-		long _0 = getRandomUniformInteger();
-		long _1 = getRandomUniformInteger();
+	public long generateUniformLong() {
+		long _0 = generateUniformInteger();
+		long _1 = generateUniformInteger();
 		return _0 << 32 | _1;
 	}
 
