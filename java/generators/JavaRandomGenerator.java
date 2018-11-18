@@ -1,6 +1,5 @@
 package generators;
 
-import java.security.SecureRandom;
 import java.util.Random;
 
 import api.RandomGenerator;
@@ -26,19 +25,18 @@ public class JavaRandomGenerator implements RandomGenerator {
 	// Instance initializers
 
 	/**
-	 * Constructs a generator with a randomly chosen seed as given by SecureRandom.
+	 * Constructs a generator using Random's no argument constructor.
 	 * 
-	 * @see SecureRandom
+	 * @see java.util.Random
 	 */
 	public JavaRandomGenerator() {
 		random = new Random();
 	}
 
 	/**
-	 * Constructs a generator with the given seed.
+	 * Constructs a generator using Random's seed-based constructor.
 	 * 
-	 * @param seed
-	 *                 A seed.
+	 * @see java.util.Random
 	 */
 	public JavaRandomGenerator(byte[] seed) {
 		long _0 = ((long) seed[0]) << 56;
@@ -50,6 +48,15 @@ public class JavaRandomGenerator implements RandomGenerator {
 		long _6 = ((long) seed[6]) << 8;
 		long _7 = (long) seed[7];
 		random = new Random(_0 | _1 | _2 | _3 | _4 | _5 | _6 | _7);
+	}
+
+	/**
+	 * Constructs a generator using the given Random.
+	 * 
+	 * @see java.util.Random
+	 */
+	public JavaRandomGenerator(Random random) {
+		this.random = random;
 	}
 
 	// -----------------------------------------------------------------------------
