@@ -148,6 +148,11 @@ public interface RandomGenerator {
 	 * 
 	 * @param seed
 	 *                 A seed.
+	 * @throws IllegalArgumentException
+	 *                                           If the seed is too short.
+	 * @throws UnsupportedOperationException
+	 *                                           If this generator doesn't support
+	 *                                           setting its seed.
 	 */
 	public void setSeed(byte[] seed);
 
@@ -158,6 +163,9 @@ public interface RandomGenerator {
 	 * Get the current state of this generator.
 	 * 
 	 * @return The current state of this generator.
+	 * @throws UnsupportedOperationException
+	 *                                           If this generator doesn't support
+	 *                                           getting its state.
 	 */
 	public byte[] getState();
 
@@ -167,7 +175,10 @@ public interface RandomGenerator {
 	 * @param state
 	 *                  A new state for this generator.
 	 * @throws IllegalArgumentException
-	 *                                      If the state is too short.
+	 *                                           If the state is too short.
+	 * @throws UnsupportedOperationException
+	 *                                           If this generator doesn't support
+	 *                                           setting its state.
 	 */
 	public void setState(byte[] state);
 
@@ -524,11 +535,13 @@ public interface RandomGenerator {
 	}
 
 	/**
-	 * Get a random short integer with a uniform distribution between 0 and a number.
+	 * Get a random short integer with a uniform distribution between 0 and a
+	 * number.
 	 * 
 	 * @param max
 	 *                Maximum value of the number, exclusive.
-	 * @return A random short integer with a uniform distribution between 0 and a number.
+	 * @return A random short integer with a uniform distribution between 0 and a
+	 *         number.
 	 * @throws IllegalArgumentException
 	 *                                      If max is not larger than 0.
 	 */
@@ -543,7 +556,8 @@ public interface RandomGenerator {
 	 *                Minimum value of the number, inclusive.
 	 * @param max
 	 *                Maximum value of the number, exclusive.
-	 * @return A random short integer with a uniform distribution between two numbers.
+	 * @return A random short integer with a uniform distribution between two
+	 *         numbers.
 	 * @throws IllegalArgumentException
 	 *                                      If min is not smaller than max.
 	 */
@@ -954,7 +968,8 @@ public interface RandomGenerator {
 	 * 
 	 * @param max
 	 *                Maximum value of the number, exclusive.
-	 * @return A random long integer with a uniform distribution between 0 and a number.
+	 * @return A random long integer with a uniform distribution between 0 and a
+	 *         number.
 	 * @throws IllegalArgumentException
 	 *                                      If max is not larger than 0.
 	 */
@@ -981,7 +996,8 @@ public interface RandomGenerator {
 	 *                Minimum value of the number, inclusive.
 	 * @param max
 	 *                Maximum value of the number, exclusive.
-	 * @return A random long integer with a uniform distribution between two numbers.
+	 * @return A random long integer with a uniform distribution between two
+	 *         numbers.
 	 * @throws IllegalArgumentException
 	 *                                      If min is not smaller than max.
 	 */
@@ -1215,20 +1231,24 @@ public interface RandomGenerator {
 	}
 
 	/**
-	 * Get a random floating point with a uniform distribution in the range [0.0, 1.0].
+	 * Get a random floating point with a uniform distribution in the range [0.0,
+	 * 1.0].
 	 * 
-	 * @return A random floating point with a uniform distribution in the range [0.0, 1.0].
+	 * @return A random floating point with a uniform distribution in the range
+	 *         [0.0, 1.0].
 	 */
 	public default float generateUniformFloat() {
 		return generateUniformInteger((1 << 24) + 1) / (float) (1L << 24);
 	}
 
 	/**
-	 * Get a random floating point with a uniform distribution between 0 and a number.
+	 * Get a random floating point with a uniform distribution between 0 and a
+	 * number.
 	 * 
 	 * @param max
 	 *                Maximum value of the number, inclusive.
-	 * @return A random floating point with a uniform distribution between 0 and a number.
+	 * @return A random floating point with a uniform distribution between 0 and a
+	 *         number.
 	 * @throws IllegalArgumentException
 	 *                                      If max is not larger than 0.
 	 */
@@ -1246,7 +1266,8 @@ public interface RandomGenerator {
 	 *                Minimum value of the number, inclusive.
 	 * @param max
 	 *                Maximum value of the number, inclusive.
-	 * @return A random floating point with a uniform distribution between two numbers.
+	 * @return A random floating point with a uniform distribution between two
+	 *         numbers.
 	 * @throws IllegalArgumentException
 	 *                                      If min is not smaller than max.
 	 */
@@ -1481,20 +1502,24 @@ public interface RandomGenerator {
 	}
 
 	/**
-	 * Get a random double floating point with a uniform distribution in the range [0.0, 1.0].
+	 * Get a random double floating point with a uniform distribution in the range
+	 * [0.0, 1.0].
 	 * 
-	 * @return A random double floating point with a uniform distribution in the range [0.0, 1.0].
+	 * @return A random double floating point with a uniform distribution in the
+	 *         range [0.0, 1.0].
 	 */
 	public default double generateUniformDouble() {
 		return generateUniformLong((1L << 53) + 1) / (double) (1L << 53);
 	}
 
 	/**
-	 * Get a random double floating point with a uniform distribution between 0 and a number.
+	 * Get a random double floating point with a uniform distribution between 0 and
+	 * a number.
 	 * 
 	 * @param max
 	 *                Maximum value of the number, inclusive.
-	 * @return A random double floating point with a uniform distribution between 0 and a number.
+	 * @return A random double floating point with a uniform distribution between 0
+	 *         and a number.
 	 * @throws IllegalArgumentException
 	 *                                      If max is not larger than 0.
 	 */
@@ -1506,13 +1531,15 @@ public interface RandomGenerator {
 	}
 
 	/**
-	 * Get a random double floating point with a uniform distribution between two numbers.
+	 * Get a random double floating point with a uniform distribution between two
+	 * numbers.
 	 * 
 	 * @param min
 	 *                Minimum value of the number, inclusive.
 	 * @param max
 	 *                Maximum value of the number, inclusive.
-	 * @return A random double floating point with a uniform distribution between two numbers.
+	 * @return A random double floating point with a uniform distribution between
+	 *         two numbers.
 	 * @throws IllegalArgumentException
 	 *                                      If min is not smaller than max.
 	 */
