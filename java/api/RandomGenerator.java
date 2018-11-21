@@ -144,6 +144,17 @@ public interface RandomGenerator {
 	// Seed methods
 
 	/**
+	 * Get the size of this generator's seed in bytes.
+	 * 
+	 * @throws UnsupportedOperationException
+	 *                                           If this generator doesn't support
+	 *                                           setting its seed.
+	 */
+	public default int getSeedSize() {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
 	 * Resets this generator with the given seed.
 	 * 
 	 * @param seed
@@ -155,11 +166,22 @@ public interface RandomGenerator {
 	 *                                           setting its seed.
 	 */
 	public default void setSeed(byte[] seed) {
-		throw new UnsupportedOperationException();
+		setState(seed);
 	}
 
 	// -----------------------------------------------------------------------------
 	// State methods
+
+	/**
+	 * Get the size of this generator's state in bytes.
+	 * 
+	 * @throws UnsupportedOperationException
+	 *                                           If this generator doesn't support
+	 *                                           setting its state.
+	 */
+	public default int getStateSize() {
+		throw new UnsupportedOperationException();
+	}
 
 	/**
 	 * Get the current state of this generator.

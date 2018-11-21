@@ -6,7 +6,7 @@ import api.RandomGenerator;
 import util.ByteConverter;
 
 /**
- * Implementation of a Xoroshiro128+ PRNG with a state of 128 bits.
+ * Implementation of a Xoroshiro512** PRNG with a state of 512 bits.
  * 
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
@@ -14,7 +14,7 @@ import util.ByteConverter;
  * @since 1.0
  * 
  */
-public class Xoroshiro128PlusGenerator implements RandomGenerator {
+public class Xoroshiro512StarStarGenerator implements RandomGenerator {
 
 	// -----------------------------------------------------------------------------
 	// Class fields
@@ -22,13 +22,13 @@ public class Xoroshiro128PlusGenerator implements RandomGenerator {
 	/**
 	 * Size of this generator's state in bytes.
 	 */
-	public static final int STATE_SIZE = 16;
+	public static final int STATE_SIZE = 64;
 	/**
 	 * Size of this generator's seed in bytes.
 	 */
 	public static final int SEED_SIZE = STATE_SIZE;
-	private static final long[] JUMP = { 0xDF900294D8F554A5L, 0x170865DF4B3201FCL };
-	private static final long[] LONG_JUMP = { 0xD2A98B26625EEE7BL, 0xDDDF9B1090AA7AC1L };
+	private static final long[] JUMP = { 0x33ED89B6E7A353F9L, 0x760083D7955323BEL, 0x2837F2FBB5F22FAEL,
+			0x4B8C5674d309511CL, 0xB11AC47A7BA28C25L, 0xF1BE7667092BCC1CL, 0x53851EFDB6DF0AAFL, 0x1EBBC8B23EAF25DBL };
 
 	// -----------------------------------------------------------------------------
 	// Instance fields
@@ -46,7 +46,7 @@ public class Xoroshiro128PlusGenerator implements RandomGenerator {
 	 * 
 	 * @see SecureRandom
 	 */
-	public Xoroshiro128PlusGenerator() {
+	public Xoroshiro512StarStarGenerator() {
 		setSeed(SecureRandom.getSeed(SEED_SIZE));
 	}
 
@@ -58,7 +58,7 @@ public class Xoroshiro128PlusGenerator implements RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If the seed is too short.
 	 */
-	public Xoroshiro128PlusGenerator(byte[] seed) {
+	public Xoroshiro512StarStarGenerator(byte[] seed) {
 		setSeed(seed);
 	}
 
@@ -90,54 +90,58 @@ public class Xoroshiro128PlusGenerator implements RandomGenerator {
 
 	@Override
 	public long generateUniformLong() {
-		long state0 = state[0];
-		long state1 = state[1];
-		long result = state0 + state1;
-		state1 ^= state0;
-		state[0] = ((state0 << 24) | (state0 >>> 40)) ^ state1 ^ (state1 << 16);
-		state[1] = (state1 << 37) | (state1 >>> 27);
+		long x = state[1] * 5L;
+		long result = ((x << 7) | (x >>> 57)) * 9L;
+		long t = state[1] << 11;
+		state[2] ^= state[0];
+		state[5] ^= state[1];
+		state[1] ^= state[2];
+		state[7] ^= state[3];
+		state[3] ^= state[4];
+		state[4] ^= state[5];
+		state[0] ^= state[6];
+		state[6] ^= state[7];
+		state[6] ^= t;
+		state[7] = (state[7] << 21) | (state[7] >>> 43);
 		return result;
 	}
 
 	/**
-	 * Equivalent to 2^64 calls to generateUniformLong(). Can be used to generate
-	 * 2^64 non-overlapping sequences.
+	 * Equivalent to 2^256 calls to generateUniformLong(). Can be used to generate
+	 * 2^256 non-overlapping sequences.
 	 */
 	public void jump() {
 		long state0 = 0;
 		long state1 = 0;
+		long state2 = 0;
+		long state3 = 0;
+		long state4 = 0;
+		long state5 = 0;
+		long state6 = 0;
+		long state7 = 0;
 		for (int i = 0; i < JUMP.length; ++i) {
 			for (int j = 0; j < 64; ++j) {
 				if ((JUMP[i] & (1L << j)) != 0) {
 					state0 ^= state[0];
 					state1 ^= state[1];
+					state2 ^= state[2];
+					state3 ^= state[3];
+					state4 ^= state[4];
+					state5 ^= state[5];
+					state6 ^= state[6];
+					state7 ^= state[7];
 				}
 				generateUniformLong();
 			}
 		}
 		state[0] = state0;
 		state[1] = state1;
-	}
-
-	/**
-	 * Equivalent to 2^96 calls to generateUniformLong(). Can be used to generate
-	 * 2^32 starting points from each of which jump() can generate 2^32
-	 * non-overlapping sequences.
-	 */
-	public void longJump() {
-		long state0 = 0;
-		long state1 = 0;
-		for (int i = 0; i < LONG_JUMP.length; ++i) {
-			for (int j = 0; j < 64; ++j) {
-				if ((LONG_JUMP[i] & (1L << j)) != 0) {
-					state0 ^= state[0];
-					state1 ^= state[1];
-				}
-				generateUniformLong();
-			}
-		}
-		state[0] = state0;
-		state[1] = state1;
+		state[2] = state2;
+		state[3] = state3;
+		state[4] = state4;
+		state[5] = state5;
+		state[6] = state6;
+		state[7] = state7;
 	}
 
 }

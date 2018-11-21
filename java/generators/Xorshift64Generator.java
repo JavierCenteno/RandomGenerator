@@ -32,6 +32,8 @@ public class Xorshift64Generator extends Abstract64RandomGenerator {
 	 * 
 	 * @param seed
 	 *                 A seed.
+	 * @throws IllegalArgumentException
+	 *                                      If the seed is too short.
 	 */
 	public Xorshift64Generator(byte[] seed) {
 		super(seed);

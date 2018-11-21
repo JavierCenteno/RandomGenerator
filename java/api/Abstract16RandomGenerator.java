@@ -34,6 +34,18 @@ import util.ByteConverter;
 public abstract class Abstract16RandomGenerator implements RandomGenerator {
 
 	// -----------------------------------------------------------------------------
+	// Class fields
+
+	/**
+	 * Size of this generator's state in bytes.
+	 */
+	public static final int STATE_SIZE = 2;
+	/**
+	 * Size of this generator's seed in bytes.
+	 */
+	public static final int SEED_SIZE = STATE_SIZE;
+
+	// -----------------------------------------------------------------------------
 	// Instance fields
 
 	/**
@@ -50,7 +62,7 @@ public abstract class Abstract16RandomGenerator implements RandomGenerator {
 	 * @see SecureRandom
 	 */
 	public Abstract16RandomGenerator() {
-		this(SecureRandom.getSeed(2));
+		this(SecureRandom.getSeed(SEED_SIZE));
 	}
 
 	/**
@@ -58,6 +70,8 @@ public abstract class Abstract16RandomGenerator implements RandomGenerator {
 	 * 
 	 * @param seed
 	 *                 A seed.
+	 * @throws IllegalArgumentException
+	 *                                      If the seed is too short.
 	 */
 	public Abstract16RandomGenerator(byte[] seed) {
 		setSeed(seed);
@@ -67,8 +81,13 @@ public abstract class Abstract16RandomGenerator implements RandomGenerator {
 	// Instance methods
 
 	@Override
-	public void setSeed(byte[] seed) {
-		setState(seed);
+	public int getSeedSize() {
+		return SEED_SIZE;
+	}
+
+	@Override
+	public int getStateSize() {
+		return STATE_SIZE;
 	}
 
 	@Override
@@ -78,6 +97,9 @@ public abstract class Abstract16RandomGenerator implements RandomGenerator {
 
 	@Override
 	public void setState(byte[] state) {
+		if (state.length < STATE_SIZE) {
+			throw new IllegalArgumentException();
+		}
 		this.state = ByteConverter.bytesToShort(state);
 	}
 

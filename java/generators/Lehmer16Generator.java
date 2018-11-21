@@ -33,6 +33,8 @@ public class Lehmer16Generator extends Abstract16RandomGenerator {
 	 * 
 	 * @param seed
 	 *                 A seed.
+	 * @throws IllegalArgumentException
+	 *                                      If the seed is too short.
 	 */
 	public Lehmer16Generator(byte[] seed) {
 		super(seed);

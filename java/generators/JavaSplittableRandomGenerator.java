@@ -18,8 +18,21 @@ import util.ByteConverter;
 public class JavaSplittableRandomGenerator implements RandomGenerator {
 
 	// -----------------------------------------------------------------------------
+	// Class fields
+
+	/**
+	 * Size of this generator's seed in bytes.
+	 */
+	public static final int SEED_SIZE = 8;
+
+	// -----------------------------------------------------------------------------
 	// Instance fields
 
+	/**
+	 * Underlying SplittableRandom object of this generator.
+	 * 
+	 * @see java.util.SplittableRandom
+	 */
 	private SplittableRandom splittableRandom;
 
 	// -----------------------------------------------------------------------------
@@ -37,15 +50,24 @@ public class JavaSplittableRandomGenerator implements RandomGenerator {
 	/**
 	 * Constructs a generator using SplittableRandom's seed-based constructor.
 	 * 
+	 * @param seed
+	 *                 A seed.
 	 * @see java.util.SplittableRandom
+	 * @throws IllegalArgumentException
+	 *                                      If the seed is too short.
 	 */
 	public JavaSplittableRandomGenerator(byte[] seed) {
+		if (seed.length < SEED_SIZE) {
+			throw new IllegalArgumentException();
+		}
 		this.splittableRandom = new SplittableRandom(ByteConverter.bytesToLong(seed));
 	}
 
 	/**
 	 * Constructs a generator using the given SplittableRandom.
 	 * 
+	 * @param splittableRandom
+	 *                             A SplittableRandom object.
 	 * @see java.util.SplittableRandom
 	 */
 	public JavaSplittableRandomGenerator(SplittableRandom splittableRandom) {
@@ -56,7 +78,19 @@ public class JavaSplittableRandomGenerator implements RandomGenerator {
 	// Instance methods
 
 	@Override
+	public int getSeedSize() {
+		return SEED_SIZE;
+	}
+
+	public JavaSplittableRandomGenerator split() {
+		return new JavaSplittableRandomGenerator(this.splittableRandom.split());
+	}
+
+	@Override
 	public void setSeed(byte[] seed) {
+		if (seed.length < SEED_SIZE) {
+			throw new IllegalArgumentException();
+		}
 		this.splittableRandom = new SplittableRandom(ByteConverter.bytesToLong(seed));
 	}
 

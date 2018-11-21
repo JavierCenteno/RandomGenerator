@@ -19,7 +19,14 @@ public class MersenneTwister19937Generator implements RandomGenerator {
 	// -----------------------------------------------------------------------------
 	// Class fields
 
-	private static final int STATE_SIZE = 312;
+	/**
+	 * Size of this generator's state in bytes.
+	 */
+	public static final int STATE_SIZE = 312;
+	/**
+	 * Size of this generator's seed in bytes.
+	 */
+	public static final int SEED_SIZE = 8;
 	private static final int SHIFT_SIZE = 156;
 	private static final long UPPER_MASK = 0xFF_FF_FF_FF_80_00_00_00L;
 	private static final long LOWER_MASK = 0x00_00_00_00_7F_FF_FF_FFL;
@@ -40,7 +47,7 @@ public class MersenneTwister19937Generator implements RandomGenerator {
 	 * @see SecureRandom
 	 */
 	public MersenneTwister19937Generator() {
-		setSeed(SecureRandom.getSeed(8));
+		setSeed(SecureRandom.getSeed(SEED_SIZE));
 	}
 
 	/**
@@ -48,6 +55,8 @@ public class MersenneTwister19937Generator implements RandomGenerator {
 	 * 
 	 * @param seed
 	 *                 A seed.
+	 * @throws IllegalArgumentException
+	 *                                      If the seed is too short.
 	 */
 	public MersenneTwister19937Generator(byte[] seed) {
 		setSeed(seed);
@@ -57,7 +66,20 @@ public class MersenneTwister19937Generator implements RandomGenerator {
 	// Instance methods
 
 	@Override
+	public int getSeedSize() {
+		return SEED_SIZE;
+	}
+
+	@Override
+	public int getStateSize() {
+		return STATE_SIZE;
+	}
+
+	@Override
 	public void setSeed(byte[] seed) {
+		if (seed.length < SEED_SIZE) {
+			throw new IllegalArgumentException();
+		}
 		state = new long[STATE_SIZE];
 		index = 0;
 		state[index] = ByteConverter.bytesToLong(seed);
@@ -81,6 +103,9 @@ public class MersenneTwister19937Generator implements RandomGenerator {
 
 	@Override
 	public void setState(byte[] state) {
+		if (state.length < STATE_SIZE) {
+			throw new IllegalArgumentException();
+		}
 		this.state = ByteConverter.bytesToLongs(state);
 	}
 

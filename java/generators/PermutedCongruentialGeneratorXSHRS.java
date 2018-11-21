@@ -22,11 +22,21 @@ public class PermutedCongruentialGeneratorXSHRS implements RandomGenerator {
 	// -----------------------------------------------------------------------------
 	// Class fields
 
-	private static final long MULTIPLIER = 6364136223846793005L;
+	/**
+	 * Size of this generator's state in bytes.
+	 */
+	public static final int STATE_SIZE = 8;
+	/**
+	 * Size of this generator's seed in bytes.
+	 */
+	public static final int SEED_SIZE = STATE_SIZE;
 
 	// -----------------------------------------------------------------------------
 	// Instance fields
 
+	/**
+	 * State of this generator.
+	 */
 	private long state;
 
 	// -----------------------------------------------------------------------------
@@ -38,7 +48,7 @@ public class PermutedCongruentialGeneratorXSHRS implements RandomGenerator {
 	 * @see SecureRandom
 	 */
 	public PermutedCongruentialGeneratorXSHRS() {
-		setSeed(SecureRandom.getSeed(8));
+		setSeed(SecureRandom.getSeed(SEED_SIZE));
 	}
 
 	/**
@@ -46,6 +56,8 @@ public class PermutedCongruentialGeneratorXSHRS implements RandomGenerator {
 	 * 
 	 * @param seed
 	 *                 A seed.
+	 * @throws IllegalArgumentException
+	 *                                      If the seed is too short.
 	 */
 	public PermutedCongruentialGeneratorXSHRS(byte[] seed) {
 		setSeed(seed);
@@ -53,6 +65,16 @@ public class PermutedCongruentialGeneratorXSHRS implements RandomGenerator {
 
 	// -----------------------------------------------------------------------------
 	// Instance methods
+
+	@Override
+	public int getSeedSize() {
+		return SEED_SIZE;
+	}
+
+	@Override
+	public int getStateSize() {
+		return STATE_SIZE;
+	}
 
 	@Override
 	public void setSeed(byte[] seed) {
@@ -68,6 +90,9 @@ public class PermutedCongruentialGeneratorXSHRS implements RandomGenerator {
 
 	@Override
 	public void setState(byte[] state) {
+		if (state.length < STATE_SIZE) {
+			throw new IllegalArgumentException();
+		}
 		this.state = ByteConverter.bytesToLong(state);
 	}
 
@@ -75,7 +100,7 @@ public class PermutedCongruentialGeneratorXSHRS implements RandomGenerator {
 	public int generateUniformInteger() {
 		long a = state;
 		int count = (int) (a >>> 61);
-		state = a * MULTIPLIER;
+		state = a * 6364136223846793005L;
 		a ^= a >>> 22;
 		return (int) (a >>> (22 + count));
 	}

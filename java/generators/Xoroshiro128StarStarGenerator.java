@@ -6,7 +6,7 @@ import api.RandomGenerator;
 import util.ByteConverter;
 
 /**
- * Implementation of a Xoroshiro128+ PRNG with a state of 128 bits.
+ * Implementation of a Xoroshiro128** PRNG with a state of 128 bits.
  * 
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
@@ -14,7 +14,7 @@ import util.ByteConverter;
  * @since 1.0
  * 
  */
-public class Xoroshiro128PlusGenerator implements RandomGenerator {
+public class Xoroshiro128StarStarGenerator implements RandomGenerator {
 
 	// -----------------------------------------------------------------------------
 	// Class fields
@@ -46,7 +46,7 @@ public class Xoroshiro128PlusGenerator implements RandomGenerator {
 	 * 
 	 * @see SecureRandom
 	 */
-	public Xoroshiro128PlusGenerator() {
+	public Xoroshiro128StarStarGenerator() {
 		setSeed(SecureRandom.getSeed(SEED_SIZE));
 	}
 
@@ -58,7 +58,7 @@ public class Xoroshiro128PlusGenerator implements RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If the seed is too short.
 	 */
-	public Xoroshiro128PlusGenerator(byte[] seed) {
+	public Xoroshiro128StarStarGenerator(byte[] seed) {
 		setSeed(seed);
 	}
 
@@ -92,7 +92,8 @@ public class Xoroshiro128PlusGenerator implements RandomGenerator {
 	public long generateUniformLong() {
 		long state0 = state[0];
 		long state1 = state[1];
-		long result = state0 + state1;
+		long x = state[0] * 5L;
+		long result = ((x << 7) | (x >>> 57)) * 9L;
 		state1 ^= state0;
 		state[0] = ((state0 << 24) | (state0 >>> 40)) ^ state1 ^ (state1 << 16);
 		state[1] = (state1 << 37) | (state1 >>> 27);

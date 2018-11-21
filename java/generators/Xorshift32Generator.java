@@ -32,6 +32,8 @@ public class Xorshift32Generator extends Abstract32RandomGenerator {
 	 * 
 	 * @param seed
 	 *                 A seed.
+	 * @throws IllegalArgumentException
+	 *                                      If the seed is too short.
 	 */
 	public Xorshift32Generator(byte[] seed) {
 		super(seed);

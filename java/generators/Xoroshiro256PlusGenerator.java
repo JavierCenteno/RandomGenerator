@@ -6,7 +6,7 @@ import api.RandomGenerator;
 import util.ByteConverter;
 
 /**
- * Implementation of a Xoroshiro128+ PRNG with a state of 128 bits.
+ * Implementation of a Xoroshiro256+ PRNG with a state of 256 bits.
  * 
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
@@ -14,7 +14,7 @@ import util.ByteConverter;
  * @since 1.0
  * 
  */
-public class Xoroshiro128PlusGenerator implements RandomGenerator {
+public class Xoroshiro256PlusGenerator implements RandomGenerator {
 
 	// -----------------------------------------------------------------------------
 	// Class fields
@@ -22,13 +22,13 @@ public class Xoroshiro128PlusGenerator implements RandomGenerator {
 	/**
 	 * Size of this generator's state in bytes.
 	 */
-	public static final int STATE_SIZE = 16;
+	public static final int STATE_SIZE = 32;
 	/**
 	 * Size of this generator's seed in bytes.
 	 */
 	public static final int SEED_SIZE = STATE_SIZE;
-	private static final long[] JUMP = { 0xDF900294D8F554A5L, 0x170865DF4B3201FCL };
-	private static final long[] LONG_JUMP = { 0xD2A98B26625EEE7BL, 0xDDDF9B1090AA7AC1L };
+	private static final long[] JUMP = { 0x180EC6D33CFD0ABAL, 0xD5A61266F0C9392CL, 0xA9582618E03FC9AAL, 0x39ABDC4529B1661CL };
+	private static final long[] LONG_JUMP = { 0x76E15D3EFEFDCBBFL, 0xC5004E441C522FB3L, 0x77710069854EE241L, 0x39109BB02ACBE635L };
 
 	// -----------------------------------------------------------------------------
 	// Instance fields
@@ -46,7 +46,7 @@ public class Xoroshiro128PlusGenerator implements RandomGenerator {
 	 * 
 	 * @see SecureRandom
 	 */
-	public Xoroshiro128PlusGenerator() {
+	public Xoroshiro256PlusGenerator() {
 		setSeed(SecureRandom.getSeed(SEED_SIZE));
 	}
 
@@ -58,7 +58,7 @@ public class Xoroshiro128PlusGenerator implements RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If the seed is too short.
 	 */
-	public Xoroshiro128PlusGenerator(byte[] seed) {
+	public Xoroshiro256PlusGenerator(byte[] seed) {
 		setSeed(seed);
 	}
 
@@ -90,54 +90,68 @@ public class Xoroshiro128PlusGenerator implements RandomGenerator {
 
 	@Override
 	public long generateUniformLong() {
-		long state0 = state[0];
-		long state1 = state[1];
-		long result = state0 + state1;
-		state1 ^= state0;
-		state[0] = ((state0 << 24) | (state0 >>> 40)) ^ state1 ^ (state1 << 16);
-		state[1] = (state1 << 37) | (state1 >>> 27);
+		long result = state[0] + state[3];
+		long t = state[1] << 17;
+		state[2] ^= state[0];
+		state[3] ^= state[1];
+		state[1] ^= state[2];
+		state[0] ^= state[3];
+		state[2] ^= t;
+		state[3] = (state[3] << 45) | (state[3] >>> 19);
 		return result;
 	}
 
 	/**
-	 * Equivalent to 2^64 calls to generateUniformLong(). Can be used to generate
-	 * 2^64 non-overlapping sequences.
+	 * Equivalent to 2^128 calls to generateUniformLong(). Can be used to generate
+	 * 2^128 non-overlapping sequences.
 	 */
 	public void jump() {
 		long state0 = 0;
 		long state1 = 0;
+		long state2 = 0;
+		long state3 = 0;
 		for (int i = 0; i < JUMP.length; ++i) {
 			for (int j = 0; j < 64; ++j) {
 				if ((JUMP[i] & (1L << j)) != 0) {
 					state0 ^= state[0];
 					state1 ^= state[1];
+					state2 ^= state[2];
+					state3 ^= state[3];
 				}
 				generateUniformLong();
 			}
 		}
 		state[0] = state0;
 		state[1] = state1;
+		state[2] = state2;
+		state[3] = state3;
 	}
 
 	/**
-	 * Equivalent to 2^96 calls to generateUniformLong(). Can be used to generate
-	 * 2^32 starting points from each of which jump() can generate 2^32
+	 * Equivalent to 2^192 calls to generateUniformLong(). Can be used to generate
+	 * 2^64 starting points from each of which jump() can generate 2^64
 	 * non-overlapping sequences.
 	 */
 	public void longJump() {
 		long state0 = 0;
 		long state1 = 0;
+		long state2 = 0;
+		long state3 = 0;
 		for (int i = 0; i < LONG_JUMP.length; ++i) {
 			for (int j = 0; j < 64; ++j) {
 				if ((LONG_JUMP[i] & (1L << j)) != 0) {
 					state0 ^= state[0];
 					state1 ^= state[1];
+					state2 ^= state[2];
+					state3 ^= state[3];
 				}
 				generateUniformLong();
 			}
 		}
 		state[0] = state0;
 		state[1] = state1;
+		state[2] = state2;
+		state[3] = state3;
 	}
 
 }

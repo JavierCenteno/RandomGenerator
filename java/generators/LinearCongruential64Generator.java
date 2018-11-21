@@ -32,6 +32,8 @@ public class LinearCongruential64Generator extends Abstract64RandomGenerator {
 	 * 
 	 * @param seed
 	 *                 A seed.
+	 * @throws IllegalArgumentException
+	 *                                      If the seed is too short.
 	 */
 	public LinearCongruential64Generator(byte[] seed) {
 		super(seed);
