@@ -82,16 +82,17 @@ public class JavaSplittableRandomGenerator implements RandomGenerator {
 		return SEED_SIZE;
 	}
 
-	public JavaSplittableRandomGenerator split() {
-		return new JavaSplittableRandomGenerator(this.splittableRandom.split());
-	}
-
 	@Override
 	public void setSeed(byte[] seed) {
 		if (seed.length < SEED_SIZE) {
 			throw new IllegalArgumentException();
 		}
 		this.splittableRandom = new SplittableRandom(ByteConverter.bytesToLong(seed));
+	}
+
+	@Override
+	public JavaSplittableRandomGenerator split() {
+		return new JavaSplittableRandomGenerator(this.splittableRandom.split());
 	}
 
 	@Override

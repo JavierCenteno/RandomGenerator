@@ -211,6 +211,20 @@ public interface RandomGenerator {
 	}
 
 	// -----------------------------------------------------------------------------
+	// Split methods
+
+	/**
+	 * Obtain a new generator from this one.
+	 * 
+	 * @throws UnsupportedOperationException
+	 *                                           If this generator doesn't support
+	 *                                           splitting.
+	 */
+	public default RandomGenerator split() {
+		throw new UnsupportedOperationException();
+	}
+
+	// -----------------------------------------------------------------------------
 	// Boolean methods
 
 	/**

@@ -1,6 +1,7 @@
 package generators;
 
 import java.security.SecureRandom;
+import java.util.Arrays;
 
 import api.RandomGenerator;
 import util.ByteConverter;
@@ -27,8 +28,10 @@ public class Xoshiro256PlusGenerator implements RandomGenerator {
 	 * Size of this generator's seed in bytes.
 	 */
 	public static final int SEED_SIZE = STATE_SIZE;
-	private static final long[] JUMP = { 0x180EC6D33CFD0ABAL, 0xD5A61266F0C9392CL, 0xA9582618E03FC9AAL, 0x39ABDC4529B1661CL };
-	private static final long[] LONG_JUMP = { 0x76E15D3EFEFDCBBFL, 0xC5004E441C522FB3L, 0x77710069854EE241L, 0x39109BB02ACBE635L };
+	private static final long[] JUMP = { 0x180EC6D33CFD0ABAL, 0xD5A61266F0C9392CL, 0xA9582618E03FC9AAL,
+			0x39ABDC4529B1661CL };
+	private static final long[] LONG_JUMP = { 0x76E15D3EFEFDCBBFL, 0xC5004E441C522FB3L, 0x77710069854EE241L,
+			0x39109BB02ACBE635L };
 
 	// -----------------------------------------------------------------------------
 	// Instance fields
@@ -62,6 +65,16 @@ public class Xoshiro256PlusGenerator implements RandomGenerator {
 		setSeed(seed);
 	}
 
+	/**
+	 * Constructs a copy of this generator.
+	 * 
+	 * @param generator
+	 *                      A generator.
+	 */
+	public Xoshiro256PlusGenerator(Xoshiro256PlusGenerator generator) {
+		this.state = Arrays.copyOf(generator.state, generator.state.length);
+	}
+
 	// -----------------------------------------------------------------------------
 	// Instance methods
 
@@ -86,6 +99,13 @@ public class Xoshiro256PlusGenerator implements RandomGenerator {
 			throw new IllegalArgumentException();
 		}
 		this.state = ByteConverter.bytesToLongs(state);
+	}
+
+	@Override
+	public Xoshiro256PlusGenerator split() {
+		Xoshiro256PlusGenerator generator = new Xoshiro256PlusGenerator(this);
+		generator.jump();
+		return generator;
 	}
 
 	@Override

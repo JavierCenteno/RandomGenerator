@@ -1,6 +1,7 @@
 package generators;
 
 import java.security.SecureRandom;
+import java.util.Arrays;
 
 import api.RandomGenerator;
 import util.ByteConverter;
@@ -62,6 +63,16 @@ public class Xoroshiro128StarGenerator implements RandomGenerator {
 		setSeed(seed);
 	}
 
+	/**
+	 * Constructs a copy of this generator.
+	 * 
+	 * @param generator
+	 *                      A generator.
+	 */
+	public Xoroshiro128StarGenerator(Xoroshiro128StarGenerator generator) {
+		this.state = Arrays.copyOf(generator.state, generator.state.length);
+	}
+
 	// -----------------------------------------------------------------------------
 	// Instance methods
 
@@ -86,6 +97,13 @@ public class Xoroshiro128StarGenerator implements RandomGenerator {
 			throw new IllegalArgumentException();
 		}
 		this.state = ByteConverter.bytesToLongs(state);
+	}
+
+	@Override
+	public Xoroshiro128StarGenerator split() {
+		Xoroshiro128StarGenerator generator = new Xoroshiro128StarGenerator(this);
+		generator.jump();
+		return generator;
 	}
 
 	@Override
