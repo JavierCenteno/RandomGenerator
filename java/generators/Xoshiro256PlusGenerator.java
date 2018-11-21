@@ -6,7 +6,7 @@ import api.RandomGenerator;
 import util.ByteConverter;
 
 /**
- * Implementation of a Xoroshiro512+ PRNG with a state of 512 bits.
+ * Implementation of a Xoshiro256+ PRNG with a state of 256 bits.
  * 
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
@@ -14,7 +14,7 @@ import util.ByteConverter;
  * @since 1.0
  * 
  */
-public class Xoroshiro512PlusGenerator implements RandomGenerator {
+public class Xoshiro256PlusGenerator implements RandomGenerator {
 
 	// -----------------------------------------------------------------------------
 	// Class fields
@@ -22,13 +22,13 @@ public class Xoroshiro512PlusGenerator implements RandomGenerator {
 	/**
 	 * Size of this generator's state in bytes.
 	 */
-	public static final int STATE_SIZE = 64;
+	public static final int STATE_SIZE = 32;
 	/**
 	 * Size of this generator's seed in bytes.
 	 */
 	public static final int SEED_SIZE = STATE_SIZE;
-	private static final long[] JUMP = { 0x33ED89B6E7A353F9L, 0x760083D7955323BEL, 0x2837F2FBB5F22FAEL,
-			0x4B8C5674d309511CL, 0xB11AC47A7BA28C25L, 0xF1BE7667092BCC1CL, 0x53851EFDB6DF0AAFL, 0x1EBBC8B23EAF25DBL };
+	private static final long[] JUMP = { 0x180EC6D33CFD0ABAL, 0xD5A61266F0C9392CL, 0xA9582618E03FC9AAL, 0x39ABDC4529B1661CL };
+	private static final long[] LONG_JUMP = { 0x76E15D3EFEFDCBBFL, 0xC5004E441C522FB3L, 0x77710069854EE241L, 0x39109BB02ACBE635L };
 
 	// -----------------------------------------------------------------------------
 	// Instance fields
@@ -46,7 +46,7 @@ public class Xoroshiro512PlusGenerator implements RandomGenerator {
 	 * 
 	 * @see SecureRandom
 	 */
-	public Xoroshiro512PlusGenerator() {
+	public Xoshiro256PlusGenerator() {
 		setSeed(SecureRandom.getSeed(SEED_SIZE));
 	}
 
@@ -58,7 +58,7 @@ public class Xoroshiro512PlusGenerator implements RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If the seed is too short.
 	 */
-	public Xoroshiro512PlusGenerator(byte[] seed) {
+	public Xoshiro256PlusGenerator(byte[] seed) {
 		setSeed(seed);
 	}
 
@@ -90,34 +90,26 @@ public class Xoroshiro512PlusGenerator implements RandomGenerator {
 
 	@Override
 	public long generateUniformLong() {
-		long result = state[0] + state[2];
-		long t = state[1] << 11;
+		long result = state[0] + state[3];
+		long t = state[1] << 17;
 		state[2] ^= state[0];
-		state[5] ^= state[1];
+		state[3] ^= state[1];
 		state[1] ^= state[2];
-		state[7] ^= state[3];
-		state[3] ^= state[4];
-		state[4] ^= state[5];
-		state[0] ^= state[6];
-		state[6] ^= state[7];
-		state[6] ^= t;
-		state[7] = (state[7] << 21) | (state[7] >>> 43);
+		state[0] ^= state[3];
+		state[2] ^= t;
+		state[3] = (state[3] << 45) | (state[3] >>> 19);
 		return result;
 	}
 
 	/**
-	 * Equivalent to 2^256 calls to generateUniformLong(). Can be used to generate
-	 * 2^256 non-overlapping sequences.
+	 * Equivalent to 2^128 calls to generateUniformLong(). Can be used to generate
+	 * 2^128 non-overlapping sequences.
 	 */
 	public void jump() {
 		long state0 = 0;
 		long state1 = 0;
 		long state2 = 0;
 		long state3 = 0;
-		long state4 = 0;
-		long state5 = 0;
-		long state6 = 0;
-		long state7 = 0;
 		for (int i = 0; i < JUMP.length; ++i) {
 			for (int j = 0; j < 64; ++j) {
 				if ((JUMP[i] & (1L << j)) != 0) {
@@ -125,10 +117,6 @@ public class Xoroshiro512PlusGenerator implements RandomGenerator {
 					state1 ^= state[1];
 					state2 ^= state[2];
 					state3 ^= state[3];
-					state4 ^= state[4];
-					state5 ^= state[5];
-					state6 ^= state[6];
-					state7 ^= state[7];
 				}
 				generateUniformLong();
 			}
@@ -137,10 +125,33 @@ public class Xoroshiro512PlusGenerator implements RandomGenerator {
 		state[1] = state1;
 		state[2] = state2;
 		state[3] = state3;
-		state[4] = state4;
-		state[5] = state5;
-		state[6] = state6;
-		state[7] = state7;
+	}
+
+	/**
+	 * Equivalent to 2^192 calls to generateUniformLong(). Can be used to generate
+	 * 2^64 starting points from each of which jump() can generate 2^64
+	 * non-overlapping sequences.
+	 */
+	public void longJump() {
+		long state0 = 0;
+		long state1 = 0;
+		long state2 = 0;
+		long state3 = 0;
+		for (int i = 0; i < LONG_JUMP.length; ++i) {
+			for (int j = 0; j < 64; ++j) {
+				if ((LONG_JUMP[i] & (1L << j)) != 0) {
+					state0 ^= state[0];
+					state1 ^= state[1];
+					state2 ^= state[2];
+					state3 ^= state[3];
+				}
+				generateUniformLong();
+			}
+		}
+		state[0] = state0;
+		state[1] = state1;
+		state[2] = state2;
+		state[3] = state3;
 	}
 
 }
