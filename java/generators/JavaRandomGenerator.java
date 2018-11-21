@@ -31,7 +31,7 @@ public class JavaRandomGenerator implements RandomGenerator {
 	 * @see java.util.Random
 	 */
 	public JavaRandomGenerator() {
-		random = new Random();
+		this.random = new Random();
 	}
 
 	/**
@@ -40,7 +40,7 @@ public class JavaRandomGenerator implements RandomGenerator {
 	 * @see java.util.Random
 	 */
 	public JavaRandomGenerator(byte[] seed) {
-		random = new Random(ByteConverter.bytesToLong(seed));
+		this.random = new Random(ByteConverter.bytesToLong(seed));
 	}
 
 	/**
@@ -57,22 +57,22 @@ public class JavaRandomGenerator implements RandomGenerator {
 
 	@Override
 	public Random getRandom() {
-		return random;
+		return this.random;
 	}
 
 	@Override
 	public void setSeed(byte[] seed) {
-		random.setSeed(ByteConverter.bytesToLong(seed));
+		this.random.setSeed(ByteConverter.bytesToLong(seed));
 	}
 
 	@Override
 	public int generateUniformInteger() {
-		return random.nextInt();
+		return this.random.nextInt();
 	}
 
 	@Override
 	public long generateUniformLong() {
-		return random.nextLong();
+		return this.random.nextLong();
 	}
 
 }
