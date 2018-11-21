@@ -154,7 +154,9 @@ public interface RandomGenerator {
 	 *                                           If this generator doesn't support
 	 *                                           setting its seed.
 	 */
-	public void setSeed(byte[] seed);
+	public default void setSeed(byte[] seed) {
+		throw new UnsupportedOperationException();
+	}
 
 	// -----------------------------------------------------------------------------
 	// State methods
@@ -167,7 +169,9 @@ public interface RandomGenerator {
 	 *                                           If this generator doesn't support
 	 *                                           getting its state.
 	 */
-	public byte[] getState();
+	public default byte[] getState() {
+		throw new UnsupportedOperationException();
+	}
 
 	/**
 	 * Set the state of this generator.
@@ -180,7 +184,9 @@ public interface RandomGenerator {
 	 *                                           If this generator doesn't support
 	 *                                           setting its state.
 	 */
-	public void setState(byte[] state);
+	public default void setState(byte[] state) {
+		throw new UnsupportedOperationException();
+	}
 
 	// -----------------------------------------------------------------------------
 	// Boolean methods

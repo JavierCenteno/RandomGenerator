@@ -84,31 +84,31 @@ public abstract class Abstract8RandomGenerator implements RandomGenerator {
 
 	@Override
 	public short generateUniformShort() {
-		short _0 = generateUniformByte();
-		short _1 = generateUniformByte();
-		return (short) (_0 << 8 | _1);
+		int byte0 = generateUniformByte() & 0x000000FF;
+		int byte1 = generateUniformByte() & 0x000000FF;
+		return (short) (byte0 << 8 | byte1);
 	}
 
 	@Override
 	public int generateUniformInteger() {
-		int _0 = generateUniformByte();
-		int _1 = generateUniformByte();
-		int _2 = generateUniformByte();
-		int _3 = generateUniformByte();
-		return _0 << 24 | _1 << 16 | _2 << 8 | _3;
+		int byte0 = generateUniformByte() & 0x000000FF;
+		int byte1 = generateUniformByte() & 0x000000FF;
+		int byte2 = generateUniformByte() & 0x000000FF;
+		int byte3 = generateUniformByte() & 0x000000FF;
+		return byte0 << 24 | byte1 << 16 | byte2 << 8 | byte3;
 	}
 
 	@Override
 	public long generateUniformLong() {
-		long _0 = generateUniformByte();
-		long _1 = generateUniformByte();
-		long _2 = generateUniformByte();
-		long _3 = generateUniformByte();
-		long _4 = generateUniformByte();
-		long _5 = generateUniformByte();
-		long _6 = generateUniformByte();
-		long _7 = generateUniformByte();
-		return _0 << 56 | _1 << 48 | _2 << 40 | _3 << 32 | _4 << 24 | _5 << 16 | _6 << 8 | _7;
+		long byte0 = generateUniformByte() & 0x00000000000000FFL;
+		long byte1 = generateUniformByte() & 0x00000000000000FFL;
+		long byte2 = generateUniformByte() & 0x00000000000000FFL;
+		long byte3 = generateUniformByte() & 0x00000000000000FFL;
+		long byte4 = generateUniformByte() & 0x00000000000000FFL;
+		long byte5 = generateUniformByte() & 0x00000000000000FFL;
+		long byte6 = generateUniformByte() & 0x00000000000000FFL;
+		long byte7 = generateUniformByte() & 0x00000000000000FFL;
+		return byte0 << 56 | byte1 << 48 | byte2 << 40 | byte3 << 32 | byte4 << 24 | byte5 << 16 | byte6 << 8 | byte7;
 	}
 
 }

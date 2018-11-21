@@ -20,6 +20,8 @@ package api;
 
 import java.security.SecureRandom;
 
+import util.ByteConverter;
+
 /**
  * This class offers a partial implementation of RandomGenerator for a generator
  * with 16 bits of state.
@@ -71,16 +73,12 @@ public abstract class Abstract16RandomGenerator implements RandomGenerator {
 
 	@Override
 	public byte[] getState() {
-		byte _0 = (byte) (state >>> 8);
-		byte _1 = (byte) (state);
-		return new byte[] { _0, _1 };
+		return ByteConverter.shortToBytes(this.state);
 	}
 
 	@Override
 	public void setState(byte[] state) {
-		short _0 = (short) (state[0] << 8);
-		short _1 = (short) (state[1]);
-		this.state = (short) (_0 | _1);
+		this.state = ByteConverter.bytesToShort(state);
 	}
 
 	@Override
@@ -93,18 +91,18 @@ public abstract class Abstract16RandomGenerator implements RandomGenerator {
 
 	@Override
 	public int generateUniformInteger() {
-		int _0 = generateUniformShort();
-		int _1 = generateUniformShort();
-		return _0 << 16 | _1;
+		int short0 = generateUniformShort() & 0x0000FFFF;
+		int short1 = generateUniformShort() & 0x0000FFFF;
+		return short0 << 16 | short1;
 	}
 
 	@Override
 	public long generateUniformLong() {
-		long _0 = generateUniformShort();
-		long _1 = generateUniformShort();
-		long _2 = generateUniformShort();
-		long _3 = generateUniformShort();
-		return _0 << 48 | _1 << 32 | _2 << 16 | _3;
+		long short0 = generateUniformShort() & 0x000000000000FFFFL;
+		long short1 = generateUniformShort() & 0x000000000000FFFFL;
+		long short2 = generateUniformShort() & 0x000000000000FFFFL;
+		long short3 = generateUniformShort() & 0x000000000000FFFFL;
+		return short0 << 48 | short1 << 32 | short2 << 16 | short3;
 	}
 
 }

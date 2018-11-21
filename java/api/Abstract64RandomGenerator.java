@@ -20,6 +20,8 @@ package api;
 
 import java.security.SecureRandom;
 
+import util.ByteConverter;
+
 /**
  * This class offers a partial implementation of RandomGenerator for a generator
  * with 64 bits of state.
@@ -71,28 +73,12 @@ public abstract class Abstract64RandomGenerator implements RandomGenerator {
 
 	@Override
 	public byte[] getState() {
-		byte _0 = (byte) (state >>> 56);
-		byte _1 = (byte) (state >>> 48);
-		byte _2 = (byte) (state >>> 40);
-		byte _3 = (byte) (state >>> 32);
-		byte _4 = (byte) (state >>> 24);
-		byte _5 = (byte) (state >>> 16);
-		byte _6 = (byte) (state >>> 8);
-		byte _7 = (byte) (state);
-		return new byte[] { _0, _1, _2, _3, _4, _5, _6, _7 };
+		return ByteConverter.longToBytes(this.state);
 	}
 
 	@Override
 	public void setState(byte[] state) {
-		long _0 = ((long) state[0]) << 56;
-		long _1 = ((long) state[1]) << 48;
-		long _2 = ((long) state[2]) << 40;
-		long _3 = ((long) state[3]) << 32;
-		long _4 = ((long) state[4]) << 24;
-		long _5 = ((long) state[5]) << 16;
-		long _6 = ((long) state[6]) << 8;
-		long _7 = (long) state[7];
-		this.state = (_0 | _1 | _2 | _3 | _4 | _5 | _6 | _7);
+		this.state = ByteConverter.bytesToLong(state);
 	}
 
 	@Override

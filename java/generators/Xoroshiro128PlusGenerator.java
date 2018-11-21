@@ -3,6 +3,7 @@ package generators;
 import java.security.SecureRandom;
 
 import api.RandomGenerator;
+import util.ByteConverter;
 
 /**
  * Implementation of a Xoroshiro+ PRNG with a state of 128 bits.
@@ -18,7 +19,6 @@ public class Xoroshiro128PlusGenerator implements RandomGenerator {
 	// -----------------------------------------------------------------------------
 	// Class fields
 
-	private static final int STATE_SIZE = 2;
 	private static final long[] JUMP = { 0xDF900294D8F554A5L, 0x170865DF4B3201FCL };
 	private static final long[] LONG_JUMP = { 0xD2A98B26625EEE7BL, 0xDDDF9B1090AA7AC1L };
 
@@ -54,56 +54,17 @@ public class Xoroshiro128PlusGenerator implements RandomGenerator {
 
 	@Override
 	public void setSeed(byte[] seed) {
-		state = new long[STATE_SIZE];
-		for (int i = 0; i < state.length; ++i) {
-			long seed0 = ((long) seed[i * 8 + 0]) << 56;
-			long seed1 = ((long) seed[i * 8 + 1]) << 48;
-			long seed2 = ((long) seed[i * 8 + 2]) << 40;
-			long seed3 = ((long) seed[i * 8 + 3]) << 32;
-			long seed4 = ((long) seed[i * 8 + 4]) << 24;
-			long seed5 = ((long) seed[i * 8 + 5]) << 16;
-			long seed6 = ((long) seed[i * 8 + 6]) << 8;
-			long seed7 = (long) seed[i * 8 + 7];
-			state[i] = (seed0 | seed1 | seed2 | seed3 | seed4 | seed5 | seed6 | seed7);
-		}
+		setState(seed);
 	}
 
 	@Override
 	public byte[] getState() {
-		int i = 0;
-		int j = 0;
-		byte[] byteState = new byte[STATE_SIZE * 8];
-		while (i < state.length) {
-			byteState[j++] = (byte) (state[i] << 56);
-			byteState[j++] = (byte) (state[i] << 48);
-			byteState[j++] = (byte) (state[i] << 40);
-			byteState[j++] = (byte) (state[i] << 32);
-			byteState[j++] = (byte) (state[i] << 24);
-			byteState[j++] = (byte) (state[i] << 16);
-			byteState[j++] = (byte) (state[i] << 8);
-			byteState[j++] = (byte) (state[i]);
-			i++;
-		}
-		return byteState;
+		return ByteConverter.longsToBytes(this.state);
 	}
 
 	@Override
 	public void setState(byte[] state) {
-		int i = 0;
-		int j = 0;
-		long[] longState = new long[STATE_SIZE];
-		while (i < longState.length) {
-			long _0 = ((long) state[j++]) << 56;
-			long _1 = ((long) state[j++]) << 48;
-			long _2 = ((long) state[j++]) << 40;
-			long _3 = ((long) state[j++]) << 32;
-			long _4 = ((long) state[j++]) << 24;
-			long _5 = ((long) state[j++]) << 16;
-			long _6 = ((long) state[j++]) << 8;
-			long _7 = (long) state[j++];
-			longState[i++] = (_0 & _1 & _2 & _3 & _4 & _5 & _6 & _7);
-		}
-		this.state = longState;
+		this.state = ByteConverter.bytesToLongs(state);
 	}
 
 	@Override
