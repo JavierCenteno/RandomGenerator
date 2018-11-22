@@ -57,14 +57,14 @@ public class ByteConverter {
 	// To byte array methods
 
 	public static byte[] shortToBytes(short from) {
-		byte[] to = new byte[2];
+		byte[] to = new byte[Short.BYTES];
 		to[0] = (byte) (from >> 8);
 		to[1] = (byte) from;
 		return to;
 	}
 
 	public static byte[] integerToBytes(int from) {
-		byte[] to = new byte[4];
+		byte[] to = new byte[Integer.BYTES];
 		to[0] = (byte) (from >> 24);
 		to[1] = (byte) (from >> 16);
 		to[2] = (byte) (from >> 8);
@@ -73,7 +73,7 @@ public class ByteConverter {
 	}
 
 	public static byte[] longToBytes(long from) {
-		byte[] to = new byte[8];
+		byte[] to = new byte[Long.BYTES];
 		to[0] = (byte) (from >> 56);
 		to[1] = (byte) (from >> 48);
 		to[2] = (byte) (from >> 40);

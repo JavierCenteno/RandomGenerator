@@ -6,7 +6,7 @@ import api.RandomGenerator;
 import util.ByteConverter;
 
 /**
- * Implementation of a Mersenne Twister 19937 PRNG with a state of 64 bits.
+ * Implementation of a WELL 1024 a PRNG with a state of 1024 bits.
  * 
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
@@ -14,7 +14,7 @@ import util.ByteConverter;
  * @since 1.0
  * 
  */
-public class MersenneTwister19937Generator implements RandomGenerator {
+public class WELL1024AGenerator implements RandomGenerator {
 
 	// -----------------------------------------------------------------------------
 	// Class fields
@@ -22,19 +22,15 @@ public class MersenneTwister19937Generator implements RandomGenerator {
 	/**
 	 * Size of this generator's state in bytes.
 	 */
-	public static final int STATE_SIZE = 312;
+	public static final int STATE_SIZE = 128;
 	/**
 	 * Size of this generator's seed in bytes.
 	 */
-	public static final int SEED_SIZE = 8;
+	public static final int SEED_SIZE = STATE_SIZE;
 	/**
 	 * Size of this generator's state, including the index, in bytes.
 	 */
 	public static final int FULL_STATE_SIZE = Integer.BYTES + STATE_SIZE;
-	private static final int SHIFT_SIZE = 156;
-	private static final long UPPER_MASK = 0xFF_FF_FF_FF_80_00_00_00L;
-	private static final long LOWER_MASK = 0x00_00_00_00_7F_FF_FF_FFL;
-	private static final long XOR_MASK = 0xB5_02_6F_5A_A9_66_19_E9L;
 
 	// -----------------------------------------------------------------------------
 	// Instance fields
@@ -49,7 +45,7 @@ public class MersenneTwister19937Generator implements RandomGenerator {
 	 * parameters that may affect the returned result, so this may not be equivalent
 	 * to what the method getState() returns.
 	 */
-	private long[] state;
+	private int[] state;
 
 	// -----------------------------------------------------------------------------
 	// Instance initializers
@@ -59,7 +55,7 @@ public class MersenneTwister19937Generator implements RandomGenerator {
 	 * 
 	 * @see SecureRandom
 	 */
-	public MersenneTwister19937Generator() {
+	public WELL1024AGenerator() {
 		setSeed(SecureRandom.getSeed(SEED_SIZE));
 	}
 
@@ -71,7 +67,7 @@ public class MersenneTwister19937Generator implements RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If the seed is too short.
 	 */
-	public MersenneTwister19937Generator(byte[] seed) {
+	public WELL1024AGenerator(byte[] seed) {
 		setSeed(seed);
 	}
 
@@ -90,29 +86,14 @@ public class MersenneTwister19937Generator implements RandomGenerator {
 
 	@Override
 	public void setSeed(byte[] seed) {
-		if (seed.length < SEED_SIZE) {
-			throw new IllegalArgumentException();
-		}
-		state = new long[STATE_SIZE];
-		index = 0;
-		state[index] = ByteConverter.bytesToLong(seed);
-		while (index < STATE_SIZE - 1) {
-			long state_i = state[index];
-			state_i ^= state_i >>> 12;
-			state_i ^= state_i << 25;
-			state_i ^= state_i >>> 27;
-			state_i *= 6364136223846793005L;
-			state_i += 1442695040888963407L;
-			++index;
-			state[index] = state_i;
-		}
-		index = 0;
+		this.index = 0;
+		this.state = ByteConverter.bytesToIntegers(seed);
 	}
 
 	@Override
 	public byte[] getState() {
 		byte[] indexBytes = ByteConverter.integerToBytes(index);
-		byte[] stateBytes = ByteConverter.longsToBytes(this.state);
+		byte[] stateBytes = ByteConverter.integersToBytes(this.state);
 		byte[] fullState = new byte[indexBytes.length + stateBytes.length];
 		System.arraycopy(indexBytes, 0, fullState, 0, indexBytes.length);
 		System.arraycopy(stateBytes, 0, fullState, indexBytes.length, stateBytes.length);
@@ -129,43 +110,30 @@ public class MersenneTwister19937Generator implements RandomGenerator {
 		System.arraycopy(state, 0, indexBytes, 0, indexBytes.length);
 		System.arraycopy(state, indexBytes.length, stateBytes, 0, stateBytes.length);
 		this.index = ByteConverter.bytesToInteger(indexBytes);
-		this.state = ByteConverter.bytesToLongs(stateBytes);
+		this.state = ByteConverter.bytesToIntegers(stateBytes);
+	}
+
+	@Override
+	public int generateUniformInteger() {
+		int index0 = index;
+		int index3 = (index + 3) % 32;
+		int index10 = (index + 10) % 32;
+		int index24 = (index + 24) % 32;
+		int index31 = (index + 31) % 32;
+		int z0 = state[index31];
+		int z1 = state[index0] ^ (state[index3] ^ (state[index3] >>> 8));
+		int z2 = (state[index24] ^ (state[index24] << 19)) ^ (state[index10] ^ (state[index10] << 14));
+		state[index0] = z1 ^ z2;
+		state[index31] = (z0 ^ (z0 << 11)) ^ (z1 ^ (z1 << 7)) ^ (z2 ^ (z2 << 13));
+		index = index31;
+		return state[index];
 	}
 
 	@Override
 	public long generateUniformLong() {
-		if (index == STATE_SIZE) {
-			int i = 0;
-			while (i < SHIFT_SIZE) {
-				long x = (state[i] & UPPER_MASK) | (state[i + 1] & LOWER_MASK);
-				state[i] = state[i + SHIFT_SIZE] ^ (x >>> 1);
-				if (x % 2 == 0) {
-					state[i] ^= XOR_MASK;
-				}
-				++i;
-			}
-			while (i < STATE_SIZE - 1) {
-				long x = (state[i] & UPPER_MASK) | (state[i + 1] & LOWER_MASK);
-				state[i] = state[i + SHIFT_SIZE - STATE_SIZE] ^ (x >>> 1);
-				if (x % 2 == 0) {
-					state[i] ^= XOR_MASK;
-				}
-				++i;
-			}
-			long x = (state[STATE_SIZE - 1] & UPPER_MASK) | (state[0] & LOWER_MASK);
-			state[STATE_SIZE - 1] = state[SHIFT_SIZE - 1] ^ (x >>> 1);
-			if (x % 2 == 0) {
-				state[STATE_SIZE - 1] ^= XOR_MASK;
-			}
-			index = 0;
-		}
-		long x = state[index];
-		x ^= (x >> 29) & 0x5555555555555555L;
-		x ^= (x << 17) & 0x71D67FFFEDA60000L;
-		x ^= (x << 37) & 0xFFF7EEE000000000L;
-		x ^= (x >> 43);
-		++index;
-		return x;
+		long int0 = generateUniformInteger() & 0x00000000FFFFFFFFL;
+		long int1 = generateUniformInteger() & 0x00000000FFFFFFFFL;
+		return int0 << 32 | int1;
 	}
 
 }

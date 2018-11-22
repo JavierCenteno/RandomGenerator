@@ -144,7 +144,9 @@ public interface RandomGenerator {
 	// Seed methods
 
 	/**
-	 * Get the size of this generator's seed in bytes.
+	 * Get the size of this generator's seed in bytes. This is the minimum number of
+	 * bytes needed for the seed passed to the setSeed(byte[]) method in order for
+	 * that method to execute without failing if such an operation is supported.
 	 * 
 	 * @throws UnsupportedOperationException
 	 *                                           If this generator doesn't support
@@ -173,7 +175,9 @@ public interface RandomGenerator {
 	// State methods
 
 	/**
-	 * Get the size of this generator's state in bytes.
+	 * Get the size of this generator's state in bytes. This is the minimum number
+	 * of bytes needed for the state passed to the setState(byte[]) method in order
+	 * for that method to execute without failing if such an operation is supported.
 	 * 
 	 * @throws UnsupportedOperationException
 	 *                                           If this generator doesn't support
@@ -184,7 +188,10 @@ public interface RandomGenerator {
 	}
 
 	/**
-	 * Get the current state of this generator.
+	 * Get the current state of this generator. Generators implementing this
+	 * operation must guarantee that instancing a new generator "newGenerator" of
+	 * the same class and invoking newGenerator.setState(this.getState()) results in
+	 * a generator with the same state that produces the same results.
 	 * 
 	 * @return The current state of this generator.
 	 * @throws UnsupportedOperationException
@@ -196,7 +203,10 @@ public interface RandomGenerator {
 	}
 
 	/**
-	 * Set the state of this generator.
+	 * Set the state of this generator. Generators implementing this operation must
+	 * guarantee that instancing a new generator "newGenerator" of the same class
+	 * and invoking newGenerator.setState(this.getState()) results in a generator
+	 * with the same state that produces the same results.
 	 * 
 	 * @param state
 	 *                  A new state for this generator.
