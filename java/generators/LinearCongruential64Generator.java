@@ -1,7 +1,5 @@
 package generators;
 
-import java.security.SecureRandom;
-
 import api.Abstract64RandomGenerator;
 
 /**
@@ -19,9 +17,8 @@ public class LinearCongruential64Generator extends Abstract64RandomGenerator {
 	// Instance initializers
 
 	/**
-	 * Constructs a generator with a randomly chosen seed as given by SecureRandom.
-	 * 
-	 * @see SecureRandom
+	 * Constructs a generator with a randomly chosen seed provided by the default
+	 * seed generator.
 	 */
 	public LinearCongruential64Generator() {
 		super();

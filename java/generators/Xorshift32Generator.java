@@ -1,11 +1,9 @@
 package generators;
 
-import java.security.SecureRandom;
-
 import api.Abstract32RandomGenerator;
 
 /**
- * Implementation of a xorshift PRNG with a state of 64 bits.
+ * Implementation of a xorshift32 PRNG with a state of 32 bits.
  * 
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
@@ -19,9 +17,8 @@ public class Xorshift32Generator extends Abstract32RandomGenerator {
 	// Instance initializers
 
 	/**
-	 * Constructs a generator with a randomly chosen seed as given by SecureRandom.
-	 * 
-	 * @see SecureRandom
+	 * Constructs a generator with a randomly chosen seed provided by the default
+	 * seed generator.
 	 */
 	public Xorshift32Generator() {
 		super();

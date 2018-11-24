@@ -1,7 +1,5 @@
 package generators;
 
-import java.security.SecureRandom;
-
 import api.RandomGenerator;
 import util.ByteConverter;
 
@@ -55,9 +53,8 @@ public class WELL19937CGenerator implements RandomGenerator {
 	// Instance initializers
 
 	/**
-	 * Constructs a generator with a randomly chosen seed as given by SecureRandom.
-	 * 
-	 * @see SecureRandom
+	 * Constructs a generator with a randomly chosen seed provided by the default
+	 * seed generator.
 	 */
 	public WELL19937CGenerator() {
 		this(DEFAULT_SEED_GENERATOR.generateBytes(SEED_SIZE));

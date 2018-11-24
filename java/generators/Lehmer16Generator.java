@@ -1,7 +1,5 @@
 package generators;
 
-import java.security.SecureRandom;
-
 import api.Abstract16RandomGenerator;
 
 /**
@@ -20,9 +18,8 @@ public class Lehmer16Generator extends Abstract16RandomGenerator {
 	// Instance initializers
 
 	/**
-	 * Constructs a generator with a randomly chosen seed as given by SecureRandom.
-	 * 
-	 * @see SecureRandom
+	 * Constructs a generator with a randomly chosen seed provided by the default
+	 * seed generator.
 	 */
 	public Lehmer16Generator() {
 		super();

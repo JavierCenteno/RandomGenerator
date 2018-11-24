@@ -1,6 +1,5 @@
 package generators;
 
-import java.security.SecureRandom;
 import java.util.Arrays;
 
 import api.RandomGenerator;
@@ -43,9 +42,8 @@ public class Xoshiro512PlusGenerator implements RandomGenerator {
 	// Instance initializers
 
 	/**
-	 * Constructs a generator with a randomly chosen seed as given by SecureRandom.
-	 * 
-	 * @see SecureRandom
+	 * Constructs a generator with a randomly chosen seed provided by the default
+	 * seed generator.
 	 */
 	public Xoshiro512PlusGenerator() {
 		this(DEFAULT_SEED_GENERATOR.generateBytes(SEED_SIZE));

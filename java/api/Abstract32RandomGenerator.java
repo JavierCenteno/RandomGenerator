@@ -18,8 +18,6 @@
 
 package api;
 
-import java.security.SecureRandom;
-
 import util.ByteConverter;
 
 /**
@@ -57,9 +55,8 @@ public abstract class Abstract32RandomGenerator implements RandomGenerator {
 	// Instance initializers
 
 	/**
-	 * Constructs a generator with a randomly chosen seed as given by SecureRandom.
-	 * 
-	 * @see SecureRandom
+	 * Constructs a generator with a randomly chosen seed provided by the default
+	 * seed generator.
 	 */
 	public Abstract32RandomGenerator() {
 		this(DEFAULT_SEED_GENERATOR.generateBytes(SEED_SIZE));
