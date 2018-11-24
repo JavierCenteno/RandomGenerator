@@ -6,7 +6,7 @@ import api.RandomGenerator;
 import util.ByteConverter;
 
 /**
- * Implementation of a WELL 512 a PRNG with a state of 512 bits.
+ * Implementation of a WELL 44497 a PRNG with a state of 44512 bits.
  * 
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
@@ -14,7 +14,7 @@ import util.ByteConverter;
  * @since 1.0
  * 
  */
-public class WELL512AGenerator implements RandomGenerator {
+public class WELL44497BGenerator implements RandomGenerator {
 
 	// -----------------------------------------------------------------------------
 	// Class fields
@@ -22,7 +22,7 @@ public class WELL512AGenerator implements RandomGenerator {
 	/**
 	 * Size of this generator's state in integers.
 	 */
-	public static final int STATE_SIZE_INTS = 16;
+	public static final int STATE_SIZE_INTS = 1391;
 	/**
 	 * Size of this generator's state in bytes.
 	 */
@@ -59,7 +59,7 @@ public class WELL512AGenerator implements RandomGenerator {
 	 * 
 	 * @see SecureRandom
 	 */
-	public WELL512AGenerator() {
+	public WELL44497BGenerator() {
 		setSeed(SecureRandom.getSeed(SEED_SIZE));
 	}
 
@@ -71,7 +71,7 @@ public class WELL512AGenerator implements RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If the seed is too short.
 	 */
-	public WELL512AGenerator(byte[] seed) {
+	public WELL44497BGenerator(byte[] seed) {
 		setSeed(seed);
 	}
 
@@ -120,17 +120,22 @@ public class WELL512AGenerator implements RandomGenerator {
 	@Override
 	public int generateUniformInteger() {
 		int index0 = index;
-		int index9 = (index + 9) % STATE_SIZE_INTS;
-		int index13 = (index + 13) % STATE_SIZE_INTS;
-		int index15 = (index + 15) % STATE_SIZE_INTS;
-		int z0 = state[index15];
-		int z1 = (state[index0] ^ (state[index0] << 16)) ^ (state[index13] ^ (state[index13] << 15));
-		int z2 = state[index9] ^ (state[index9] >>> 11);
+		int index23 = (index + 23) % STATE_SIZE_INTS;
+		int index229 = (index + 229) % STATE_SIZE_INTS;
+		int index481 = (index + 481) % STATE_SIZE_INTS;
+		int index1389 = (index + 1389) % STATE_SIZE_INTS;
+		int index1390 = (index + 1390) % STATE_SIZE_INTS;
+		int z0 = (state[index1390] & 0xFFFF8000) | (state[index1389] & 0x00007FFF);
+		int z1 = (state[index0] ^ (state[index0] << 24)) ^ (state[index23] ^ (state[index23] >>> 30));
+		int z2 = (state[index481] ^ (state[index481] << 10)) ^ (state[index229] << 26);
 		state[index0] = z1 ^ z2;
-		state[index15] = (z0 ^ (z0 << 2)) ^ (z1 ^ (z1 << 18)) ^ (z2 << 28)
-				^ (state[index0] ^ ((state[index0] << 5) & 0xDA442D24));
-		index = index15;
-		return state[index];
+		state[index1390] = z0 ^ (z1 ^ (z1 >>> 20))
+				^ ((z2 & 0x00020000) != 0 ? ((((z2 << 9) ^ (z2 >>> 23)) & 0xFBFFFFFF) ^ 0xB729FCEC)
+						: (((z2 << 9) ^ (z2 >>> 23)) & 0xFBFFFFFF));
+		index = index1390;
+		int y = state[index] ^ ((state[index] << 7) & 0x93DD1400);
+		y = y ^ ((y << 15) & 0xFA118000);
+		return y;
 	}
 
 	@Override
