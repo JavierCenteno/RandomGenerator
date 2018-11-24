@@ -41,9 +41,9 @@ public class Xorshift64Generator extends Abstract64RandomGenerator {
 
 	@Override
 	public long generateUniformLong() {
-		this.state ^= this.state >>> 12;
-		this.state ^= this.state << 25;
-		this.state ^= this.state >>> 27;
+		this.state ^= this.state << 13;
+		this.state ^= this.state >>> 7;
+		this.state ^= this.state << 17;
 		return this.state;
 	}
 
