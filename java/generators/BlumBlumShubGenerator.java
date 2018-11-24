@@ -22,19 +22,19 @@ public class BlumBlumShubGenerator implements RandomGenerator {
 	/**
 	 * A prime.
 	 */
-	private static final BigInteger P = BigInteger.valueOf(999999999707L);
+	private static final BigInteger PRIME_1 = BigInteger.valueOf(999999999707L);
 	/**
 	 * A prime.
 	 */
-	private static final BigInteger Q = BigInteger.valueOf(999999999517L);
+	private static final BigInteger PRIME_2 = BigInteger.valueOf(999999999517L);
 	/**
-	 * The product of the primes P and Q.
+	 * The product of the two primes.
 	 */
-	private static final BigInteger M = P.multiply(Q);
+	private static final BigInteger MODULUS = PRIME_1.multiply(PRIME_2);
 	/**
 	 * Size of this generator's state in bytes.
 	 */
-	public static final int STATE_SIZE = M.toByteArray().length;
+	public static final int STATE_SIZE = MODULUS.toByteArray().length;
 	/**
 	 * Size of this generator's seed in bytes.
 	 */
@@ -63,8 +63,9 @@ public class BlumBlumShubGenerator implements RandomGenerator {
 		// Make another seed if it's 0, 1 or coprime with M
 		do {
 			seed = SecureRandom.getSeed(SEED_SIZE);
-			bigIntegerSeed = new BigInteger(seed).abs().mod(M);
-		} while (bigIntegerSeed.compareTo(BigInteger.ONE) <= 0 || bigIntegerSeed.equals(P) || bigIntegerSeed.equals(Q));
+			bigIntegerSeed = new BigInteger(seed).abs().mod(MODULUS);
+		} while (bigIntegerSeed.compareTo(BigInteger.ONE) <= 0 || bigIntegerSeed.equals(PRIME_1)
+				|| bigIntegerSeed.equals(PRIME_2));
 		setSeed(seed);
 	}
 
@@ -80,8 +81,8 @@ public class BlumBlumShubGenerator implements RandomGenerator {
 	 */
 	public BlumBlumShubGenerator(byte[] seed) {
 		BigInteger bigIntegerSeed = new BigInteger(seed);
-		if (bigIntegerSeed.compareTo(BigInteger.ONE) <= 0 || bigIntegerSeed.equals(P) || bigIntegerSeed.equals(Q)
-				|| bigIntegerSeed.compareTo(M) > 0) {
+		if (bigIntegerSeed.compareTo(BigInteger.ONE) <= 0 || bigIntegerSeed.equals(PRIME_1)
+				|| bigIntegerSeed.equals(PRIME_2) || bigIntegerSeed.compareTo(MODULUS) > 0) {
 			throw new IllegalArgumentException();
 		}
 		setSeed(seed);
@@ -113,11 +114,17 @@ public class BlumBlumShubGenerator implements RandomGenerator {
 		this.state = new BigInteger(state);
 	}
 
+	/**
+	 * Generates a single bit.
+	 * 
+	 * @return A byte that is equal to either 0 or 1.
+	 */
 	public byte generateBit() {
-		state = state.pow(2).mod(M);
+		state = state.pow(2).mod(MODULUS);
 		return (byte) (state.intValue() & 1);
 	}
 
+	@Override
 	public byte generateByteBits(int bits) {
 		if (bits < 0 || Byte.SIZE < bits) {
 			throw new IllegalArgumentException();
@@ -129,6 +136,7 @@ public class BlumBlumShubGenerator implements RandomGenerator {
 		return result;
 	}
 
+	@Override
 	public short generateShortBits(int bits) {
 		if (bits < 0 || Short.SIZE < bits) {
 			throw new IllegalArgumentException();
@@ -140,6 +148,7 @@ public class BlumBlumShubGenerator implements RandomGenerator {
 		return result;
 	}
 
+	@Override
 	public int generateIntegerBits(int bits) {
 		if (bits < 0 || Integer.SIZE < bits) {
 			throw new IllegalArgumentException();
@@ -151,6 +160,7 @@ public class BlumBlumShubGenerator implements RandomGenerator {
 		return result;
 	}
 
+	@Override
 	public long generateLongBits(int bits) {
 		if (bits < 0 || Long.SIZE < bits) {
 			throw new IllegalArgumentException();
