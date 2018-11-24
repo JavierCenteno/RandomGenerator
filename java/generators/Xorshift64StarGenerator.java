@@ -14,7 +14,7 @@ import api.Abstract64RandomGenerator;
  * @since 1.0
  * 
  */
-public class XorshiftStar64Generator extends Abstract64RandomGenerator {
+public class Xorshift64StarGenerator extends Abstract64RandomGenerator {
 
 	// -----------------------------------------------------------------------------
 	// Instance initializers
@@ -24,7 +24,7 @@ public class XorshiftStar64Generator extends Abstract64RandomGenerator {
 	 * 
 	 * @see SecureRandom
 	 */
-	public XorshiftStar64Generator() {
+	public Xorshift64StarGenerator() {
 		super();
 	}
 
@@ -36,7 +36,7 @@ public class XorshiftStar64Generator extends Abstract64RandomGenerator {
 	 * @throws IllegalArgumentException
 	 *                                      If the seed is too short.
 	 */
-	public XorshiftStar64Generator(byte[] seed) {
+	public Xorshift64StarGenerator(byte[] seed) {
 		super(seed);
 	}
 
