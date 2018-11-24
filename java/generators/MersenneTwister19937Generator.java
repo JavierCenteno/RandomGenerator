@@ -30,7 +30,7 @@ public class MersenneTwister19937Generator implements RandomGenerator {
 	/**
 	 * Size of this generator's seed in bytes.
 	 */
-	public static final int SEED_SIZE = 8;
+	public static final int SEED_SIZE = STATE_SIZE;
 	/**
 	 * Size of this generator's state, including the index, in bytes.
 	 */
@@ -94,23 +94,11 @@ public class MersenneTwister19937Generator implements RandomGenerator {
 
 	@Override
 	public void setSeed(byte[] seed) {
-		if (seed.length < SEED_SIZE) {
+		if (seed.length < STATE_SIZE) {
 			throw new IllegalArgumentException();
 		}
-		state = new long[STATE_SIZE_LONGS];
-		index = 0;
-		state[index] = ByteConverter.bytesToLong(seed);
-		while (index < STATE_SIZE_LONGS - 1) {
-			long state_i = state[index];
-			state_i ^= state_i >>> 12;
-			state_i ^= state_i << 25;
-			state_i ^= state_i >>> 27;
-			state_i *= 6364136223846793005L;
-			state_i += 1442695040888963407L;
-			++index;
-			state[index] = state_i;
-		}
-		index = 0;
+		this.index = 0;
+		this.state = ByteConverter.bytesToLongs(seed);
 	}
 
 	@Override
