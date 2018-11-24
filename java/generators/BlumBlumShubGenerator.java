@@ -62,7 +62,7 @@ public class BlumBlumShubGenerator implements RandomGenerator {
 		BigInteger bigIntegerSeed;
 		// Make another seed if it's 0, 1 or coprime with M
 		do {
-			seed = SecureRandom.getSeed(SEED_SIZE);
+			seed = DEFAULT_SEED_GENERATOR.generateBytes(SEED_SIZE);
 			bigIntegerSeed = new BigInteger(seed).abs().mod(MODULUS);
 		} while (bigIntegerSeed.compareTo(BigInteger.ONE) <= 0 || bigIntegerSeed.equals(PRIME_1)
 				|| bigIntegerSeed.equals(PRIME_2));

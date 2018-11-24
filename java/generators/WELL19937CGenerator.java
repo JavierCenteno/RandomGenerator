@@ -60,7 +60,7 @@ public class WELL19937CGenerator implements RandomGenerator {
 	 * @see SecureRandom
 	 */
 	public WELL19937CGenerator() {
-		setSeed(SecureRandom.getSeed(SEED_SIZE));
+		this(DEFAULT_SEED_GENERATOR.generateBytes(SEED_SIZE));
 	}
 
 	/**

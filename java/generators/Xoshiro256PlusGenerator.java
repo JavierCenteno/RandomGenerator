@@ -50,7 +50,7 @@ public class Xoshiro256PlusGenerator implements RandomGenerator {
 	 * @see SecureRandom
 	 */
 	public Xoshiro256PlusGenerator() {
-		setSeed(SecureRandom.getSeed(SEED_SIZE));
+		this(DEFAULT_SEED_GENERATOR.generateBytes(SEED_SIZE));
 	}
 
 	/**

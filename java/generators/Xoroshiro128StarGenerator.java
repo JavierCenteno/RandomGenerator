@@ -48,7 +48,7 @@ public class Xoroshiro128StarGenerator implements RandomGenerator {
 	 * @see SecureRandom
 	 */
 	public Xoroshiro128StarGenerator() {
-		setSeed(SecureRandom.getSeed(SEED_SIZE));
+		this(DEFAULT_SEED_GENERATOR.generateBytes(SEED_SIZE));
 	}
 
 	/**

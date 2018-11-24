@@ -50,7 +50,7 @@ public class PermutedCongruentialGeneratorXSHRR implements RandomGenerator {
 	 * @see SecureRandom
 	 */
 	public PermutedCongruentialGeneratorXSHRR() {
-		setSeed(SecureRandom.getSeed(SEED_SIZE));
+		this(DEFAULT_SEED_GENERATOR.generateBytes(SEED_SIZE));
 	}
 
 	/**

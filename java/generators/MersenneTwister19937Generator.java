@@ -64,7 +64,7 @@ public class MersenneTwister19937Generator implements RandomGenerator {
 	 * @see SecureRandom
 	 */
 	public MersenneTwister19937Generator() {
-		setSeed(SecureRandom.getSeed(SEED_SIZE));
+		setSeed(DEFAULT_SEED_GENERATOR.generateBytes(SEED_SIZE));
 	}
 
 	/**

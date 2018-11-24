@@ -62,7 +62,7 @@ public abstract class Abstract32RandomGenerator implements RandomGenerator {
 	 * @see SecureRandom
 	 */
 	public Abstract32RandomGenerator() {
-		this(SecureRandom.getSeed(SEED_SIZE));
+		this(DEFAULT_SEED_GENERATOR.generateBytes(SEED_SIZE));
 	}
 
 	/**

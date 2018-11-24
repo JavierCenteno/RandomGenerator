@@ -60,7 +60,7 @@ public abstract class Abstract8RandomGenerator implements RandomGenerator {
 	 * @see SecureRandom
 	 */
 	public Abstract8RandomGenerator() {
-		this(SecureRandom.getSeed(SEED_SIZE));
+		this(DEFAULT_SEED_GENERATOR.generateBytes(SEED_SIZE));
 	}
 
 	/**

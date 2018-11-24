@@ -23,6 +23,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import generators.Xoroshiro128StarStarGenerator;
+import util.ByteConverter;
+
 /**
  * This class offers methods to generate random variables.
  * 
@@ -32,6 +35,16 @@ import java.util.Set;
  * 
  */
 public interface RandomGenerator {
+
+	// -----------------------------------------------------------------------------
+	// Seed generator
+
+	/**
+	 * Default generator of seeds.
+	 */
+	public static final RandomGenerator DEFAULT_SEED_GENERATOR = new Xoroshiro128StarStarGenerator(
+			ByteConverter.longsToBytes(
+					new long[] { System.nanoTime(), System.nanoTime() * 6364136223846793005L + 1442695040888963407L }));
 
 	// -----------------------------------------------------------------------------
 	// Random methods
@@ -221,7 +234,7 @@ public interface RandomGenerator {
 	}
 
 	// -----------------------------------------------------------------------------
-	// Split methods
+	// Generator operation methods
 
 	/**
 	 * Obtain a new generator from this one.
@@ -232,40 +245,6 @@ public interface RandomGenerator {
 	 */
 	public default RandomGenerator split() {
 		throw new UnsupportedOperationException();
-	}
-
-	// -----------------------------------------------------------------------------
-	// Boolean methods
-
-	/**
-	 * Get a random boolean.
-	 * 
-	 * @return A random boolean.
-	 */
-	public default boolean generateBoolean() {
-		return generateUniformByte() < 0;
-	}
-
-	/**
-	 * Get a random boolean.
-	 * 
-	 * @param probability
-	 *                        Probability that this will return true.
-	 * @return A random boolean.
-	 */
-	public default boolean generateBoolean(float probability) {
-		return generateUniformFloat() < probability;
-	}
-
-	/**
-	 * Get a random boolean.
-	 * 
-	 * @param probability
-	 *                        Probability that this will return true.
-	 * @return A random boolean.
-	 */
-	public default boolean generateBoolean(double probability) {
-		return generateUniformDouble() < probability;
 	}
 
 	// -----------------------------------------------------------------------------
@@ -340,6 +319,94 @@ public interface RandomGenerator {
 	}
 
 	// -----------------------------------------------------------------------------
+	// Boolean methods
+
+	/**
+	 * Get a random boolean.
+	 * 
+	 * @return A random boolean.
+	 */
+	public default boolean generateBoolean() {
+		return generateUniformByte() < 0;
+	}
+
+	/**
+	 * Fills an array with the results of generateBoolean().
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateBoolean().
+	 * @see generateBoolean()
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default boolean[] generateBooleans(int size) {
+		boolean[] result = new boolean[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateBoolean();
+		}
+		return result;
+	}
+
+	/**
+	 * Get a random boolean.
+	 * 
+	 * @param probability
+	 *                        Probability that this will return true.
+	 * @return A random boolean.
+	 */
+	public default boolean generateBoolean(float probability) {
+		return generateUniformFloat() < probability;
+	}
+
+	/**
+	 * Fills an array with the results of generateBoolean(float).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateBoolean(float).
+	 * @see generateBoolean(float)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default boolean[] generateBooleans(float probability, int size) {
+		boolean[] result = new boolean[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateBoolean(probability);
+		}
+		return result;
+	}
+
+	/**
+	 * Get a random boolean.
+	 * 
+	 * @param probability
+	 *                        Probability that this will return true.
+	 * @return A random boolean.
+	 */
+	public default boolean generateBoolean(double probability) {
+		return generateUniformDouble() < probability;
+	}
+
+	/**
+	 * Fills an array with the results of generateBoolean(double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateBoolean(double).
+	 * @see generateBoolean(double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default boolean[] generateBooleans(double probability, int size) {
+		boolean[] result = new boolean[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateBoolean(probability);
+		}
+		return result;
+	}
+
+	// -----------------------------------------------------------------------------
 	// Byte methods
 
 	/**
@@ -350,10 +417,46 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateByte().
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateByte().
+	 * @see generateByte()
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default byte[] generateBytes(int size) {
+		byte[] result = new byte[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateByte();
+		}
+		return result;
+	}
+
+	/**
 	 * @see RandomGenerator#generateUniformByte(byte)
 	 */
 	public default byte generateByte(byte max) {
 		return generateUniformByte(max);
+	}
+
+	/**
+	 * Fills an array with the results of generateByte(byte).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateByte(byte).
+	 * @see generateByte(byte)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default byte[] generateBytes(byte max, int size) {
+		byte[] result = new byte[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateByte(max);
+		}
+		return result;
 	}
 
 	/**
@@ -364,12 +467,48 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateByte(byte, byte).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateByte(byte, byte).
+	 * @see generateByte(byte, byte)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default byte[] generateBytes(byte min, byte max, int size) {
+		byte[] result = new byte[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateByte(min, max);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random byte with a uniform distribution.
 	 * 
 	 * @return A random byte with a uniform distribution.
 	 */
 	public default byte generateUniformByte() {
 		return (byte) generateUniformShort();
+	}
+
+	/**
+	 * Fills an array with the results of generateUniformByte().
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateUniformByte().
+	 * @see generateUniformByte()
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default byte[] generateUniformBytes(int size) {
+		byte[] result = new byte[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateUniformByte();
+		}
+		return result;
 	}
 
 	/**
@@ -386,6 +525,24 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateUniformByte(byte).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateUniformByte(byte).
+	 * @see generateUniformByte(byte)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default byte[] generateUniformBytes(byte max, int size) {
+		byte[] result = new byte[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateUniformByte(max);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random byte with a uniform distribution between two numbers.
 	 * 
 	 * @param min
@@ -398,6 +555,24 @@ public interface RandomGenerator {
 	 */
 	public default byte generateUniformByte(byte min, byte max) {
 		return (byte) generateUniformShort(min, max);
+	}
+
+	/**
+	 * Fills an array with the results of generateUniformByte(byte, byte).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateUniformByte(byte, byte).
+	 * @see generateUniformByte(byte, byte)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default byte[] generateUniformBytes(byte min, byte max, int size) {
+		byte[] result = new byte[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateUniformByte(min, max);
+		}
+		return result;
 	}
 
 	/**
@@ -418,6 +593,25 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateBatesByte(byte, byte, int).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateBatesByte(byte, byte,
+	 *         int).
+	 * @see generateBatesByte(byte, byte, int)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default byte[] generateBatesBytes(byte min, byte max, int number, int size) {
+		byte[] result = new byte[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateBatesByte(min, max, number);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random byte with a normal distribution.
 	 * 
 	 * @param mean
@@ -428,6 +622,25 @@ public interface RandomGenerator {
 	 */
 	public default byte generateNormalByte(double mean, double standardDeviation) {
 		return (byte) generateNormalShort(mean, standardDeviation);
+	}
+
+	/**
+	 * Fills an array with the results of generateNormalByte(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateNormalByte(double,
+	 *         double).
+	 * @see generateNormalByte(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default byte[] generateNormalBytes(double mean, double standardDeviation, int size) {
+		byte[] result = new byte[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateNormalByte(mean, standardDeviation);
+		}
+		return result;
 	}
 
 	/**
@@ -443,6 +656,25 @@ public interface RandomGenerator {
 	 */
 	public default byte generateLognormalByte(double logMean, double logStandardDeviation) {
 		return (byte) generateLognormalShort(logMean, logStandardDeviation);
+	}
+
+	/**
+	 * Fills an array with the results of generateLognormalByte(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateLognormalByte(double,
+	 *         double).
+	 * @see generateLognormalByte(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default byte[] generateLognormalBytes(double logMean, double logStandardDeviation, int size) {
+		byte[] result = new byte[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateLognormalByte(logMean, logStandardDeviation);
+		}
+		return result;
 	}
 
 	/**
@@ -464,6 +696,25 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateTriangularByte(byte, byte, byte).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateTriangularByte(byte,
+	 *         byte, byte).
+	 * @see generateTriangularByte(byte, byte, byte)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default byte[] generateTriangularBytes(byte min, byte max, byte mode, int size) {
+		byte[] result = new byte[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateTriangularByte(min, max, mode);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random byte with a Pareto distribution.
 	 * 
 	 * @param shape
@@ -477,6 +728,25 @@ public interface RandomGenerator {
 	 */
 	public default byte generateParetoByte(double shape, double scale) {
 		return (byte) generateParetoShort(shape, scale);
+	}
+
+	/**
+	 * Fills an array with the results of generateParetoByte(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateParetoByte(double,
+	 *         double).
+	 * @see generateParetoByte(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default byte[] generateParetoBytes(double shape, double scale, int size) {
+		byte[] result = new byte[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateParetoByte(shape, scale);
+		}
+		return result;
 	}
 
 	/**
@@ -496,6 +766,25 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateWeibullByte(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateWeibullByte(double,
+	 *         double).
+	 * @see generateWeibullByte(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default byte[] generateWeibullBytes(double shape, double scale, int size) {
+		byte[] result = new byte[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateWeibullByte(shape, scale);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random byte with an exponential distribution.
 	 * 
 	 * @param scale
@@ -506,6 +795,24 @@ public interface RandomGenerator {
 	 */
 	public default byte generateExponentialByte(double scale) {
 		return (byte) generateExponentialShort(scale);
+	}
+
+	/**
+	 * Fills an array with the results of generateExponentialByte(double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateExponentialByte(double).
+	 * @see generateExponentialByte(double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default byte[] generateExponentialBytes(double scale, int size) {
+		byte[] result = new byte[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateExponentialByte(scale);
+		}
+		return result;
 	}
 
 	/**
@@ -525,6 +832,25 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateGammaByte(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateGammaByte(double,
+	 *         double).
+	 * @see generateGammaByte(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default byte[] generateGammaBytes(double shape, double scale, int size) {
+		byte[] result = new byte[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateGammaByte(shape, scale);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random byte with a beta distribution.
 	 * 
 	 * @param shapeAlpha
@@ -541,6 +867,24 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateBetaByte(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateBetaByte(double, double).
+	 * @see generateBetaByte(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default byte[] generateBetaBytes(double shapeAlpha, double shapeBeta, int size) {
+		byte[] result = new byte[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateBetaByte(shapeAlpha, shapeBeta);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random byte with a poisson distribution.
 	 * 
 	 * @param rate
@@ -551,6 +895,24 @@ public interface RandomGenerator {
 	 */
 	public default byte generatePoissonByte(double rate) {
 		return (byte) generatePoissonShort(rate);
+	}
+
+	/**
+	 * Fills an array with the results of generatePoissonByte(double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generatePoissonByte(double).
+	 * @see generatePoissonByte(double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default byte[] generatePoissonBytes(double rate, int size) {
+		byte[] result = new byte[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generatePoissonByte(rate);
+		}
+		return result;
 	}
 
 	// -----------------------------------------------------------------------------
@@ -564,10 +926,46 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateShort().
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateShort().
+	 * @see generateShort()
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default short[] generateShorts(int size) {
+		short[] result = new short[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateShort();
+		}
+		return result;
+	}
+
+	/**
 	 * @see RandomGenerator#generateUniformShort(short)
 	 */
 	public default short generateShort(short max) {
 		return generateUniformShort(max);
+	}
+
+	/**
+	 * Fills an array with the results of generateShort(short).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateShort(short).
+	 * @see generateShort(short)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default short[] generateShorts(short max, int size) {
+		short[] result = new short[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateShort(max);
+		}
+		return result;
 	}
 
 	/**
@@ -578,12 +976,48 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateShort(short, short).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateShort(short, short).
+	 * @see generateShort(short, short)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default short[] generateShorts(short min, short max, int size) {
+		short[] result = new short[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateShort(min, max);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random short integer with a uniform distribution.
 	 * 
 	 * @return A random short integer with a uniform distribution.
 	 */
 	public default short generateUniformShort() {
 		return (short) generateUniformInteger();
+	}
+
+	/**
+	 * Fills an array with the results of generateUniformShort().
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateUniformShort().
+	 * @see generateUniformShort()
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default short[] generateUniformShorts(int size) {
+		short[] result = new short[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateUniformShort();
+		}
+		return result;
 	}
 
 	/**
@@ -602,6 +1036,24 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateUniformShort(short).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateUniformShort(short).
+	 * @see generateUniformShort(short)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default short[] generateUniformShorts(short max, int size) {
+		short[] result = new short[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateUniformShort(max);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random short integer with a uniform distribution between two numbers.
 	 * 
 	 * @param min
@@ -615,6 +1067,25 @@ public interface RandomGenerator {
 	 */
 	public default short generateUniformShort(short min, short max) {
 		return (short) generateUniformInteger(min, max);
+	}
+
+	/**
+	 * Fills an array with the results of generateUniformShort(short, short).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateUniformShort(short,
+	 *         short).
+	 * @see generateUniformShort(short, short)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default short[] generateUniformShorts(short min, short max, int size) {
+		short[] result = new short[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateUniformShort(min, max);
+		}
+		return result;
 	}
 
 	/**
@@ -635,6 +1106,25 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateBatesShort(short, short, int).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateBatesShort(short, short,
+	 *         int).
+	 * @see generateBatesShort(short, short, int)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default short[] generateBatesShorts(short min, short max, int number, int size) {
+		short[] result = new short[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateBatesShort(min, max, number);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random short integer with a normal distribution.
 	 * 
 	 * @param mean
@@ -645,6 +1135,25 @@ public interface RandomGenerator {
 	 */
 	public default short generateNormalShort(double mean, double standardDeviation) {
 		return (short) generateNormalInteger(mean, standardDeviation);
+	}
+
+	/**
+	 * Fills an array with the results of generateNormalShort(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateNormalShort(double,
+	 *         double).
+	 * @see generateNormalShort(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default short[] generateNormalShorts(double mean, double standardDeviation, int size) {
+		short[] result = new short[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateNormalShort(mean, standardDeviation);
+		}
+		return result;
 	}
 
 	/**
@@ -660,6 +1169,25 @@ public interface RandomGenerator {
 	 */
 	public default short generateLognormalShort(double logMean, double logStandardDeviation) {
 		return (short) generateLognormalInteger(logMean, logStandardDeviation);
+	}
+
+	/**
+	 * Fills an array with the results of generateLognormalShort(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateLognormalShort(double,
+	 *         double).
+	 * @see generateLognormalShort(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default short[] generateLognormalShorts(double mean, double standardDeviation, int size) {
+		short[] result = new short[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateLognormalShort(mean, standardDeviation);
+		}
+		return result;
 	}
 
 	/**
@@ -681,6 +1209,26 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateTriangularShort(short, short,
+	 * short).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateTriangularShort(short,
+	 *         short, short).
+	 * @see generateTriangularShort(short, short, short)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default short[] generateTriangularShorts(short min, short max, short mode, int size) {
+		short[] result = new short[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateTriangularShort(min, max, mode);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random short integer with a Pareto distribution.
 	 * 
 	 * @param shape
@@ -694,6 +1242,25 @@ public interface RandomGenerator {
 	 */
 	public default short generateParetoShort(double shape, double scale) {
 		return (short) generateParetoInteger(shape, scale);
+	}
+
+	/**
+	 * Fills an array with the results of generateParetoShort(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateParetoShort(double,
+	 *         double).
+	 * @see generateParetoShort(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default short[] generateParetoShorts(double shape, double scale, int size) {
+		short[] result = new short[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateParetoShort(shape, scale);
+		}
+		return result;
 	}
 
 	/**
@@ -713,6 +1280,25 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateWeibullShort(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateWeibullShort(double,
+	 *         double).
+	 * @see generateWeibullShort(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default short[] generateWeibullShorts(double shape, double scale, int size) {
+		short[] result = new short[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateWeibullShort(shape, scale);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random short integer with an exponential distribution.
 	 * 
 	 * @param scale
@@ -723,6 +1309,24 @@ public interface RandomGenerator {
 	 */
 	public default short generateExponentialShort(double scale) {
 		return (short) generateExponentialInteger(scale);
+	}
+
+	/**
+	 * Fills an array with the results of generateExponentialShort(double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateExponentialShort(double).
+	 * @see generateExponentialShort(double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default short[] generateExponentialShorts(double scale, int size) {
+		short[] result = new short[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateExponentialShort(scale);
+		}
+		return result;
 	}
 
 	/**
@@ -742,6 +1346,25 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateGammaShort(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateGammaShort(double,
+	 *         double).
+	 * @see generateGammaShort(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default short[] generateGammaShorts(double shape, double scale, int size) {
+		short[] result = new short[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateGammaShort(shape, scale);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random short integer with a beta distribution.
 	 * 
 	 * @param shapeAlpha
@@ -758,6 +1381,25 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateBetaShort(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateBetaShort(double,
+	 *         double).
+	 * @see generateBetaShort(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default short[] generateBetaShorts(double shapeAlpha, double shapeBeta, int size) {
+		short[] result = new short[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateBetaShort(shapeAlpha, shapeBeta);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random short integer with a poisson distribution.
 	 * 
 	 * @param rate
@@ -768,6 +1410,24 @@ public interface RandomGenerator {
 	 */
 	public default short generatePoissonShort(double rate) {
 		return (short) generatePoissonInteger(rate);
+	}
+
+	/**
+	 * Fills an array with the results of generatePoissonShort(double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generatePoissonShort(double).
+	 * @see generatePoissonShort(double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default short[] generatePoissonShorts(double rate, int size) {
+		short[] result = new short[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generatePoissonShort(rate);
+		}
+		return result;
 	}
 
 	// -----------------------------------------------------------------------------
@@ -781,10 +1441,46 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateInteger().
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateInteger().
+	 * @see generateInteger()
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default int[] generateIntegers(int size) {
+		int[] result = new int[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateInteger();
+		}
+		return result;
+	}
+
+	/**
 	 * @see RandomGenerator#generateUniformInteger(int)
 	 */
 	public default int generateInteger(int max) {
 		return generateUniformInteger(max);
+	}
+
+	/**
+	 * Fills an array with the results of generateInteger(int).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateInteger(int).
+	 * @see generateInteger(int)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default int[] generateIntegers(int max, int size) {
+		int[] result = new int[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateInteger(max);
+		}
+		return result;
 	}
 
 	/**
@@ -795,12 +1491,48 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateInteger(int, int).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateInteger(int, int).
+	 * @see generateInteger(int, int)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default int[] generateIntegers(int min, int max, int size) {
+		int[] result = new int[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateInteger(min, max);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random integer with a uniform distribution.
 	 * 
 	 * @return A random integer with a uniform distribution.
 	 */
 	public default int generateUniformInteger() {
 		return (int) generateUniformLong();
+	}
+
+	/**
+	 * Fills an array with the results of generateUniformInteger().
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateUniformInteger().
+	 * @see generateUniformInteger()
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default int[] generateUniformIntegers(int size) {
+		int[] result = new int[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateUniformInteger();
+		}
+		return result;
 	}
 
 	/**
@@ -817,6 +1549,24 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateUniformInteger(int).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateUniformInteger(int).
+	 * @see generateUniformInteger(int)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default int[] generateUniformIntegers(int max, int size) {
+		int[] result = new int[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateUniformInteger(max);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random integer with a uniform distribution between two numbers.
 	 * 
 	 * @param min
@@ -829,6 +1579,24 @@ public interface RandomGenerator {
 	 */
 	public default int generateUniformInteger(int min, int max) {
 		return (int) generateUniformLong(min, max);
+	}
+
+	/**
+	 * Fills an array with the results of generateUniformInteger(int, int).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateUniformInteger(int, int).
+	 * @see generateUniformInteger(int, int)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default int[] generateUniformIntegers(int min, int max, int size) {
+		int[] result = new int[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateUniformInteger(min, max);
+		}
+		return result;
 	}
 
 	/**
@@ -849,6 +1617,25 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateBatesInteger(int, int, int).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateBatesInteger(int, int,
+	 *         int).
+	 * @see generateBatesInteger(int, int, int)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default int[] generateBatesIntegers(int min, int max, int number, int size) {
+		int[] result = new int[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateBatesInteger(min, number, max);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random integer with a normal distribution.
 	 * 
 	 * @param mean
@@ -859,6 +1646,25 @@ public interface RandomGenerator {
 	 */
 	public default int generateNormalInteger(double mean, double standardDeviation) {
 		return (int) generateNormalLong(mean, standardDeviation);
+	}
+
+	/**
+	 * Fills an array with the results of generateNormalInteger(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateNormalInteger(double,
+	 *         double).
+	 * @see generateNormalInteger(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default int[] generateNormalIntegers(double mean, double standardDeviation, int size) {
+		int[] result = new int[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateNormalInteger(mean, standardDeviation);
+		}
+		return result;
 	}
 
 	/**
@@ -874,6 +1680,25 @@ public interface RandomGenerator {
 	 */
 	public default int generateLognormalInteger(double logMean, double logStandardDeviation) {
 		return (int) generateLognormalLong(logMean, logStandardDeviation);
+	}
+
+	/**
+	 * Fills an array with the results of generateLognormalInteger(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateLognormalInteger(double,
+	 *         double).
+	 * @see generateLognormalInteger(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default int[] generateLognormalIntegers(double logMean, double logStandardDeviation, int size) {
+		int[] result = new int[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateLognormalInteger(logMean, logStandardDeviation);
+		}
+		return result;
 	}
 
 	/**
@@ -895,6 +1720,25 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateTriangularInteger(int, int, int).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateTriangularInteger(int,
+	 *         int, int).
+	 * @see generateTriangularInteger(int, int, int)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default int[] generateTriangularIntegers(int min, int max, int mode, int size) {
+		int[] result = new int[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateTriangularInteger(min, max, mode);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random integer with a Pareto distribution.
 	 * 
 	 * @param shape
@@ -908,6 +1752,25 @@ public interface RandomGenerator {
 	 */
 	public default int generateParetoInteger(double shape, double scale) {
 		return (int) generateParetoLong(shape, scale);
+	}
+
+	/**
+	 * Fills an array with the results of generateParetoInteger(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateParetoInteger(double,
+	 *         double).
+	 * @see generateParetoInteger(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default int[] generateParetoIntegers(double shape, double scale, int size) {
+		int[] result = new int[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateParetoInteger(shape, scale);
+		}
+		return result;
 	}
 
 	/**
@@ -927,6 +1790,25 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateWeibullInteger(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateWeibullInteger(double,
+	 *         double).
+	 * @see generateWeibullInteger(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default int[] generateWeibullIntegers(double shape, double scale, int size) {
+		int[] result = new int[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateWeibullInteger(shape, scale);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random integer with an exponential distribution.
 	 * 
 	 * @param scale
@@ -937,6 +1819,25 @@ public interface RandomGenerator {
 	 */
 	public default int generateExponentialInteger(double scale) {
 		return (int) generateExponentialLong(scale);
+	}
+
+	/**
+	 * Fills an array with the results of generateExponentialInteger(double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of
+	 *         generateExponentialInteger(double).
+	 * @see generateExponentialInteger(double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default int[] generateExponentialIntegers(double scale, int size) {
+		int[] result = new int[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateExponentialInteger(scale);
+		}
+		return result;
 	}
 
 	/**
@@ -956,6 +1857,25 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateGammaInteger(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateGammaInteger(double,
+	 *         double).
+	 * @see generateGammaInteger(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default int[] generateGammaIntegers(double shape, double scale, int size) {
+		int[] result = new int[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateGammaInteger(shape, scale);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random integer with a beta distribution.
 	 * 
 	 * @param shapeAlpha
@@ -972,6 +1892,25 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateBetaInteger(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateBetaInteger(double,
+	 *         double).
+	 * @see generateBetaInteger(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default int[] generateBetaIntegers(double shapeAlpha, double shapeBeta, int size) {
+		int[] result = new int[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateBetaInteger(shapeAlpha, shapeBeta);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random integer with a poisson distribution.
 	 * 
 	 * @param rate
@@ -982,6 +1921,24 @@ public interface RandomGenerator {
 	 */
 	public default int generatePoissonInteger(double rate) {
 		return (int) generatePoissonLong(rate);
+	}
+
+	/**
+	 * Fills an array with the results of generatePoissonInteger(double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generatePoissonInteger(double).
+	 * @see generatePoissonInteger(double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default int[] generatePoissonIntegers(double rate, int size) {
+		int[] result = new int[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generatePoissonInteger(rate);
+		}
+		return result;
 	}
 
 	// -----------------------------------------------------------------------------
@@ -995,10 +1952,46 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateLong().
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateLong().
+	 * @see generateLong()
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default long[] generateLongs(int size) {
+		long[] result = new long[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateLong();
+		}
+		return result;
+	}
+
+	/**
 	 * @see RandomGenerator#generateUniformLong(long)
 	 */
 	public default long generateLong(long max) {
 		return generateUniformLong(max);
+	}
+
+	/**
+	 * Fills an array with the results of generateLong(long).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateLong(long).
+	 * @see generateLong(long)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default long[] generateLongs(long max, int size) {
+		long[] result = new long[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateLong(max);
+		}
+		return result;
 	}
 
 	/**
@@ -1009,11 +2002,47 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateLong(long, long).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateLong(long, long).
+	 * @see generateLong(long, long)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default long[] generateLongs(long min, long max, int size) {
+		long[] result = new long[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateLong(min, max);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random long integer with a uniform distribution.
 	 * 
 	 * @return A random long integer with a uniform distribution.
 	 */
 	public long generateUniformLong();
+
+	/**
+	 * Fills an array with the results of generateUniformLong().
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateUniformLong().
+	 * @see generateUniformLong()
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default long[] generateUniformLongs(int size) {
+		long[] result = new long[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateUniformLong();
+		}
+		return result;
+	}
 
 	/**
 	 * Get a random long integer with a uniform distribution between 0 and a number.
@@ -1042,6 +2071,24 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateUniformLong(long).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateUniformLong(long).
+	 * @see generateUniformLong(long)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default long[] generateUniformLongs(long max, int size) {
+		long[] result = new long[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateUniformLong(max);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random long integer with a uniform distribution between two numbers.
 	 * 
 	 * @param min
@@ -1058,6 +2105,24 @@ public interface RandomGenerator {
 			throw new IllegalArgumentException();
 		}
 		return generateUniformLong(max - min) + min;
+	}
+
+	/**
+	 * Fills an array with the results of generateUniformLong(long, long).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateUniformLong(long, long).
+	 * @see generateUniformLong(long, long)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default long[] generateUniformLongs(long min, long max, int size) {
+		long[] result = new long[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateUniformLong(min, max);
+		}
+		return result;
 	}
 
 	/**
@@ -1095,6 +2160,25 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateBatesLong(long, long, int).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateBatesLong(long, long,
+	 *         int).
+	 * @see generateBatesLong(long, long, int)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default long[] generateBatesLongs(long min, long max, int number, int size) {
+		long[] result = new long[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateBatesLong(min, max, number);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random long integer with a normal distribution.
 	 * 
 	 * @param mean
@@ -1105,6 +2189,25 @@ public interface RandomGenerator {
 	 */
 	public default long generateNormalLong(double mean, double standardDeviation) {
 		return Math.round(generateNormalDouble(mean, standardDeviation));
+	}
+
+	/**
+	 * Fills an array with the results of generateNormalLong(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateNormalLong(double,
+	 *         double).
+	 * @see generateNormalLong(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default long[] generateNormalLongs(double mean, double standardDeviation, int size) {
+		long[] result = new long[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateNormalLong(mean, standardDeviation);
+		}
+		return result;
 	}
 
 	/**
@@ -1120,6 +2223,25 @@ public interface RandomGenerator {
 	 */
 	public default long generateLognormalLong(double logMean, double logStandardDeviation) {
 		return (long) generateLognormalDouble(logMean, logStandardDeviation);
+	}
+
+	/**
+	 * Fills an array with the results of generateLognormalLong(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateLognormalLong(double,
+	 *         double).
+	 * @see generateLognormalLong(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default long[] generateLognormalLongs(double logMean, double logStandardDeviation, int size) {
+		long[] result = new long[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateLognormalLong(logMean, logStandardDeviation);
+		}
+		return result;
 	}
 
 	/**
@@ -1146,6 +2268,25 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateTriangularLong(long, long, long).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateTriangularLong(long,
+	 *         long, long).
+	 * @see generateTriangularLong(long, long, long)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default long[] generateTriangularLongs(long min, long max, long mode, int size) {
+		long[] result = new long[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateTriangularLong(min, max, mode);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random long integer with a Pareto distribution.
 	 * 
 	 * @param shape
@@ -1159,6 +2300,25 @@ public interface RandomGenerator {
 	 */
 	public default long generateParetoLong(double shape, double scale) {
 		return (long) generateParetoDouble(shape, scale);
+	}
+
+	/**
+	 * Fills an array with the results of generateParetoLong(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateParetoLong(double,
+	 *         double).
+	 * @see generateParetoLong(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default long[] generateParetoLongs(double shape, double scale, int size) {
+		long[] result = new long[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateParetoLong(shape, scale);
+		}
+		return result;
 	}
 
 	/**
@@ -1178,6 +2338,25 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateWeibullLong(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateWeibullLong(double,
+	 *         double).
+	 * @see generateWeibullLong(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default long[] generateWeibullLongs(double shape, double scale, int size) {
+		long[] result = new long[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateWeibullLong(shape, scale);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random long integer with an exponential distribution.
 	 * 
 	 * @param scale
@@ -1188,6 +2367,24 @@ public interface RandomGenerator {
 	 */
 	public default long generateExponentialLong(double scale) {
 		return (long) generateExponentialDouble(scale);
+	}
+
+	/**
+	 * Fills an array with the results of generateExponentialLong(double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateExponentialLong(double).
+	 * @see generateExponentialLong(double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default long[] generateExponentialLongs(double scale, int size) {
+		long[] result = new long[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateExponentialLong(scale);
+		}
+		return result;
 	}
 
 	/**
@@ -1207,6 +2404,25 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateGammaLong(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateGammaLong(double,
+	 *         double).
+	 * @see generateGammaLong(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default long[] generateGammaLongs(double shape, double scale, int size) {
+		long[] result = new long[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateGammaLong(shape, scale);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random long integer with a beta distribution.
 	 * 
 	 * @param shapeAlpha
@@ -1220,6 +2436,24 @@ public interface RandomGenerator {
 	 */
 	public default long generateBetaLong(double shapeAlpha, double shapeBeta) {
 		return (long) generateBetaDouble(shapeAlpha, shapeBeta);
+	}
+
+	/**
+	 * Fills an array with the results of generateBetaLong(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateBetaLong(double, double).
+	 * @see generateBetaLong(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default long[] generateBetaLongs(double shapeAlpha, double shapeBeta, int size) {
+		long[] result = new long[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateBetaLong(shapeAlpha, shapeBeta);
+		}
+		return result;
 	}
 
 	/**
@@ -1258,6 +2492,24 @@ public interface RandomGenerator {
 		return k;
 	}
 
+	/**
+	 * Fills an array with the results of generatePoissonLong(double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generatePoissonLong(double).
+	 * @see generatePoissonLong(double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default long[] generatePoissonLongs(double rate, int size) {
+		long[] result = new long[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generatePoissonLong(rate);
+		}
+		return result;
+	}
+
 	// -----------------------------------------------------------------------------
 	// Floating point methods
 
@@ -1269,6 +2521,24 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateFloat().
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateFloat().
+	 * @see generateFloat()
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default float[] generateFloats(int size) {
+		float[] result = new float[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateFloat();
+		}
+		return result;
+	}
+
+	/**
 	 * @see RandomGenerator#generateUniformFloat(float)
 	 */
 	public default float generateFloat(float max) {
@@ -1276,10 +2546,46 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateFloat(float).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateFloat(float).
+	 * @see generateFloat(float)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default float[] generateFloats(float max, int size) {
+		float[] result = new float[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateFloat(max);
+		}
+		return result;
+	}
+
+	/**
 	 * @see RandomGenerator#generateUniformFloat(float, float)
 	 */
 	public default float generateFloat(float min, float max) {
 		return generateUniformFloat(min, max);
+	}
+
+	/**
+	 * Fills an array with the results of generateFloat(float, float).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateFloat(float, float).
+	 * @see generateFloat(float, float)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default float[] generateFloats(float min, float max, int size) {
+		float[] result = new float[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateFloat(min, max);
+		}
+		return result;
 	}
 
 	/**
@@ -1291,6 +2597,24 @@ public interface RandomGenerator {
 	 */
 	public default float generateUniformFloat() {
 		return generateUniformInteger((1 << 24) + 1) / (float) (1L << 24);
+	}
+
+	/**
+	 * Fills an array with the results of generateUniformFloat().
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateUniformFloat().
+	 * @see generateUniformFloat()
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default float[] generateUniformFloats(int size) {
+		float[] result = new float[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateUniformFloat();
+		}
+		return result;
 	}
 
 	/**
@@ -1309,6 +2633,24 @@ public interface RandomGenerator {
 			throw new IllegalArgumentException();
 		}
 		return generateUniformFloat() * max;
+	}
+
+	/**
+	 * Fills an array with the results of generateUniformFloat(float).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateUniformFloat(float).
+	 * @see generateUniformFloat(float)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default float[] generateUniformFloats(float max, int size) {
+		float[] result = new float[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateUniformFloat(max);
+		}
+		return result;
 	}
 
 	/**
@@ -1331,6 +2673,25 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateUniformFloat(float, float).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateUniformFloat(float,
+	 *         float).
+	 * @see generateUniformFloat(float, float)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default float[] generateUniformFloats(float min, float max, int size) {
+		float[] result = new float[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateUniformFloat(min, max);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random floating point with a Bates distribution in the range [0.0,
 	 * 1.0].
 	 * 
@@ -1346,6 +2707,24 @@ public interface RandomGenerator {
 		}
 		res /= number;
 		return res;
+	}
+
+	/**
+	 * Fills an array with the results of generateBatesFloat(int).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateBatesFloat(int).
+	 * @see generateBatesFloat(int)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default float[] generateBatesFloats(int number, int size) {
+		float[] result = new float[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateBatesFloat(number);
+		}
+		return result;
 	}
 
 	/**
@@ -1370,6 +2749,24 @@ public interface RandomGenerator {
 		}
 		res /= number;
 		return res;
+	}
+
+	/**
+	 * Fills an array with the results of generateBatesFloat(float, int).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateBatesFloat(float, int).
+	 * @see generateBatesFloat(float, int)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default float[] generateBatesFloats(float max, int number, int size) {
+		float[] result = new float[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateBatesFloat(max, number);
+		}
+		return result;
 	}
 
 	/**
@@ -1399,6 +2796,25 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateBatesFloat(float, float, int).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateBatesFloat(float, float,
+	 *         int).
+	 * @see generateBatesFloat(float, float, int)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default float[] generateBatesFloats(float min, float max, int number, int size) {
+		float[] result = new float[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateBatesFloat(min, max, number);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random floating point with a normal distribution.
 	 * 
 	 * @param mean
@@ -1409,6 +2825,25 @@ public interface RandomGenerator {
 	 */
 	public default float generateNormalFloat(double mean, double standardDeviation) {
 		return (float) generateNormalDouble(mean, standardDeviation);
+	}
+
+	/**
+	 * Fills an array with the results of generateNormalFloat(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateNormalFloat(double,
+	 *         double).
+	 * @see generateNormalFloat(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default float[] generateNormalFloats(double mean, double standardDeviation, int size) {
+		float[] result = new float[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateNormalFloat(mean, standardDeviation);
+		}
+		return result;
 	}
 
 	/**
@@ -1424,6 +2859,25 @@ public interface RandomGenerator {
 	 */
 	public default float generateLognormalFloat(double logMean, double logStandardDeviation) {
 		return (float) generateLognormalDouble(logMean, logStandardDeviation);
+	}
+
+	/**
+	 * Fills an array with the results of generateLognormalFloat(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateLognormalFloat(double,
+	 *         double).
+	 * @see generateLognormalFloat(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default float[] generateLognormalFloats(double logMean, double logStandardDeviation, int size) {
+		float[] result = new float[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateLognormalFloat(logMean, logStandardDeviation);
+		}
+		return result;
 	}
 
 	/**
@@ -1453,6 +2907,26 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateTriangularFloat(float, float,
+	 * float).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateTriangularFloat(float,
+	 *         float, float).
+	 * @see generateTriangularFloat(float, float, float)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default float[] generateTriangularFloats(float min, float max, float mode, int size) {
+		float[] result = new float[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateTriangularFloat(min, max, mode);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random floating point with a Pareto distribution.
 	 * 
 	 * @param shape
@@ -1466,6 +2940,25 @@ public interface RandomGenerator {
 	 */
 	public default float generateParetoFloat(double shape, double scale) {
 		return (float) generateParetoDouble(shape, scale);
+	}
+
+	/**
+	 * Fills an array with the results of generateParetoFloat(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateParetoFloat(double,
+	 *         double).
+	 * @see generateParetoFloat(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default float[] generateParetoFloats(double shape, double scale, int size) {
+		float[] result = new float[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateParetoFloat(shape, scale);
+		}
+		return result;
 	}
 
 	/**
@@ -1485,6 +2978,25 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateWeibullFloat(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateWeibullFloat(double,
+	 *         double).
+	 * @see generateWeibullFloat(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default float[] generateWeibullFloats(double shape, double scale, int size) {
+		float[] result = new float[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateWeibullFloat(shape, scale);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random floating point with an exponential distribution.
 	 * 
 	 * @param scale
@@ -1495,6 +3007,24 @@ public interface RandomGenerator {
 	 */
 	public default float generateExponentialFloat(double scale) {
 		return (float) generateExponentialDouble(scale);
+	}
+
+	/**
+	 * Fills an array with the results of generateExponentialFloat(double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateExponentialFloat(double).
+	 * @see generateExponentialFloat(double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default float[] generateExponentialFloats(double scale, int size) {
+		float[] result = new float[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateExponentialFloat(scale);
+		}
+		return result;
 	}
 
 	/**
@@ -1514,6 +3044,25 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateGammaFloat(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateGammaFloat(double,
+	 *         double).
+	 * @see generateGammaFloat(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default float[] generateGammaFloats(double shape, double scale, int size) {
+		float[] result = new float[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateGammaFloat(shape, scale);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random floating point with a beta distribution.
 	 * 
 	 * @param shapeAlpha
@@ -1529,6 +3078,25 @@ public interface RandomGenerator {
 		return (float) generateBetaDouble(shapeAlpha, shapeBeta);
 	}
 
+	/**
+	 * Fills an array with the results of generateBetaFloat(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateBetaFloat(double,
+	 *         double).
+	 * @see generateBetaFloat(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default float[] generateBetaFloats(double shapeAlpha, double shapeBeta, int size) {
+		float[] result = new float[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateBetaFloat(shapeAlpha, shapeBeta);
+		}
+		return result;
+	}
+
 	// -----------------------------------------------------------------------------
 	// Double floating point methods
 
@@ -1540,10 +3108,46 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateDouble().
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateDouble().
+	 * @see generateDouble()
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default double[] generateDoubles(int size) {
+		double[] result = new double[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateDouble();
+		}
+		return result;
+	}
+
+	/**
 	 * @see RandomGenerator#generateUniformDouble(double)
 	 */
-	public default double generateDouble(float max) {
+	public default double generateDouble(double max) {
 		return generateUniformDouble(max);
+	}
+
+	/**
+	 * Fills an array with the results of generateDouble(double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateDouble(double).
+	 * @see generateDouble(double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default double[] generateDoubles(double max, int size) {
+		double[] result = new double[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateDouble(max);
+		}
+		return result;
 	}
 
 	/**
@@ -1551,6 +3155,24 @@ public interface RandomGenerator {
 	 */
 	public default double generateDouble(double min, double max) {
 		return generateUniformDouble(min, max);
+	}
+
+	/**
+	 * Fills an array with the results of generateDouble(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateDouble(double, double).
+	 * @see generateDouble(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default double[] generateDoubles(double min, double max, int size) {
+		double[] result = new double[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateDouble(min, max);
+		}
+		return result;
 	}
 
 	/**
@@ -1562,6 +3184,24 @@ public interface RandomGenerator {
 	 */
 	public default double generateUniformDouble() {
 		return generateUniformLong((1L << 53) + 1) / (double) (1L << 53);
+	}
+
+	/**
+	 * Fills an array with the results of generateUniformDouble().
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateUniformDouble().
+	 * @see generateUniformDouble()
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default double[] generateUniformDoubles(int size) {
+		double[] result = new double[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateUniformDouble();
+		}
+		return result;
 	}
 
 	/**
@@ -1580,6 +3220,24 @@ public interface RandomGenerator {
 			throw new IllegalArgumentException();
 		}
 		return generateUniformDouble() * max;
+	}
+
+	/**
+	 * Fills an array with the results of generateUniformDouble(double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateUniformDouble(double).
+	 * @see generateUniformDouble(double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default double[] generateUniformDoubles(double max, int size) {
+		double[] result = new double[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateUniformDouble(max);
+		}
+		return result;
 	}
 
 	/**
@@ -1603,6 +3261,25 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateUniformDouble(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateUniformDouble(double,
+	 *         double).
+	 * @see generateUniformDouble(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default double[] generateUniformDoubles(double min, double max, int size) {
+		double[] result = new double[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateUniformDouble(min, max);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random double floating point with a Bates distribution in the range
 	 * [0.0, 1.0].
 	 * 
@@ -1618,6 +3295,24 @@ public interface RandomGenerator {
 		}
 		res /= number;
 		return res;
+	}
+
+	/**
+	 * Fills an array with the results of generateBatesDouble(int).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateBatesDouble(int).
+	 * @see generateBatesDouble(int)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default double[] generateBatesDoubles(int number, int size) {
+		double[] result = new double[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateBatesDouble(number);
+		}
+		return result;
 	}
 
 	/**
@@ -1643,6 +3338,24 @@ public interface RandomGenerator {
 		}
 		res /= number;
 		return res;
+	}
+
+	/**
+	 * Fills an array with the results of generateBatesDouble(double, int).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateBatesDouble(double, int).
+	 * @see generateBatesDouble(double, int)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default double[] generateBatesDoubles(double max, int number, int size) {
+		double[] result = new double[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateBatesDouble(max, number);
+		}
+		return result;
 	}
 
 	/**
@@ -1673,6 +3386,25 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateBatesDouble(double, double, int).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateBatesDouble(double,
+	 *         double, int).
+	 * @see generateBatesDouble(double, double, int)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default double[] generateBatesDoubles(double min, double max, int number, int size) {
+		double[] result = new double[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateBatesDouble(min, max, number);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random double floating point with a normal distribution.
 	 * 
 	 * @param mean
@@ -1694,6 +3426,25 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateNormalDouble(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateNormalDouble(double,
+	 *         double).
+	 * @see generateNormalDouble(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default double[] generateNormalDoubles(double mean, double standardDeviation, int size) {
+		double[] result = new double[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateNormalDouble(mean, standardDeviation);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random double floating point with a lognormal distribution.
 	 * 
 	 * @param logMean
@@ -1706,6 +3457,25 @@ public interface RandomGenerator {
 	 */
 	public default double generateLognormalDouble(double logMean, double logStandardDeviation) {
 		return Math.exp(generateNormalDouble(logMean, logStandardDeviation));
+	}
+
+	/**
+	 * Fills an array with the results of generateLognormalDouble(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateLognormalDouble(double,
+	 *         double).
+	 * @see generateLognormalDouble(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default double[] generateLognormalDoubles(double logMean, double logStandardDeviation, int size) {
+		double[] result = new double[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateLognormalDouble(logMean, logStandardDeviation);
+		}
+		return result;
 	}
 
 	/**
@@ -1735,6 +3505,26 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateTriangularDouble(double, double,
+	 * double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateTriangularDouble(double,
+	 *         double, double).
+	 * @see generateTriangularDouble(double, double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default double[] generateTriangularDoubles(double min, double max, double mode, int size) {
+		double[] result = new double[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateTriangularDouble(min, max, mode);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random double floating point with a Pareto distribution.
 	 * 
 	 * @param shape
@@ -1755,6 +3545,25 @@ public interface RandomGenerator {
 			random = generateUniformDouble();
 		} while (random == 0);
 		return scale / Math.pow(random, 1 / shape);
+	}
+
+	/**
+	 * Fills an array with the results of generateParetoDouble(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateParetoDouble(double,
+	 *         double).
+	 * @see generateParetoDouble(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default double[] generateParetoDoubles(double shape, double scale, int size) {
+		double[] result = new double[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateParetoDouble(shape, scale);
+		}
+		return result;
 	}
 
 	/**
@@ -1781,6 +3590,25 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateWeibullDouble(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateWeibullDouble(double,
+	 *         double).
+	 * @see generateWeibullDouble(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default double[] generateWeibullDoubles(double shape, double scale, int size) {
+		double[] result = new double[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateWeibullDouble(shape, scale);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random double floating point with an exponential distribution.
 	 * 
 	 * @param scale
@@ -1795,6 +3623,25 @@ public interface RandomGenerator {
 			uniform = generateUniformDouble();
 		} while (uniform == 0);
 		return Math.log(uniform) * scale;
+	}
+
+	/**
+	 * Fills an array with the results of generateExponentialDouble(double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of
+	 *         generateExponentialDouble(double).
+	 * @see generateExponentialDouble(double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default double[] generateExponentialDoubles(double scale, int size) {
+		double[] result = new double[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateExponentialDouble(scale);
+		}
+		return result;
 	}
 
 	/**
@@ -1843,6 +3690,25 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Fills an array with the results of generateGammaDouble(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateGammaDouble(double,
+	 *         double).
+	 * @see generateGammaDouble(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default double[] generateGammaDoubles(double shape, double scale, int size) {
+		double[] result = new double[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateGammaDouble(shape, scale);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random double floating point with a beta distribution.
 	 * 
 	 * @param shapeAlpha
@@ -1863,6 +3729,25 @@ public interface RandomGenerator {
 		}
 	}
 
+	/**
+	 * Fills an array with the results of generateBetaDouble(double, double).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateBetaDouble(double,
+	 *         double).
+	 * @see generateBetaDouble(double, double)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default double[] generateBetaDouble(double shapeAlpha, double shapeBeta, int size) {
+		double[] result = new double[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateBetaDouble(shapeAlpha, shapeBeta);
+		}
+		return result;
+	}
+
 	// -----------------------------------------------------------------------------
 	// Character methods
 
@@ -1877,8 +3762,23 @@ public interface RandomGenerator {
 		return alphabet.charAt(generateUniformInteger(alphabet.length()));
 	}
 
-	// -----------------------------------------------------------------------------
-	// String methods
+	/**
+	 * Fills an array with the results of generateCharacter(String).
+	 * 
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of generateCharacter(String).
+	 * @see generateCharacter(String)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default char[] generateCharacters(String alphabet, int size) {
+		char[] result = new char[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = generateCharacter(alphabet);
+		}
+		return result;
+	}
 
 	/**
 	 * Gets a random String from characters picked from the given String.
