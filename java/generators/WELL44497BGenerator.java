@@ -22,11 +22,11 @@ public class WELL44497BGenerator implements RandomGenerator {
 	/**
 	 * Size of this generator's state in integers.
 	 */
-	public static final int STATE_SIZE_INTS = 1391;
+	public static final int STATE_SIZE_INTEGERS = 1391;
 	/**
 	 * Size of this generator's state in bytes.
 	 */
-	public static final int STATE_SIZE = STATE_SIZE_INTS * Integer.BYTES;
+	public static final int STATE_SIZE = STATE_SIZE_INTEGERS * Integer.BYTES;
 	/**
 	 * Size of this generator's seed in bytes.
 	 */
@@ -120,11 +120,11 @@ public class WELL44497BGenerator implements RandomGenerator {
 	@Override
 	public int generateUniformInteger() {
 		int index0 = index;
-		int index23 = (index + 23) % STATE_SIZE_INTS;
-		int index229 = (index + 229) % STATE_SIZE_INTS;
-		int index481 = (index + 481) % STATE_SIZE_INTS;
-		int index1389 = (index + 1389) % STATE_SIZE_INTS;
-		int index1390 = (index + 1390) % STATE_SIZE_INTS;
+		int index23 = (index + 23) % STATE_SIZE_INTEGERS;
+		int index229 = (index + 229) % STATE_SIZE_INTEGERS;
+		int index481 = (index + 481) % STATE_SIZE_INTEGERS;
+		int index1389 = (index + 1389) % STATE_SIZE_INTEGERS;
+		int index1390 = (index + 1390) % STATE_SIZE_INTEGERS;
 		int z0 = (state[index1390] & 0xFFFF8000) | (state[index1389] & 0x00007FFF);
 		int z1 = (state[index0] ^ (state[index0] << 24)) ^ (state[index23] ^ (state[index23] >>> 30));
 		int z2 = (state[index481] ^ (state[index481] << 10)) ^ (state[index229] << 26);

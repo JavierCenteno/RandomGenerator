@@ -20,9 +20,13 @@ public class MersenneTwister19937Generator implements RandomGenerator {
 	// Class fields
 
 	/**
+	 * Size of this generator's state in longs.
+	 */
+	public static final int STATE_SIZE_LONGS = 312;
+	/**
 	 * Size of this generator's state in bytes.
 	 */
-	public static final int STATE_SIZE = 312;
+	public static final int STATE_SIZE = STATE_SIZE_LONGS * Long.BYTES;
 	/**
 	 * Size of this generator's seed in bytes.
 	 */
@@ -93,10 +97,10 @@ public class MersenneTwister19937Generator implements RandomGenerator {
 		if (seed.length < SEED_SIZE) {
 			throw new IllegalArgumentException();
 		}
-		state = new long[STATE_SIZE];
+		state = new long[STATE_SIZE_LONGS];
 		index = 0;
 		state[index] = ByteConverter.bytesToLong(seed);
-		while (index < STATE_SIZE - 1) {
+		while (index < STATE_SIZE_LONGS - 1) {
 			long state_i = state[index];
 			state_i ^= state_i >>> 12;
 			state_i ^= state_i << 25;
@@ -134,7 +138,7 @@ public class MersenneTwister19937Generator implements RandomGenerator {
 
 	@Override
 	public long generateUniformLong() {
-		if (index == STATE_SIZE) {
+		if (index == STATE_SIZE_LONGS) {
 			int i = 0;
 			while (i < SHIFT_SIZE) {
 				long x = (state[i] & UPPER_MASK) | (state[i + 1] & LOWER_MASK);
@@ -144,18 +148,18 @@ public class MersenneTwister19937Generator implements RandomGenerator {
 				}
 				++i;
 			}
-			while (i < STATE_SIZE - 1) {
+			while (i < STATE_SIZE_LONGS - 1) {
 				long x = (state[i] & UPPER_MASK) | (state[i + 1] & LOWER_MASK);
-				state[i] = state[i + SHIFT_SIZE - STATE_SIZE] ^ (x >>> 1);
+				state[i] = state[i + SHIFT_SIZE - STATE_SIZE_LONGS] ^ (x >>> 1);
 				if (x % 2 == 0) {
 					state[i] ^= XOR_MASK;
 				}
 				++i;
 			}
-			long x = (state[STATE_SIZE - 1] & UPPER_MASK) | (state[0] & LOWER_MASK);
-			state[STATE_SIZE - 1] = state[SHIFT_SIZE - 1] ^ (x >>> 1);
+			long x = (state[STATE_SIZE_LONGS - 1] & UPPER_MASK) | (state[0] & LOWER_MASK);
+			state[STATE_SIZE_LONGS - 1] = state[SHIFT_SIZE - 1] ^ (x >>> 1);
 			if (x % 2 == 0) {
-				state[STATE_SIZE - 1] ^= XOR_MASK;
+				state[STATE_SIZE_LONGS - 1] ^= XOR_MASK;
 			}
 			index = 0;
 		}

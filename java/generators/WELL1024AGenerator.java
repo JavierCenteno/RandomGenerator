@@ -22,11 +22,11 @@ public class WELL1024AGenerator implements RandomGenerator {
 	/**
 	 * Size of this generator's state in integers.
 	 */
-	public static final int STATE_SIZE_INTS = 32;
+	public static final int STATE_SIZE_INTEGERS = 32;
 	/**
 	 * Size of this generator's state in bytes.
 	 */
-	public static final int STATE_SIZE = STATE_SIZE_INTS * Integer.BYTES;
+	public static final int STATE_SIZE = STATE_SIZE_INTEGERS * Integer.BYTES;
 	/**
 	 * Size of this generator's seed in bytes.
 	 */
@@ -120,10 +120,10 @@ public class WELL1024AGenerator implements RandomGenerator {
 	@Override
 	public int generateUniformInteger() {
 		int index0 = index;
-		int index3 = (index + 3) % STATE_SIZE_INTS;
-		int index10 = (index + 10) % STATE_SIZE_INTS;
-		int index24 = (index + 24) % STATE_SIZE_INTS;
-		int index31 = (index + 31) % STATE_SIZE_INTS;
+		int index3 = (index + 3) % STATE_SIZE_INTEGERS;
+		int index10 = (index + 10) % STATE_SIZE_INTEGERS;
+		int index24 = (index + 24) % STATE_SIZE_INTEGERS;
+		int index31 = (index + 31) % STATE_SIZE_INTEGERS;
 		int z0 = state[index31];
 		int z1 = state[index0] ^ (state[index3] ^ (state[index3] >>> 8));
 		int z2 = (state[index24] ^ (state[index24] << 19)) ^ (state[index10] ^ (state[index10] << 14));
