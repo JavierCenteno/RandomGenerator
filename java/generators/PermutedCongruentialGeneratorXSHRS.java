@@ -6,7 +6,7 @@ import util.ByteConverter;
 /**
  * Implementation of a permuted congruential generator XSH-RS PRNG. This
  * generator has a state of 64 bits and produces 32 random bits at a time. It is
- * slightly faster than its counterpart XSL-RR but produces worse results.
+ * slightly faster than its counterpart XSH-RR but produces worse results.
  * 
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
