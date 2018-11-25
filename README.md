@@ -6,7 +6,7 @@ This project offers an API for random number generation and some implementations
 
 ## License
 
-[This API is licensed under a GNU general public license.](./LICENSE "LICENSE")
+[This project is licensed under a GNU general public license.](./LICENSE "LICENSE")
 
 ## Usage
 
@@ -36,3 +36,35 @@ Distributions include:
 ## Generators
 
 The `generators` package contains a few implementations of the API with some well known random number generators.
+
+These implementations include:
+* Blum Blum Shub
+* Complementary-Multiply-With-Carry
+* Java's Random
+* Java's SplittableRandom
+* Lehmer
+* Lineal Congruential Generator 32
+* Lineal Congruential Generator 64
+* Mersenne Twister 19937
+* Permuted Congruential Generator XSH-RR
+* Permuted Congruential Generator XSH-RS
+* WELL 512 a
+* WELL 1024 a
+* WELL 19937 a
+* WELL 19937 c
+* WELL 44497 a
+* WELL 44497 b
+* Xorshift32
+* Xorshift64
+* Xorshift128
+* Xorshift128+
+* Xorshift64*
+* Xorshift1024*
+* Xorwow
+* Xoroshiro128+
+* Xoroshiro128*
+* Xoroshiro128**
+* Xoshiro256+
+* Xoshiro256**
+* Xoshiro512+
+* Xoshiro512**
