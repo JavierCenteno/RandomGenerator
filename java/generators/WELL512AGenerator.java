@@ -87,7 +87,7 @@ public class WELL512AGenerator implements RandomGenerator {
 
 	@Override
 	public void setSeed(byte[] seed) {
-		if (seed.length < STATE_SIZE) {
+		if (seed.length < SEED_SIZE) {
 			throw new IllegalArgumentException();
 		}
 		this.index = 0;
