@@ -38,7 +38,7 @@ public class WELL1024AGenerator implements RandomGenerator {
 	// Instance fields
 
 	/**
-	 * Index used to access elements of this generator.
+	 * Index that points at state elements.
 	 */
 	private int index;
 	/**

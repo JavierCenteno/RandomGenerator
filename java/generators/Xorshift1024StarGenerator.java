@@ -38,7 +38,7 @@ public class Xorshift1024StarGenerator implements RandomGenerator {
 	// Instance fields
 
 	/**
-	 * Index used to access elements of this generator.
+	 * Index that points at state elements.
 	 */
 	private int index;
 	/**
