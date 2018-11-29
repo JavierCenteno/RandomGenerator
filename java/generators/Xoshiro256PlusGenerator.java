@@ -2,7 +2,7 @@ package generators;
 
 import java.util.Arrays;
 
-import api.RandomGenerator;
+import api.RandomGenerator64;
 import util.ByteConverter;
 
 /**
@@ -14,7 +14,7 @@ import util.ByteConverter;
  * @since 1.0
  * 
  */
-public class Xoshiro256PlusGenerator implements RandomGenerator {
+public class Xoshiro256PlusGenerator implements RandomGenerator64 {
 
 	// -----------------------------------------------------------------------------
 	// Class fields

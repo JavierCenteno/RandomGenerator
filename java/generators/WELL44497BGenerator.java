@@ -1,6 +1,6 @@
 package generators;
 
-import api.RandomGenerator;
+import api.RandomGenerator32;
 import util.ByteConverter;
 
 /**
@@ -12,7 +12,7 @@ import util.ByteConverter;
  * @since 1.0
  * 
  */
-public class WELL44497BGenerator implements RandomGenerator {
+public class WELL44497BGenerator implements RandomGenerator32 {
 
 	// -----------------------------------------------------------------------------
 	// Class fields
@@ -136,13 +136,6 @@ public class WELL44497BGenerator implements RandomGenerator {
 		int y = state[index] ^ ((state[index] << 7) & 0x93DD1400);
 		y = y ^ ((y << 15) & 0xFA118000);
 		return y;
-	}
-
-	@Override
-	public long generateUniformLong() {
-		long int0 = generateUniformInteger() & 0x00000000FFFFFFFFL;
-		long int1 = generateUniformInteger() & 0x00000000FFFFFFFFL;
-		return int0 << 32 | int1;
 	}
 
 }

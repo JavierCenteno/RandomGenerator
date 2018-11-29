@@ -2,7 +2,7 @@ package generators;
 
 import java.util.SplittableRandom;
 
-import api.RandomGenerator;
+import api.RandomGenerator32;
 import util.ByteConverter;
 
 /**
@@ -15,7 +15,7 @@ import util.ByteConverter;
  * @since 1.0
  * 
  */
-public class JavaSplittableRandomGenerator implements RandomGenerator {
+public class JavaSplittableRandomGenerator implements RandomGenerator32 {
 
 	// -----------------------------------------------------------------------------
 	// Class fields

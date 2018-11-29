@@ -1,6 +1,6 @@
 package generators;
 
-import api.RandomGenerator;
+import api.RandomGenerator32;
 import util.ByteConverter;
 
 /**
@@ -15,7 +15,7 @@ import util.ByteConverter;
  * @since 1.0
  * 
  */
-public class PermutedCongruentialGeneratorXSHRS implements RandomGenerator {
+public class PermutedCongruentialGeneratorXSHRS implements RandomGenerator32 {
 
 	// -----------------------------------------------------------------------------
 	// Class fields
@@ -100,13 +100,6 @@ public class PermutedCongruentialGeneratorXSHRS implements RandomGenerator {
 		state = a * 6364136223846793005L;
 		a ^= a >>> 22;
 		return (int) (a >>> (22 + count));
-	}
-
-	@Override
-	public long generateUniformLong() {
-		long int0 = generateUniformInteger() & 0x00000000FFFFFFFFL;
-		long int1 = generateUniformInteger() & 0x00000000FFFFFFFFL;
-		return int0 << 32 | int1;
 	}
 
 }

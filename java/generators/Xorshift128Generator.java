@@ -1,6 +1,6 @@
 package generators;
 
-import api.RandomGenerator;
+import api.RandomGenerator32;
 import util.ByteConverter;
 
 /**
@@ -12,7 +12,7 @@ import util.ByteConverter;
  * @since 1.0
  * 
  */
-public class Xorshift128Generator implements RandomGenerator {
+public class Xorshift128Generator implements RandomGenerator32 {
 
 	// -----------------------------------------------------------------------------
 	// Class fields
@@ -96,13 +96,6 @@ public class Xorshift128Generator implements RandomGenerator {
 		t ^= s >>> 19;
 		state[0] = t;
 		return t;
-	}
-
-	@Override
-	public long generateUniformLong() {
-		long int0 = generateUniformInteger() & 0x00000000FFFFFFFFL;
-		long int1 = generateUniformInteger() & 0x00000000FFFFFFFFL;
-		return int0 << 32 | int1;
 	}
 
 }

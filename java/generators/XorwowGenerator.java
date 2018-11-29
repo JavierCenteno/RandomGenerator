@@ -1,6 +1,6 @@
 package generators;
 
-import api.RandomGenerator;
+import api.RandomGenerator32;
 import util.ByteConverter;
 
 /**
@@ -12,7 +12,7 @@ import util.ByteConverter;
  * @since 1.0
  * 
  */
-public class XorwowGenerator implements RandomGenerator {
+public class XorwowGenerator implements RandomGenerator32 {
 
 	// -----------------------------------------------------------------------------
 	// Class fields
@@ -101,13 +101,6 @@ public class XorwowGenerator implements RandomGenerator {
 		state[0] = t;
 		state[4] += 362437;
 		return t + state[4];
-	}
-
-	@Override
-	public long generateUniformLong() {
-		long int0 = generateUniformInteger() & 0x00000000FFFFFFFFL;
-		long int1 = generateUniformInteger() & 0x00000000FFFFFFFFL;
-		return int0 << 32 | int1;
 	}
 
 }

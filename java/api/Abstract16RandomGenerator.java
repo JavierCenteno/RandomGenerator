@@ -26,10 +26,11 @@ import util.ByteConverter;
  * 
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
+ * @see api.RandomGenerator16
  * @since 1.0
  * 
  */
-public abstract class Abstract16RandomGenerator implements RandomGenerator {
+public abstract class Abstract16RandomGenerator implements RandomGenerator16 {
 
 	// -----------------------------------------------------------------------------
 	// Class fields
@@ -98,30 +99,6 @@ public abstract class Abstract16RandomGenerator implements RandomGenerator {
 			throw new IllegalArgumentException();
 		}
 		this.state = ByteConverter.bytesToShort(state);
-	}
-
-	@Override
-	public byte generateUniformByte() {
-		return (byte) generateUniformShort();
-	}
-
-	@Override
-	public abstract short generateUniformShort();
-
-	@Override
-	public int generateUniformInteger() {
-		int short0 = generateUniformShort() & 0x0000FFFF;
-		int short1 = generateUniformShort() & 0x0000FFFF;
-		return short0 << 16 | short1;
-	}
-
-	@Override
-	public long generateUniformLong() {
-		long short0 = generateUniformShort() & 0x000000000000FFFFL;
-		long short1 = generateUniformShort() & 0x000000000000FFFFL;
-		long short2 = generateUniformShort() & 0x000000000000FFFFL;
-		long short3 = generateUniformShort() & 0x000000000000FFFFL;
-		return short0 << 48 | short1 << 32 | short2 << 16 | short3;
 	}
 
 }

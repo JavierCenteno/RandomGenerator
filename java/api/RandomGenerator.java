@@ -27,7 +27,8 @@ import generators.Xoroshiro128StarStarGenerator;
 import util.ByteConverter;
 
 /**
- * This class offers methods to generate random variables.
+ * This interface offers methods to generate random data with different
+ * distributions.
  * 
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
@@ -489,9 +490,7 @@ public interface RandomGenerator {
 	 * 
 	 * @return A random byte with a uniform distribution.
 	 */
-	public default byte generateUniformByte() {
-		return (byte) generateUniformShort();
-	}
+	public byte generateUniformByte();
 
 	/**
 	 * Fills an array with the results of generateUniformByte().
@@ -998,9 +997,7 @@ public interface RandomGenerator {
 	 * 
 	 * @return A random short integer with a uniform distribution.
 	 */
-	public default short generateUniformShort() {
-		return (short) generateUniformInteger();
-	}
+	public short generateUniformShort();
 
 	/**
 	 * Fills an array with the results of generateUniformShort().
@@ -1513,9 +1510,7 @@ public interface RandomGenerator {
 	 * 
 	 * @return A random integer with a uniform distribution.
 	 */
-	public default int generateUniformInteger() {
-		return (int) generateUniformLong();
-	}
+	public int generateUniformInteger();
 
 	/**
 	 * Fills an array with the results of generateUniformInteger().

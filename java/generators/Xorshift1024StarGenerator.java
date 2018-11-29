@@ -1,6 +1,6 @@
 package generators;
 
-import api.RandomGenerator;
+import api.RandomGenerator64;
 import util.ByteConverter;
 
 /**
@@ -12,7 +12,7 @@ import util.ByteConverter;
  * @since 1.0
  * 
  */
-public class Xorshift1024StarGenerator implements RandomGenerator {
+public class Xorshift1024StarGenerator implements RandomGenerator64 {
 
 	// -----------------------------------------------------------------------------
 	// Class fields

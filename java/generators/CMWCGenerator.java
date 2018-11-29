@@ -1,6 +1,6 @@
 package generators;
 
-import api.RandomGenerator;
+import api.RandomGenerator32;
 import util.ByteConverter;
 
 /**
@@ -13,7 +13,7 @@ import util.ByteConverter;
  * @since 1.0
  * 
  */
-public class CMWCGenerator implements RandomGenerator {
+public class CMWCGenerator implements RandomGenerator32 {
 
 	// -----------------------------------------------------------------------------
 	// Class fields
@@ -144,13 +144,6 @@ public class CMWCGenerator implements RandomGenerator {
 			carry++;
 		}
 		return state[index] = 0xfffffffe - x;
-	}
-
-	@Override
-	public long generateUniformLong() {
-		long int0 = generateUniformInteger() & 0x00000000FFFFFFFFL;
-		long int1 = generateUniformInteger() & 0x00000000FFFFFFFFL;
-		return int0 << 32 | int1;
 	}
 
 }

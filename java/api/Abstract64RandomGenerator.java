@@ -26,10 +26,11 @@ import util.ByteConverter;
  * 
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
+ * @see api.RandomGenerator64
  * @since 1.0
  * 
  */
-public abstract class Abstract64RandomGenerator implements RandomGenerator {
+public abstract class Abstract64RandomGenerator implements RandomGenerator64 {
 
 	// -----------------------------------------------------------------------------
 	// Class fields
@@ -99,23 +100,5 @@ public abstract class Abstract64RandomGenerator implements RandomGenerator {
 		}
 		this.state = ByteConverter.bytesToLong(state);
 	}
-
-	@Override
-	public byte generateUniformByte() {
-		return (byte) generateUniformLong();
-	}
-
-	@Override
-	public short generateUniformShort() {
-		return (short) generateUniformLong();
-	}
-
-	@Override
-	public int generateUniformInteger() {
-		return (int) generateUniformLong();
-	}
-
-	@Override
-	public abstract long generateUniformLong();
 
 }

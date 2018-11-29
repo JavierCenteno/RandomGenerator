@@ -24,10 +24,11 @@ package api;
  * 
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
+ * @see api.RandomGenerator8
  * @since 1.0
  * 
  */
-public abstract class Abstract8RandomGenerator implements RandomGenerator {
+public abstract class Abstract8RandomGenerator implements RandomGenerator8 {
 
 	// -----------------------------------------------------------------------------
 	// Class fields
@@ -96,38 +97,6 @@ public abstract class Abstract8RandomGenerator implements RandomGenerator {
 			throw new IllegalArgumentException();
 		}
 		this.state = state[0];
-	}
-
-	@Override
-	public abstract byte generateUniformByte();
-
-	@Override
-	public short generateUniformShort() {
-		int byte0 = generateUniformByte() & 0x000000FF;
-		int byte1 = generateUniformByte() & 0x000000FF;
-		return (short) (byte0 << 8 | byte1);
-	}
-
-	@Override
-	public int generateUniformInteger() {
-		int byte0 = generateUniformByte() & 0x000000FF;
-		int byte1 = generateUniformByte() & 0x000000FF;
-		int byte2 = generateUniformByte() & 0x000000FF;
-		int byte3 = generateUniformByte() & 0x000000FF;
-		return byte0 << 24 | byte1 << 16 | byte2 << 8 | byte3;
-	}
-
-	@Override
-	public long generateUniformLong() {
-		long byte0 = generateUniformByte() & 0x00000000000000FFL;
-		long byte1 = generateUniformByte() & 0x00000000000000FFL;
-		long byte2 = generateUniformByte() & 0x00000000000000FFL;
-		long byte3 = generateUniformByte() & 0x00000000000000FFL;
-		long byte4 = generateUniformByte() & 0x00000000000000FFL;
-		long byte5 = generateUniformByte() & 0x00000000000000FFL;
-		long byte6 = generateUniformByte() & 0x00000000000000FFL;
-		long byte7 = generateUniformByte() & 0x00000000000000FFL;
-		return byte0 << 56 | byte1 << 48 | byte2 << 40 | byte3 << 32 | byte4 << 24 | byte5 << 16 | byte6 << 8 | byte7;
 	}
 
 }
