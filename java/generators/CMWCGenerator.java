@@ -4,7 +4,7 @@ import api.RandomGenerator32;
 import util.ByteConverter;
 
 /**
- * Implementation of a complementary multiply with carry PRNG with a state of
+ * Implementation of a complementary-multiply-with-carry PRNG with a state of
  * 131072 bits.
  * 
  * @author Javier Centeno Vega <jacenve@telefonica.net>

@@ -6,7 +6,7 @@ import api.RandomGenerator32;
 import util.ByteConverter;
 
 /**
- * A wrapper for Java's Random PRNG.
+ * A wrapper for Java's Random PRNG, which uses a linear congruential generator.
  * 
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0

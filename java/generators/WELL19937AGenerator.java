@@ -4,7 +4,8 @@ import api.RandomGenerator32;
 import util.ByteConverter;
 
 /**
- * Implementation of a WELL 19937 a PRNG with a state of 19968 bits.
+ * Implementation of a well equidistributed long-period linear 19937 A PRNG with
+ * a state of 19968 bits.
  * 
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0

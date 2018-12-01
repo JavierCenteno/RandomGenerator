@@ -61,7 +61,7 @@ public class MersenneTwister19937Generator implements RandomGenerator64 {
 	 * seed generator.
 	 */
 	public MersenneTwister19937Generator() {
-		setSeed(DEFAULT_SEED_GENERATOR.generateBytes(SEED_SIZE));
+		this(DEFAULT_SEED_GENERATOR.generateBytes(SEED_SIZE));
 	}
 
 	/**

@@ -4,7 +4,8 @@ import api.RandomGenerator32;
 import util.ByteConverter;
 
 /**
- * Implementation of a WELL 512 a PRNG with a state of 512 bits.
+ * Implementation of a well equidistributed long-period linear 512 A PRNG with a
+ * state of 512 bits.
  * 
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0

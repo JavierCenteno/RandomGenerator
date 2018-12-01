@@ -6,7 +6,7 @@ import api.RandomGenerator32;
 import util.ByteConverter;
 
 /**
- * A wrapper for Java's SplittableRandom PRNG.
+ * A wrapper for Java's SplittableRandom PRNG, which uses a SplitMix generator.
  * 
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
