@@ -1,1 +1,6 @@
-/bin/
+bin/
+lib/
+res/
+.settings/
+.classpath
+.project
