@@ -14,7 +14,7 @@ import util.ByteConverter;
  */
 public class Xorshift1024StarGenerator implements RandomGenerator64 {
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Class fields
 
 	/**
@@ -34,7 +34,7 @@ public class Xorshift1024StarGenerator implements RandomGenerator64 {
 	 */
 	public static final int FULL_STATE_SIZE = Integer.BYTES + STATE_SIZE;
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance fields
 
 	/**
@@ -49,7 +49,7 @@ public class Xorshift1024StarGenerator implements RandomGenerator64 {
 	 */
 	private long[] state;
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance initializers
 
 	/**
@@ -72,7 +72,7 @@ public class Xorshift1024StarGenerator implements RandomGenerator64 {
 		setSeed(seed);
 	}
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance methods
 
 	@Override

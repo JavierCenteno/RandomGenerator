@@ -15,7 +15,7 @@ import util.ByteConverter;
  */
 public class MarioGenerator implements RandomGenerator16 {
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Class fields
 
 	/**
@@ -27,7 +27,7 @@ public class MarioGenerator implements RandomGenerator16 {
 	 */
 	public static final int SEED_SIZE = STATE_SIZE;
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance fields
 
 	/**
@@ -35,7 +35,7 @@ public class MarioGenerator implements RandomGenerator16 {
 	 */
 	private short state;
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance initializers
 
 	/**
@@ -58,7 +58,7 @@ public class MarioGenerator implements RandomGenerator16 {
 		setSeed(seed);
 	}
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance methods
 
 	@Override

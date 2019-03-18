@@ -19,7 +19,7 @@ import util.ByteConverter;
  */
 public class PermutedCongruentialGeneratorXSHRR implements RandomGenerator32 {
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Class fields
 
 	/**
@@ -31,7 +31,7 @@ public class PermutedCongruentialGeneratorXSHRR implements RandomGenerator32 {
 	 */
 	public static final int SEED_SIZE = STATE_SIZE;
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance fields
 
 	/**
@@ -39,7 +39,7 @@ public class PermutedCongruentialGeneratorXSHRR implements RandomGenerator32 {
 	 */
 	private long state;
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance initializers
 
 	/**
@@ -62,7 +62,7 @@ public class PermutedCongruentialGeneratorXSHRR implements RandomGenerator32 {
 		setSeed(seed);
 	}
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance methods
 
 	@Override

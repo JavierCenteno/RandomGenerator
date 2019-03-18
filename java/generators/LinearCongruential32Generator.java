@@ -13,7 +13,7 @@ import api.Abstract32RandomGenerator;
  */
 public class LinearCongruential32Generator extends Abstract32RandomGenerator {
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance initializers
 
 	/**
@@ -36,7 +36,7 @@ public class LinearCongruential32Generator extends Abstract32RandomGenerator {
 		super(seed);
 	}
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance methods
 
 	@Override

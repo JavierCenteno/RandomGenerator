@@ -15,7 +15,7 @@ import util.ByteConverter;
  */
 public class CMWCGenerator implements RandomGenerator32 {
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Class fields
 
 	/**
@@ -39,7 +39,7 @@ public class CMWCGenerator implements RandomGenerator32 {
 	 */
 	public static final int MAX_CARRY = 809430660;
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance fields
 
 	/**
@@ -55,7 +55,7 @@ public class CMWCGenerator implements RandomGenerator32 {
 	 */
 	private int[] state;
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance initializers
 
 	/**
@@ -78,7 +78,7 @@ public class CMWCGenerator implements RandomGenerator32 {
 		setSeed(seed);
 	}
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance methods
 
 	@Override

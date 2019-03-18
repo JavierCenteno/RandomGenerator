@@ -14,7 +14,7 @@ import util.ByteConverter;
  */
 public class XorwowGenerator implements RandomGenerator32 {
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Class fields
 
 	/**
@@ -30,7 +30,7 @@ public class XorwowGenerator implements RandomGenerator32 {
 	 */
 	public static final int SEED_SIZE = STATE_SIZE;
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance fields
 
 	/**
@@ -38,7 +38,7 @@ public class XorwowGenerator implements RandomGenerator32 {
 	 */
 	private int[] state;
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance initializers
 
 	/**
@@ -61,7 +61,7 @@ public class XorwowGenerator implements RandomGenerator32 {
 		setSeed(seed);
 	}
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance methods
 
 	@Override

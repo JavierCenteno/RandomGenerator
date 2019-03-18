@@ -12,7 +12,7 @@ package api;
  */
 public abstract class Abstract8RandomGenerator implements RandomGenerator8 {
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Class fields
 
 	/**
@@ -24,7 +24,7 @@ public abstract class Abstract8RandomGenerator implements RandomGenerator8 {
 	 */
 	public static final int SEED_SIZE = STATE_SIZE;
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance fields
 
 	/**
@@ -32,7 +32,7 @@ public abstract class Abstract8RandomGenerator implements RandomGenerator8 {
 	 */
 	protected byte state;
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance initializers
 
 	/**
@@ -55,7 +55,7 @@ public abstract class Abstract8RandomGenerator implements RandomGenerator8 {
 		setSeed(seed);
 	}
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance methods
 
 	@Override

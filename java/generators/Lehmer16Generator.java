@@ -14,7 +14,7 @@ import api.Abstract16RandomGenerator;
  */
 public class Lehmer16Generator extends Abstract16RandomGenerator {
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance initializers
 
 	/**
@@ -37,12 +37,13 @@ public class Lehmer16Generator extends Abstract16RandomGenerator {
 		super(seed);
 	}
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance methods
 
 	@Override
 	public short generateUniformShort() {
 		int next = this.state;
+		// reject results over the short range
 		do {
 			next = 75 * next % 65537;
 		} while (next == 65536);

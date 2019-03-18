@@ -16,7 +16,7 @@ import util.ByteConverter;
  */
 public class Xoshiro512StarStarGenerator implements RandomGenerator64 {
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Class fields
 
 	/**
@@ -30,7 +30,7 @@ public class Xoshiro512StarStarGenerator implements RandomGenerator64 {
 	private static final long[] JUMP = { 0x33ED89B6E7A353F9L, 0x760083D7955323BEL, 0x2837F2FBB5F22FAEL,
 			0x4B8C5674d309511CL, 0xB11AC47A7BA28C25L, 0xF1BE7667092BCC1CL, 0x53851EFDB6DF0AAFL, 0x1EBBC8B23EAF25DBL };
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance fields
 
 	/**
@@ -38,7 +38,7 @@ public class Xoshiro512StarStarGenerator implements RandomGenerator64 {
 	 */
 	private long[] state;
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance initializers
 
 	/**
@@ -71,7 +71,7 @@ public class Xoshiro512StarStarGenerator implements RandomGenerator64 {
 		this.state = Arrays.copyOf(generator.state, generator.state.length);
 	}
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance methods
 
 	@Override

@@ -14,7 +14,7 @@ import api.Abstract64RandomGenerator;
  */
 public class Xorshift64StarGenerator extends Abstract64RandomGenerator {
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance initializers
 
 	/**
@@ -37,7 +37,7 @@ public class Xorshift64StarGenerator extends Abstract64RandomGenerator {
 		super(seed);
 	}
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance methods
 
 	@Override

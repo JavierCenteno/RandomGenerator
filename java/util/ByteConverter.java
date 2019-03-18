@@ -2,7 +2,7 @@ package util;
 
 public class ByteConverter {
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// From byte array methods
 
 	public static short bytesToShort(byte... from) {
@@ -53,7 +53,7 @@ public class ByteConverter {
 		return to;
 	}
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// To byte array methods
 
 	public static byte[] shortToBytes(short from) {

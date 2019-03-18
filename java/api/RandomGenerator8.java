@@ -12,7 +12,7 @@ package api;
  */
 public interface RandomGenerator8 extends RandomGenerator {
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance methods
 
 	@Override

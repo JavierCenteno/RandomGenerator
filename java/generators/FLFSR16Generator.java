@@ -15,7 +15,7 @@ import util.ByteConverter;
  */
 public class FLFSR16Generator implements RandomGenerator1 {
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Class fields
 
 	/**
@@ -27,7 +27,7 @@ public class FLFSR16Generator implements RandomGenerator1 {
 	 */
 	public static final int SEED_SIZE = STATE_SIZE;
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance fields
 
 	/**
@@ -35,7 +35,7 @@ public class FLFSR16Generator implements RandomGenerator1 {
 	 */
 	private short state;
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance initializers
 
 	/**
@@ -58,7 +58,7 @@ public class FLFSR16Generator implements RandomGenerator1 {
 		setSeed(seed);
 	}
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance methods
 
 	@Override

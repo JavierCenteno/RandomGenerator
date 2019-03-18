@@ -17,7 +17,7 @@ import util.ByteConverter;
  */
 public class JavaSplittableRandomGenerator implements RandomGenerator32 {
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Class fields
 
 	/**
@@ -25,7 +25,7 @@ public class JavaSplittableRandomGenerator implements RandomGenerator32 {
 	 */
 	public static final int SEED_SIZE = 8;
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance fields
 
 	/**
@@ -35,7 +35,7 @@ public class JavaSplittableRandomGenerator implements RandomGenerator32 {
 	 */
 	private SplittableRandom splittableRandom;
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance initializers
 
 	/**
@@ -74,7 +74,7 @@ public class JavaSplittableRandomGenerator implements RandomGenerator32 {
 		this.splittableRandom = splittableRandom;
 	}
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance methods
 
 	@Override

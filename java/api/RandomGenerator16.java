@@ -12,7 +12,7 @@ package api;
  */
 public interface RandomGenerator16 extends RandomGenerator {
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance methods
 
 	@Override

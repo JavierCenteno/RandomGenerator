@@ -14,7 +14,7 @@ import util.ByteConverter;
  */
 public abstract class Abstract64RandomGenerator implements RandomGenerator64 {
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Class fields
 
 	/**
@@ -26,7 +26,7 @@ public abstract class Abstract64RandomGenerator implements RandomGenerator64 {
 	 */
 	public static final int SEED_SIZE = STATE_SIZE;
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance fields
 
 	/**
@@ -34,7 +34,7 @@ public abstract class Abstract64RandomGenerator implements RandomGenerator64 {
 	 */
 	protected long state;
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance initializers
 
 	/**
@@ -57,7 +57,7 @@ public abstract class Abstract64RandomGenerator implements RandomGenerator64 {
 		setSeed(seed);
 	}
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance methods
 
 	@Override

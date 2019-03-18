@@ -15,7 +15,7 @@ import api.RandomGenerator1;
  */
 public class BlumBlumShubGenerator implements RandomGenerator1 {
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Class fields
 
 	/**
@@ -39,7 +39,7 @@ public class BlumBlumShubGenerator implements RandomGenerator1 {
 	 */
 	public static final int SEED_SIZE = STATE_SIZE;
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance fields
 
 	/**
@@ -48,7 +48,7 @@ public class BlumBlumShubGenerator implements RandomGenerator1 {
 	 */
 	private BigInteger state;
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance initializers
 
 	/**
@@ -86,7 +86,7 @@ public class BlumBlumShubGenerator implements RandomGenerator1 {
 		setSeed(seed);
 	}
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance methods
 
 	@Override

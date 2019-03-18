@@ -13,7 +13,7 @@ import api.Abstract64RandomGenerator;
  */
 public class LinearCongruential64Generator extends Abstract64RandomGenerator {
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance initializers
 
 	/**
@@ -36,7 +36,7 @@ public class LinearCongruential64Generator extends Abstract64RandomGenerator {
 		super(seed);
 	}
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance methods
 
 	@Override

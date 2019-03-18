@@ -15,7 +15,7 @@ import util.ByteConverter;
  */
 public class WELL512AGenerator implements RandomGenerator32 {
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Class fields
 
 	/**
@@ -35,7 +35,7 @@ public class WELL512AGenerator implements RandomGenerator32 {
 	 */
 	public static final int FULL_STATE_SIZE = Integer.BYTES + STATE_SIZE;
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance fields
 
 	/**
@@ -50,7 +50,7 @@ public class WELL512AGenerator implements RandomGenerator32 {
 	 */
 	private int[] state;
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance initializers
 
 	/**
@@ -73,7 +73,7 @@ public class WELL512AGenerator implements RandomGenerator32 {
 		setSeed(seed);
 	}
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance methods
 
 	@Override

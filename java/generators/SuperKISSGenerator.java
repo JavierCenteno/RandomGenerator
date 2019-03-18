@@ -16,7 +16,7 @@ import util.ByteConverter;
  */
 public class SuperKISSGenerator implements RandomGenerator64 {
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Class fields
 
 	/**
@@ -33,7 +33,7 @@ public class SuperKISSGenerator implements RandomGenerator64 {
 	 */
 	public static final int SEED_SIZE = Long.BYTES;
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance fields
 
 	/**
@@ -57,7 +57,7 @@ public class SuperKISSGenerator implements RandomGenerator64 {
 	 */
 	private long linearCongruential;
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance initializers
 
 	/**
@@ -90,7 +90,7 @@ public class SuperKISSGenerator implements RandomGenerator64 {
 		this.state = Arrays.copyOf(generator.state, generator.state.length);
 	}
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance methods
 
 	@Override

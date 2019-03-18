@@ -14,7 +14,7 @@ import util.ByteConverter;
  */
 public class MersenneTwister19937Generator implements RandomGenerator64 {
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Class fields
 
 	/**
@@ -38,7 +38,7 @@ public class MersenneTwister19937Generator implements RandomGenerator64 {
 	private static final long LOWER_MASK = 0x00_00_00_00_7F_FF_FF_FFL;
 	private static final long XOR_MASK = 0xB5_02_6F_5A_A9_66_19_E9L;
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance fields
 
 	/**
@@ -53,7 +53,7 @@ public class MersenneTwister19937Generator implements RandomGenerator64 {
 	 */
 	private long[] state;
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance initializers
 
 	/**
@@ -76,7 +76,7 @@ public class MersenneTwister19937Generator implements RandomGenerator64 {
 		setSeed(seed);
 	}
 
-	// -----------------------------------------------------------------------------
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance methods
 
 	@Override
