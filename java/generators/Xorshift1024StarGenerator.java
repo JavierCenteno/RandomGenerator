@@ -1,16 +1,17 @@
 package generators;
 
+import api.RandomGenerator;
 import api.RandomGenerator64;
 import util.ByteConverter;
 
 /**
  * Implementation of a xorshift1024* PRNG with a state of 1024 bits.
- * 
+ *
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
  * @see api.RandomGenerator
  * @since 1.0
- * 
+ *
  */
 public class Xorshift1024StarGenerator implements RandomGenerator64 {
 
@@ -24,15 +25,15 @@ public class Xorshift1024StarGenerator implements RandomGenerator64 {
 	/**
 	 * Size of this generator's state in bytes.
 	 */
-	public static final int STATE_SIZE = STATE_SIZE_LONGS * Long.BYTES;
+	public static final int STATE_SIZE = Xorshift1024StarGenerator.STATE_SIZE_LONGS * Long.BYTES;
 	/**
 	 * Size of this generator's seed in bytes.
 	 */
-	public static final int SEED_SIZE = STATE_SIZE;
+	public static final int SEED_SIZE = Xorshift1024StarGenerator.STATE_SIZE;
 	/**
 	 * Size of this generator's state, including the index, in bytes.
 	 */
-	public static final int FULL_STATE_SIZE = Integer.BYTES + STATE_SIZE;
+	public static final int FULL_STATE_SIZE = Integer.BYTES + Xorshift1024StarGenerator.STATE_SIZE;
 
 	////////////////////////////////////////////////////////////////////////////////
 	// Instance fields
@@ -57,19 +58,19 @@ public class Xorshift1024StarGenerator implements RandomGenerator64 {
 	 * seed generator.
 	 */
 	public Xorshift1024StarGenerator() {
-		this(DEFAULT_SEED_GENERATOR.generateBytes(SEED_SIZE));
+		this(RandomGenerator.DEFAULT_SEED_GENERATOR.generateBytes(Xorshift1024StarGenerator.SEED_SIZE));
 	}
 
 	/**
 	 * Constructs a generator with the given seed.
-	 * 
+	 *
 	 * @param seed
 	 *                 A seed.
 	 * @throws IllegalArgumentException
 	 *                                      If the seed is too short.
 	 */
-	public Xorshift1024StarGenerator(byte[] seed) {
-		setSeed(seed);
+	public Xorshift1024StarGenerator(final byte[] seed) {
+		this.setSeed(seed);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -77,17 +78,17 @@ public class Xorshift1024StarGenerator implements RandomGenerator64 {
 
 	@Override
 	public int getSeedSize() {
-		return SEED_SIZE;
+		return Xorshift1024StarGenerator.SEED_SIZE;
 	}
 
 	@Override
 	public int getStateSize() {
-		return FULL_STATE_SIZE;
+		return Xorshift1024StarGenerator.FULL_STATE_SIZE;
 	}
 
 	@Override
-	public void setSeed(byte[] seed) {
-		if (seed.length < SEED_SIZE) {
+	public void setSeed(final byte[] seed) {
+		if (seed.length < Xorshift1024StarGenerator.SEED_SIZE) {
 			throw new IllegalArgumentException();
 		}
 		this.index = 0;
@@ -96,21 +97,21 @@ public class Xorshift1024StarGenerator implements RandomGenerator64 {
 
 	@Override
 	public byte[] getState() {
-		byte[] indexBytes = ByteConverter.integerToBytes(index);
-		byte[] stateBytes = ByteConverter.longsToBytes(this.state);
-		byte[] fullState = new byte[indexBytes.length + stateBytes.length];
+		final byte[] indexBytes = ByteConverter.integerToBytes(this.index);
+		final byte[] stateBytes = ByteConverter.longsToBytes(this.state);
+		final byte[] fullState = new byte[indexBytes.length + stateBytes.length];
 		System.arraycopy(indexBytes, 0, fullState, 0, indexBytes.length);
 		System.arraycopy(stateBytes, 0, fullState, indexBytes.length, stateBytes.length);
 		return fullState;
 	}
 
 	@Override
-	public void setState(byte[] state) {
-		if (state.length < FULL_STATE_SIZE) {
+	public void setState(final byte[] state) {
+		if (state.length < Xorshift1024StarGenerator.FULL_STATE_SIZE) {
 			throw new IllegalArgumentException();
 		}
-		byte[] indexBytes = new byte[Integer.BYTES];
-		byte[] stateBytes = new byte[STATE_SIZE];
+		final byte[] indexBytes = new byte[Integer.BYTES];
+		final byte[] stateBytes = new byte[Xorshift1024StarGenerator.STATE_SIZE];
 		System.arraycopy(state, 0, indexBytes, 0, indexBytes.length);
 		System.arraycopy(state, indexBytes.length, stateBytes, 0, stateBytes.length);
 		this.index = ByteConverter.bytesToInteger(indexBytes);
@@ -119,13 +120,13 @@ public class Xorshift1024StarGenerator implements RandomGenerator64 {
 
 	@Override
 	public long generateUniformLong() {
-		long state0 = state[index];
-		index = (index + 1) % STATE_SIZE_LONGS;
-		long state1 = state[index];
+		final long state0 = this.state[this.index];
+		this.index = (this.index + 1) % Xorshift1024StarGenerator.STATE_SIZE_LONGS;
+		long state1 = this.state[this.index];
 		state1 ^= state1 << 31;
 		state1 ^= state1 >>> 11;
 		state1 ^= state0 ^ (state0 >>> 30);
-		state[index] = state1;
+		this.state[this.index] = state1;
 		return state1 * 1181783497276652981L;
 	}
 

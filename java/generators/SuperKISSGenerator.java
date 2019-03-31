@@ -2,17 +2,18 @@ package generators;
 
 import java.util.Arrays;
 
+import api.RandomGenerator;
 import api.RandomGenerator64;
 import util.ByteConverter;
 
 /**
  * Implementation of a SuperKISS PRNG with a state of 512 bits.
- * 
+ *
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
  * @see api.RandomGenerator
  * @since 1.0
- * 
+ *
  */
 public class SuperKISSGenerator implements RandomGenerator64 {
 
@@ -27,7 +28,7 @@ public class SuperKISSGenerator implements RandomGenerator64 {
 	 * Size of this generator's state, including other variables used by the
 	 * generator, in bytes.
 	 */
-	public static final int FULL_STATE_SIZE = STATE_SIZE + Integer.BYTES + 3 * Long.BYTES;
+	public static final int FULL_STATE_SIZE = SuperKISSGenerator.STATE_SIZE + Integer.BYTES + (3 * Long.BYTES);
 	/**
 	 * Size of this generator's seed in bytes.
 	 */
@@ -65,28 +66,28 @@ public class SuperKISSGenerator implements RandomGenerator64 {
 	 * seed generator.
 	 */
 	public SuperKISSGenerator() {
-		this(DEFAULT_SEED_GENERATOR.generateBytes(SEED_SIZE));
+		this(RandomGenerator.DEFAULT_SEED_GENERATOR.generateBytes(SuperKISSGenerator.SEED_SIZE));
 	}
 
 	/**
 	 * Constructs a generator with the given seed.
-	 * 
+	 *
 	 * @param seed
 	 *                 A seed.
 	 * @throws IllegalArgumentException
 	 *                                      If the seed is too short.
 	 */
-	public SuperKISSGenerator(byte[] seed) {
-		setSeed(seed);
+	public SuperKISSGenerator(final byte[] seed) {
+		this.setSeed(seed);
 	}
 
 	/**
 	 * Constructs a copy of this generator.
-	 * 
+	 *
 	 * @param generator
 	 *                      A generator.
 	 */
-	public SuperKISSGenerator(SuperKISSGenerator generator) {
+	public SuperKISSGenerator(final SuperKISSGenerator generator) {
 		this.state = Arrays.copyOf(generator.state, generator.state.length);
 	}
 
@@ -95,36 +96,36 @@ public class SuperKISSGenerator implements RandomGenerator64 {
 
 	@Override
 	public int getSeedSize() {
-		return SEED_SIZE;
+		return SuperKISSGenerator.SEED_SIZE;
 	}
 
 	@Override
 	public int getStateSize() {
-		return STATE_SIZE;
+		return SuperKISSGenerator.STATE_SIZE;
 	}
 
 	@Override
-	public void setSeed(byte[] seed) {
-		if (seed.length < SEED_SIZE) {
+	public void setSeed(final byte[] seed) {
+		if (seed.length < SuperKISSGenerator.SEED_SIZE) {
 			throw new IllegalArgumentException();
 		}
-		long longSeed = ByteConverter.bytesToLong(seed);
+		final long longSeed = ByteConverter.bytesToLong(seed);
 		this.linearCongruential ^= longSeed;
 		this.xorShift ^= this.linearCongruential;
-		this.state = new long[STATE_SIZE / Long.BYTES];
-		for (int i = 0; i < state.length; ++i) {
-			state[i] = linearCongruential + xorShift;
+		this.state = new long[SuperKISSGenerator.STATE_SIZE / Long.BYTES];
+		for (int i = 0; i < this.state.length; ++i) {
+			this.state[i] = this.linearCongruential + this.xorShift;
 		}
 	}
 
 	@Override
 	public byte[] getState() {
-		byte[] indexBytes = ByteConverter.integerToBytes(index);
-		byte[] carryBytes = ByteConverter.longToBytes(carry);
-		byte[] xorShiftBytes = ByteConverter.longToBytes(xorShift);
-		byte[] linearCongruentialBytes = ByteConverter.longToBytes(linearCongruential);
-		byte[] stateBytes = ByteConverter.longsToBytes(this.state);
-		byte[] fullState = new byte[indexBytes.length + carryBytes.length + xorShiftBytes.length
+		final byte[] indexBytes = ByteConverter.integerToBytes(this.index);
+		final byte[] carryBytes = ByteConverter.longToBytes(this.carry);
+		final byte[] xorShiftBytes = ByteConverter.longToBytes(this.xorShift);
+		final byte[] linearCongruentialBytes = ByteConverter.longToBytes(this.linearCongruential);
+		final byte[] stateBytes = ByteConverter.longsToBytes(this.state);
+		final byte[] fullState = new byte[indexBytes.length + carryBytes.length + xorShiftBytes.length
 				+ linearCongruentialBytes.length + stateBytes.length];
 		System.arraycopy(indexBytes, 0, fullState, 0, indexBytes.length);
 		System.arraycopy(carryBytes, 0, fullState, indexBytes.length, carryBytes.length);
@@ -138,15 +139,15 @@ public class SuperKISSGenerator implements RandomGenerator64 {
 	}
 
 	@Override
-	public void setState(byte[] state) {
-		if (state.length < STATE_SIZE) {
+	public void setState(final byte[] state) {
+		if (state.length < SuperKISSGenerator.STATE_SIZE) {
 			throw new IllegalArgumentException();
 		}
-		byte[] indexBytes = new byte[Integer.BYTES];
-		byte[] carryBytes = new byte[Long.BYTES];
-		byte[] xorShiftBytes = new byte[Long.BYTES];
-		byte[] linearCongruentialBytes = new byte[Long.BYTES];
-		byte[] stateBytes = new byte[STATE_SIZE];
+		final byte[] indexBytes = new byte[Integer.BYTES];
+		final byte[] carryBytes = new byte[Long.BYTES];
+		final byte[] xorShiftBytes = new byte[Long.BYTES];
+		final byte[] linearCongruentialBytes = new byte[Long.BYTES];
+		final byte[] stateBytes = new byte[SuperKISSGenerator.STATE_SIZE];
 		System.arraycopy(state, 0, indexBytes, 0, indexBytes.length);
 		System.arraycopy(state, indexBytes.length, carryBytes, 0, carryBytes.length);
 		System.arraycopy(state, indexBytes.length + carryBytes.length, xorShiftBytes, 0, xorShiftBytes.length);
@@ -164,16 +165,16 @@ public class SuperKISSGenerator implements RandomGenerator64 {
 
 	@Override
 	public long generateUniformLong() {
-		index = (index + 1) % state.length;
-		long x = state[index];
-		long t = (x << 28) + carry;
-		carry = (x >>> 36) - (t < x ? 1 : 0);
-		state[index] = t - x;
-		linearCongruential = 6906969069L * linearCongruential + 13579;
-		xorShift ^= xorShift << 13;
-		xorShift ^= xorShift >>> 17;
-		xorShift ^= xorShift << 43;
-		return state[index] + linearCongruential + xorShift;
+		this.index = (this.index + 1) % this.state.length;
+		final long x = this.state[this.index];
+		final long t = (x << 28) + this.carry;
+		this.carry = (x >>> 36) - (t < x ? 1 : 0);
+		this.state[this.index] = t - x;
+		this.linearCongruential = (6906969069L * this.linearCongruential) + 13579;
+		this.xorShift ^= this.xorShift << 13;
+		this.xorShift ^= this.xorShift >>> 17;
+		this.xorShift ^= this.xorShift << 43;
+		return this.state[this.index] + this.linearCongruential + this.xorShift;
 	}
 
 }

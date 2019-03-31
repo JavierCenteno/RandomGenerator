@@ -2,16 +2,17 @@ package generators;
 
 import java.math.BigInteger;
 
+import api.RandomGenerator;
 import api.RandomGenerator1;
 
 /**
  * Implementation of a blum blum shub PRNG.
- * 
+ *
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
  * @see api.RandomGenerator
  * @since 1.0
- * 
+ *
  */
 public class BlumBlumShubGenerator implements RandomGenerator1 {
 
@@ -29,15 +30,15 @@ public class BlumBlumShubGenerator implements RandomGenerator1 {
 	/**
 	 * The product of the two primes.
 	 */
-	private static final BigInteger MODULUS = PRIME_1.multiply(PRIME_2);
+	private static final BigInteger MODULUS = BlumBlumShubGenerator.PRIME_1.multiply(BlumBlumShubGenerator.PRIME_2);
 	/**
 	 * Size of this generator's state in bytes.
 	 */
-	public static final int STATE_SIZE = MODULUS.toByteArray().length;
+	public static final int STATE_SIZE = BlumBlumShubGenerator.MODULUS.toByteArray().length;
 	/**
 	 * Size of this generator's seed in bytes.
 	 */
-	public static final int SEED_SIZE = STATE_SIZE;
+	public static final int SEED_SIZE = BlumBlumShubGenerator.STATE_SIZE;
 
 	////////////////////////////////////////////////////////////////////////////////
 	// Instance fields
@@ -60,16 +61,16 @@ public class BlumBlumShubGenerator implements RandomGenerator1 {
 		BigInteger bigIntegerSeed;
 		// Make another seed if it's 0, 1 or coprime with M
 		do {
-			seed = DEFAULT_SEED_GENERATOR.generateBytes(SEED_SIZE);
-			bigIntegerSeed = new BigInteger(seed).abs().mod(MODULUS);
-		} while (bigIntegerSeed.compareTo(BigInteger.ONE) <= 0 || bigIntegerSeed.equals(PRIME_1)
-				|| bigIntegerSeed.equals(PRIME_2));
-		setSeed(seed);
+			seed = RandomGenerator.DEFAULT_SEED_GENERATOR.generateBytes(BlumBlumShubGenerator.SEED_SIZE);
+			bigIntegerSeed = new BigInteger(seed).abs().mod(BlumBlumShubGenerator.MODULUS);
+		} while ((bigIntegerSeed.compareTo(BigInteger.ONE) <= 0) || bigIntegerSeed.equals(BlumBlumShubGenerator.PRIME_1)
+				|| bigIntegerSeed.equals(BlumBlumShubGenerator.PRIME_2));
+		this.setSeed(seed);
 	}
 
 	/**
 	 * Constructs a generator with the given seed.
-	 * 
+	 *
 	 * @param seed
 	 *                 A seed.
 	 * @throws IllegalArgumentException
@@ -77,13 +78,14 @@ public class BlumBlumShubGenerator implements RandomGenerator1 {
 	 *                                      illegal value (0, 1, P, Q, negative or
 	 *                                      bigger than M).
 	 */
-	public BlumBlumShubGenerator(byte[] seed) {
-		BigInteger bigIntegerSeed = new BigInteger(seed);
-		if (bigIntegerSeed.compareTo(BigInteger.ONE) <= 0 || bigIntegerSeed.equals(PRIME_1)
-				|| bigIntegerSeed.equals(PRIME_2) || bigIntegerSeed.compareTo(MODULUS) > 0) {
+	public BlumBlumShubGenerator(final byte[] seed) {
+		final BigInteger bigIntegerSeed = new BigInteger(seed);
+		if ((bigIntegerSeed.compareTo(BigInteger.ONE) <= 0) || bigIntegerSeed.equals(BlumBlumShubGenerator.PRIME_1)
+				|| bigIntegerSeed.equals(BlumBlumShubGenerator.PRIME_2)
+				|| (bigIntegerSeed.compareTo(BlumBlumShubGenerator.MODULUS) > 0)) {
 			throw new IllegalArgumentException();
 		}
-		setSeed(seed);
+		this.setSeed(seed);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -91,22 +93,22 @@ public class BlumBlumShubGenerator implements RandomGenerator1 {
 
 	@Override
 	public int getSeedSize() {
-		return SEED_SIZE;
+		return BlumBlumShubGenerator.SEED_SIZE;
 	}
 
 	@Override
 	public int getStateSize() {
-		return STATE_SIZE;
+		return BlumBlumShubGenerator.STATE_SIZE;
 	}
 
 	@Override
 	public byte[] getState() {
-		return state.toByteArray();
+		return this.state.toByteArray();
 	}
 
 	@Override
-	public void setState(byte[] state) {
-		if (state.length < STATE_SIZE) {
+	public void setState(final byte[] state) {
+		if (state.length < BlumBlumShubGenerator.STATE_SIZE) {
 			throw new IllegalArgumentException();
 		}
 		this.state = new BigInteger(state);
@@ -114,8 +116,8 @@ public class BlumBlumShubGenerator implements RandomGenerator1 {
 
 	@Override
 	public byte generateBit() {
-		state = state.pow(2).mod(MODULUS);
-		return (byte) (state.intValue() & 1);
+		this.state = this.state.pow(2).mod(BlumBlumShubGenerator.MODULUS);
+		return (byte) (this.state.intValue() & 1);
 	}
 
 }

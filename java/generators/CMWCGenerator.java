@@ -1,17 +1,18 @@
 package generators;
 
+import api.RandomGenerator;
 import api.RandomGenerator32;
 import util.ByteConverter;
 
 /**
  * Implementation of a complementary-multiply-with-carry PRNG with a state of
  * 131072 bits.
- * 
+ *
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
  * @see api.RandomGenerator
  * @since 1.0
- * 
+ *
  */
 public class CMWCGenerator implements RandomGenerator32 {
 
@@ -25,15 +26,15 @@ public class CMWCGenerator implements RandomGenerator32 {
 	/**
 	 * Size of this generator's state in bytes.
 	 */
-	public static final int STATE_SIZE = STATE_SIZE_INTEGERS * Integer.BYTES;
+	public static final int STATE_SIZE = CMWCGenerator.STATE_SIZE_INTEGERS * Integer.BYTES;
 	/**
 	 * Size of this generator's seed in bytes.
 	 */
-	public static final int SEED_SIZE = Integer.BYTES + STATE_SIZE;
+	public static final int SEED_SIZE = Integer.BYTES + CMWCGenerator.STATE_SIZE;
 	/**
 	 * Size of this generator's state, including the index and the carry, in bytes.
 	 */
-	public static final int FULL_STATE_SIZE = 2 * Integer.BYTES + STATE_SIZE;
+	public static final int FULL_STATE_SIZE = (2 * Integer.BYTES) + CMWCGenerator.STATE_SIZE;
 	/**
 	 * Maximum value the carry can have.
 	 */
@@ -63,19 +64,19 @@ public class CMWCGenerator implements RandomGenerator32 {
 	 * seed generator.
 	 */
 	public CMWCGenerator() {
-		this(DEFAULT_SEED_GENERATOR.generateBytes(SEED_SIZE));
+		this(RandomGenerator.DEFAULT_SEED_GENERATOR.generateBytes(CMWCGenerator.SEED_SIZE));
 	}
 
 	/**
 	 * Constructs a generator with the given seed.
-	 * 
+	 *
 	 * @param seed
 	 *                 A seed.
 	 * @throws IllegalArgumentException
 	 *                                      If the seed is too short.
 	 */
-	public CMWCGenerator(byte[] seed) {
-		setSeed(seed);
+	public CMWCGenerator(final byte[] seed) {
+		this.setSeed(seed);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -83,34 +84,34 @@ public class CMWCGenerator implements RandomGenerator32 {
 
 	@Override
 	public int getSeedSize() {
-		return SEED_SIZE;
+		return CMWCGenerator.SEED_SIZE;
 	}
 
 	@Override
 	public int getStateSize() {
-		return FULL_STATE_SIZE;
+		return CMWCGenerator.FULL_STATE_SIZE;
 	}
 
 	@Override
-	public void setSeed(byte[] seed) {
-		if (seed.length < SEED_SIZE) {
+	public void setSeed(final byte[] seed) {
+		if (seed.length < CMWCGenerator.SEED_SIZE) {
 			throw new IllegalArgumentException();
 		}
-		this.index = STATE_SIZE_INTEGERS - 1;
-		byte[] carryBytes = new byte[Integer.BYTES];
-		byte[] stateBytes = new byte[STATE_SIZE];
+		this.index = CMWCGenerator.STATE_SIZE_INTEGERS - 1;
+		final byte[] carryBytes = new byte[Integer.BYTES];
+		final byte[] stateBytes = new byte[CMWCGenerator.STATE_SIZE];
 		System.arraycopy(seed, 0, carryBytes, 0, carryBytes.length);
 		System.arraycopy(seed, carryBytes.length, stateBytes, 0, stateBytes.length);
-		this.carry = Math.abs(ByteConverter.bytesToInteger(carryBytes)) % MAX_CARRY;
+		this.carry = Math.abs(ByteConverter.bytesToInteger(carryBytes)) % CMWCGenerator.MAX_CARRY;
 		this.state = ByteConverter.bytesToIntegers(stateBytes);
 	}
 
 	@Override
 	public byte[] getState() {
-		byte[] indexBytes = ByteConverter.integerToBytes(index);
-		byte[] carryBytes = ByteConverter.integerToBytes(carry);
-		byte[] stateBytes = ByteConverter.integersToBytes(this.state);
-		byte[] fullState = new byte[indexBytes.length + carryBytes.length + stateBytes.length];
+		final byte[] indexBytes = ByteConverter.integerToBytes(this.index);
+		final byte[] carryBytes = ByteConverter.integerToBytes(this.carry);
+		final byte[] stateBytes = ByteConverter.integersToBytes(this.state);
+		final byte[] fullState = new byte[indexBytes.length + carryBytes.length + stateBytes.length];
 		System.arraycopy(indexBytes, 0, fullState, 0, indexBytes.length);
 		System.arraycopy(carryBytes, 0, fullState, indexBytes.length, carryBytes.length);
 		System.arraycopy(stateBytes, 0, fullState, indexBytes.length + carryBytes.length, stateBytes.length);
@@ -118,13 +119,13 @@ public class CMWCGenerator implements RandomGenerator32 {
 	}
 
 	@Override
-	public void setState(byte[] state) {
-		if (state.length < FULL_STATE_SIZE) {
+	public void setState(final byte[] state) {
+		if (state.length < CMWCGenerator.FULL_STATE_SIZE) {
 			throw new IllegalArgumentException();
 		}
-		byte[] indexBytes = new byte[Integer.BYTES];
-		byte[] cBytes = new byte[Integer.BYTES];
-		byte[] stateBytes = new byte[STATE_SIZE];
+		final byte[] indexBytes = new byte[Integer.BYTES];
+		final byte[] cBytes = new byte[Integer.BYTES];
+		final byte[] stateBytes = new byte[CMWCGenerator.STATE_SIZE];
 		System.arraycopy(state, 0, indexBytes, 0, indexBytes.length);
 		System.arraycopy(state, indexBytes.length, cBytes, 0, cBytes.length);
 		System.arraycopy(state, indexBytes.length + cBytes.length, stateBytes, 0, stateBytes.length);
@@ -135,15 +136,15 @@ public class CMWCGenerator implements RandomGenerator32 {
 
 	@Override
 	public int generateUniformInteger() {
-		index = (index + 1) % STATE_SIZE_INTEGERS;
-		long t = 18782L * state[index] + carry;
-		carry = (int) (t >>> 32);
-		int x = (int) (t + carry);
-		if (x < carry) {
+		this.index = (this.index + 1) % CMWCGenerator.STATE_SIZE_INTEGERS;
+		final long t = (18782L * this.state[this.index]) + this.carry;
+		this.carry = (int) (t >>> 32);
+		int x = (int) (t + this.carry);
+		if (x < this.carry) {
 			x++;
-			carry++;
+			this.carry++;
 		}
-		return state[index] = 0xfffffffe - x;
+		return this.state[this.index] = 0xfffffffe - x;
 	}
 
 }

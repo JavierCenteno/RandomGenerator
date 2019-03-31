@@ -4,13 +4,13 @@ import api.Abstract16RandomGenerator;
 
 /**
  * Implementation of a Lehmer PRNG with a state of 16 bits.
- * 
+ *
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
  * @see api.RandomGenerator
  * @see generators.Xorshift64Generator
  * @since 1.0
- * 
+ *
  */
 public class Lehmer16Generator extends Abstract16RandomGenerator {
 
@@ -27,13 +27,13 @@ public class Lehmer16Generator extends Abstract16RandomGenerator {
 
 	/**
 	 * Constructs a generator with the given seed.
-	 * 
+	 *
 	 * @param seed
 	 *                 A seed.
 	 * @throws IllegalArgumentException
 	 *                                      If the seed is too short.
 	 */
-	public Lehmer16Generator(byte[] seed) {
+	public Lehmer16Generator(final byte[] seed) {
 		super(seed);
 	}
 
@@ -45,7 +45,7 @@ public class Lehmer16Generator extends Abstract16RandomGenerator {
 		int next = this.state;
 		// reject results over the short range
 		do {
-			next = 75 * next % 65537;
+			next = (75 * next) % 65537;
 		} while (next == 65536);
 		return this.state = (short) next;
 	}

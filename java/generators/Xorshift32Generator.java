@@ -4,12 +4,12 @@ import api.Abstract32RandomGenerator;
 
 /**
  * Implementation of a xorshift32 PRNG with a state of 32 bits.
- * 
+ *
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
  * @see api.RandomGenerator
  * @since 1.0
- * 
+ *
  */
 public class Xorshift32Generator extends Abstract32RandomGenerator {
 
@@ -26,13 +26,13 @@ public class Xorshift32Generator extends Abstract32RandomGenerator {
 
 	/**
 	 * Constructs a generator with the given seed.
-	 * 
+	 *
 	 * @param seed
 	 *                 A seed.
 	 * @throws IllegalArgumentException
 	 *                                      If the seed is too short.
 	 */
-	public Xorshift32Generator(byte[] seed) {
+	public Xorshift32Generator(final byte[] seed) {
 		super(seed);
 	}
 

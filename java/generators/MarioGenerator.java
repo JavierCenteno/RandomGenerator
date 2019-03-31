@@ -1,17 +1,18 @@
 package generators;
 
+import api.RandomGenerator;
 import api.RandomGenerator16;
 import util.ByteConverter;
 
 /**
  * Implementation of the PRNG used in super mario 64. This generator has a state
  * of 16 bits and a period of 65114.
- * 
+ *
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
  * @see api.RandomGenerator
  * @since 1.0
- * 
+ *
  */
 public class MarioGenerator implements RandomGenerator16 {
 
@@ -25,7 +26,7 @@ public class MarioGenerator implements RandomGenerator16 {
 	/**
 	 * Size of this generator's seed in bytes.
 	 */
-	public static final int SEED_SIZE = STATE_SIZE;
+	public static final int SEED_SIZE = MarioGenerator.STATE_SIZE;
 
 	////////////////////////////////////////////////////////////////////////////////
 	// Instance fields
@@ -43,19 +44,19 @@ public class MarioGenerator implements RandomGenerator16 {
 	 * seed generator.
 	 */
 	public MarioGenerator() {
-		this(DEFAULT_SEED_GENERATOR.generateBytes(SEED_SIZE));
+		this(RandomGenerator.DEFAULT_SEED_GENERATOR.generateBytes(MarioGenerator.SEED_SIZE));
 	}
 
 	/**
 	 * Constructs a generator with the given seed.
-	 * 
+	 *
 	 * @param seed
 	 *                 A seed.
 	 * @throws IllegalArgumentException
 	 *                                      If the seed is too short.
 	 */
-	public MarioGenerator(byte[] seed) {
-		setSeed(seed);
+	public MarioGenerator(final byte[] seed) {
+		this.setSeed(seed);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -63,12 +64,12 @@ public class MarioGenerator implements RandomGenerator16 {
 
 	@Override
 	public int getSeedSize() {
-		return SEED_SIZE;
+		return MarioGenerator.SEED_SIZE;
 	}
 
 	@Override
 	public int getStateSize() {
-		return STATE_SIZE;
+		return MarioGenerator.STATE_SIZE;
 	}
 
 	@Override
@@ -77,8 +78,8 @@ public class MarioGenerator implements RandomGenerator16 {
 	}
 
 	@Override
-	public void setState(byte[] state) {
-		if (state.length < STATE_SIZE) {
+	public void setState(final byte[] state) {
+		if (state.length < MarioGenerator.STATE_SIZE) {
 			throw new IllegalArgumentException();
 		}
 		this.state = ByteConverter.bytesToShort(state);
@@ -94,7 +95,7 @@ public class MarioGenerator implements RandomGenerator16 {
 		s0 ^= state32;
 		state32 = ((s0 & 0x00FF) << 8) | ((s0 & 0xFF00) >>> 8);
 		s0 = ((s0 & 0x00FF) << 1) ^ state32;
-		int s1 = (s0 >>> 1) ^ 0xFF80;
+		final int s1 = (s0 >>> 1) ^ 0xFF80;
 		if ((s0 & 1) == 0) {
 			if (s1 == 0xAA55) {
 				state32 = 0;

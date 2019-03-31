@@ -7,13 +7,13 @@ import util.ByteConverter;
 
 /**
  * A wrapper for Java's SplittableRandom PRNG, which uses a SplitMix generator.
- * 
+ *
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
  * @see api.RandomGenerator
  * @see java.util.SplittableRandom
  * @since 1.0
- * 
+ *
  */
 public class JavaSplittableRandomGenerator implements RandomGenerator32 {
 
@@ -30,7 +30,7 @@ public class JavaSplittableRandomGenerator implements RandomGenerator32 {
 
 	/**
 	 * Underlying SplittableRandom object of this generator.
-	 * 
+	 *
 	 * @see java.util.SplittableRandom
 	 */
 	private SplittableRandom splittableRandom;
@@ -40,7 +40,7 @@ public class JavaSplittableRandomGenerator implements RandomGenerator32 {
 
 	/**
 	 * Constructs a generator using SplittableRandom's no argument constructor.
-	 * 
+	 *
 	 * @see java.util.SplittableRandom
 	 */
 	public JavaSplittableRandomGenerator() {
@@ -49,15 +49,15 @@ public class JavaSplittableRandomGenerator implements RandomGenerator32 {
 
 	/**
 	 * Constructs a generator using SplittableRandom's seed-based constructor.
-	 * 
+	 *
 	 * @param seed
 	 *                 A seed.
 	 * @see java.util.SplittableRandom
 	 * @throws IllegalArgumentException
 	 *                                      If the seed is too short.
 	 */
-	public JavaSplittableRandomGenerator(byte[] seed) {
-		if (seed.length < SEED_SIZE) {
+	public JavaSplittableRandomGenerator(final byte[] seed) {
+		if (seed.length < JavaSplittableRandomGenerator.SEED_SIZE) {
 			throw new IllegalArgumentException();
 		}
 		this.splittableRandom = new SplittableRandom(ByteConverter.bytesToLong(seed));
@@ -65,12 +65,12 @@ public class JavaSplittableRandomGenerator implements RandomGenerator32 {
 
 	/**
 	 * Constructs a generator using the given SplittableRandom.
-	 * 
+	 *
 	 * @param splittableRandom
 	 *                             A SplittableRandom object.
 	 * @see java.util.SplittableRandom
 	 */
-	public JavaSplittableRandomGenerator(SplittableRandom splittableRandom) {
+	public JavaSplittableRandomGenerator(final SplittableRandom splittableRandom) {
 		this.splittableRandom = splittableRandom;
 	}
 
@@ -79,12 +79,12 @@ public class JavaSplittableRandomGenerator implements RandomGenerator32 {
 
 	@Override
 	public int getSeedSize() {
-		return SEED_SIZE;
+		return JavaSplittableRandomGenerator.SEED_SIZE;
 	}
 
 	@Override
-	public void setSeed(byte[] seed) {
-		if (seed.length < SEED_SIZE) {
+	public void setSeed(final byte[] seed) {
+		if (seed.length < JavaSplittableRandomGenerator.SEED_SIZE) {
 			throw new IllegalArgumentException();
 		}
 		this.splittableRandom = new SplittableRandom(ByteConverter.bytesToLong(seed));

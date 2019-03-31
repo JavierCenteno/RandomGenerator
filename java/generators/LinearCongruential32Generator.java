@@ -4,12 +4,12 @@ import api.Abstract32RandomGenerator;
 
 /**
  * Implementation of a linear congruential PRNG with a state of 64 bits.
- * 
+ *
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
  * @see api.RandomGenerator
  * @since 1.0
- * 
+ *
  */
 public class LinearCongruential32Generator extends Abstract32RandomGenerator {
 
@@ -26,13 +26,13 @@ public class LinearCongruential32Generator extends Abstract32RandomGenerator {
 
 	/**
 	 * Constructs a generator with the given seed.
-	 * 
+	 *
 	 * @param seed
 	 *                 A seed.
 	 * @throws IllegalArgumentException
 	 *                                      If the seed is too short.
 	 */
-	public LinearCongruential32Generator(byte[] seed) {
+	public LinearCongruential32Generator(final byte[] seed) {
 		super(seed);
 	}
 
@@ -41,7 +41,7 @@ public class LinearCongruential32Generator extends Abstract32RandomGenerator {
 
 	@Override
 	public int generateUniformInteger() {
-		return this.state = this.state * 134775813 + 1;
+		return this.state = (this.state * 134775813) + 1;
 	}
 
 }

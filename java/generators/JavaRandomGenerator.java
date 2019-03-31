@@ -7,13 +7,13 @@ import util.ByteConverter;
 
 /**
  * A wrapper for Java's Random PRNG, which uses a linear congruential generator.
- * 
+ *
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
  * @see api.RandomGenerator
  * @see java.util.Random
  * @since 1.0
- * 
+ *
  */
 public class JavaRandomGenerator implements RandomGenerator32 {
 
@@ -30,17 +30,17 @@ public class JavaRandomGenerator implements RandomGenerator32 {
 
 	/**
 	 * Underlying Random object of this generator.
-	 * 
+	 *
 	 * @see java.util.Random
 	 */
-	private Random random;
+	private final Random random;
 
 	////////////////////////////////////////////////////////////////////////////////
 	// Instance initializers
 
 	/**
 	 * Constructs a generator using Random's no argument constructor.
-	 * 
+	 *
 	 * @see java.util.Random
 	 */
 	public JavaRandomGenerator() {
@@ -49,15 +49,15 @@ public class JavaRandomGenerator implements RandomGenerator32 {
 
 	/**
 	 * Constructs a generator using Random's seed-based constructor.
-	 * 
+	 *
 	 * @param seed
 	 *                 A seed.
 	 * @see java.util.Random
 	 * @throws IllegalArgumentException
 	 *                                      If the seed is too short.
 	 */
-	public JavaRandomGenerator(byte[] seed) {
-		if (seed.length < SEED_SIZE) {
+	public JavaRandomGenerator(final byte[] seed) {
+		if (seed.length < JavaRandomGenerator.SEED_SIZE) {
 			throw new IllegalArgumentException();
 		}
 		this.random = new Random(ByteConverter.bytesToLong(seed));
@@ -65,12 +65,12 @@ public class JavaRandomGenerator implements RandomGenerator32 {
 
 	/**
 	 * Constructs a generator using the given Random.
-	 * 
+	 *
 	 * @param random
 	 *                   A Random object.
 	 * @see java.util.Random
 	 */
-	public JavaRandomGenerator(Random random) {
+	public JavaRandomGenerator(final Random random) {
 		this.random = random;
 	}
 
@@ -79,7 +79,7 @@ public class JavaRandomGenerator implements RandomGenerator32 {
 
 	@Override
 	public int getSeedSize() {
-		return SEED_SIZE;
+		return JavaRandomGenerator.SEED_SIZE;
 	}
 
 	@Override
@@ -88,8 +88,8 @@ public class JavaRandomGenerator implements RandomGenerator32 {
 	}
 
 	@Override
-	public void setSeed(byte[] seed) {
-		if (seed.length < SEED_SIZE) {
+	public void setSeed(final byte[] seed) {
+		if (seed.length < JavaRandomGenerator.SEED_SIZE) {
 			throw new IllegalArgumentException();
 		}
 		this.random.setSeed(ByteConverter.bytesToLong(seed));

@@ -1,17 +1,18 @@
 package generators;
 
+import api.RandomGenerator;
 import api.RandomGenerator32;
 import util.ByteConverter;
 
 /**
  * Implementation of a well equidistributed long-period linear 19937 A PRNG with
  * a state of 19968 bits.
- * 
+ *
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
  * @see api.RandomGenerator
  * @since 1.0
- * 
+ *
  */
 public class WELL19937AGenerator implements RandomGenerator32 {
 
@@ -25,15 +26,15 @@ public class WELL19937AGenerator implements RandomGenerator32 {
 	/**
 	 * Size of this generator's state in bytes.
 	 */
-	public static final int STATE_SIZE = STATE_SIZE_INTEGERS * Integer.BYTES;
+	public static final int STATE_SIZE = WELL19937AGenerator.STATE_SIZE_INTEGERS * Integer.BYTES;
 	/**
 	 * Size of this generator's seed in bytes.
 	 */
-	public static final int SEED_SIZE = STATE_SIZE;
+	public static final int SEED_SIZE = WELL19937AGenerator.STATE_SIZE;
 	/**
 	 * Size of this generator's state, including the index, in bytes.
 	 */
-	public static final int FULL_STATE_SIZE = Integer.BYTES + STATE_SIZE;
+	public static final int FULL_STATE_SIZE = Integer.BYTES + WELL19937AGenerator.STATE_SIZE;
 
 	////////////////////////////////////////////////////////////////////////////////
 	// Instance fields
@@ -58,19 +59,19 @@ public class WELL19937AGenerator implements RandomGenerator32 {
 	 * seed generator.
 	 */
 	public WELL19937AGenerator() {
-		this(DEFAULT_SEED_GENERATOR.generateBytes(SEED_SIZE));
+		this(RandomGenerator.DEFAULT_SEED_GENERATOR.generateBytes(WELL19937AGenerator.SEED_SIZE));
 	}
 
 	/**
 	 * Constructs a generator with the given seed.
-	 * 
+	 *
 	 * @param seed
 	 *                 A seed.
 	 * @throws IllegalArgumentException
 	 *                                      If the seed is too short.
 	 */
-	public WELL19937AGenerator(byte[] seed) {
-		setSeed(seed);
+	public WELL19937AGenerator(final byte[] seed) {
+		this.setSeed(seed);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -78,17 +79,17 @@ public class WELL19937AGenerator implements RandomGenerator32 {
 
 	@Override
 	public int getSeedSize() {
-		return SEED_SIZE;
+		return WELL19937AGenerator.SEED_SIZE;
 	}
 
 	@Override
 	public int getStateSize() {
-		return FULL_STATE_SIZE;
+		return WELL19937AGenerator.FULL_STATE_SIZE;
 	}
 
 	@Override
-	public void setSeed(byte[] seed) {
-		if (seed.length < SEED_SIZE) {
+	public void setSeed(final byte[] seed) {
+		if (seed.length < WELL19937AGenerator.SEED_SIZE) {
 			throw new IllegalArgumentException();
 		}
 		this.index = 0;
@@ -97,21 +98,21 @@ public class WELL19937AGenerator implements RandomGenerator32 {
 
 	@Override
 	public byte[] getState() {
-		byte[] indexBytes = ByteConverter.integerToBytes(index);
-		byte[] stateBytes = ByteConverter.integersToBytes(this.state);
-		byte[] fullState = new byte[indexBytes.length + stateBytes.length];
+		final byte[] indexBytes = ByteConverter.integerToBytes(this.index);
+		final byte[] stateBytes = ByteConverter.integersToBytes(this.state);
+		final byte[] fullState = new byte[indexBytes.length + stateBytes.length];
 		System.arraycopy(indexBytes, 0, fullState, 0, indexBytes.length);
 		System.arraycopy(stateBytes, 0, fullState, indexBytes.length, stateBytes.length);
 		return fullState;
 	}
 
 	@Override
-	public void setState(byte[] state) {
-		if (state.length < FULL_STATE_SIZE) {
+	public void setState(final byte[] state) {
+		if (state.length < WELL19937AGenerator.FULL_STATE_SIZE) {
 			throw new IllegalArgumentException();
 		}
-		byte[] indexBytes = new byte[Integer.BYTES];
-		byte[] stateBytes = new byte[STATE_SIZE];
+		final byte[] indexBytes = new byte[Integer.BYTES];
+		final byte[] stateBytes = new byte[WELL19937AGenerator.STATE_SIZE];
 		System.arraycopy(state, 0, indexBytes, 0, indexBytes.length);
 		System.arraycopy(state, indexBytes.length, stateBytes, 0, stateBytes.length);
 		this.index = ByteConverter.bytesToInteger(indexBytes);
@@ -120,19 +121,21 @@ public class WELL19937AGenerator implements RandomGenerator32 {
 
 	@Override
 	public int generateUniformInteger() {
-		int index0 = index;
-		int index70 = (index + 70) % STATE_SIZE_INTEGERS;
-		int index179 = (index + 179) % STATE_SIZE_INTEGERS;
-		int index449 = (index + 449) % STATE_SIZE_INTEGERS;
-		int index622 = (index + 622) % STATE_SIZE_INTEGERS;
-		int index623 = (index + 623) % STATE_SIZE_INTEGERS;
-		int z0 = (state[index623] & 0xFFFFFFFE) | (state[index622] & 0x00000001);
-		int z1 = (state[index0] ^ (state[index0] << 25)) ^ (state[index70] ^ (state[index70] >>> 27));
-		int z2 = (state[index179] >> 9) ^ (state[index449] ^ (state[index449] >>> 1));
-		state[index0] = z1 ^ z2;
-		state[index623] = z0 ^ (z1 ^ (z1 << 9)) ^ (z2 ^ (z2 << 21)) ^ (state[index0] ^ (state[index0] >>> 21));
-		index = index623;
-		return state[index];
+		final int index0 = this.index;
+		final int index70 = (this.index + 70) % WELL19937AGenerator.STATE_SIZE_INTEGERS;
+		final int index179 = (this.index + 179) % WELL19937AGenerator.STATE_SIZE_INTEGERS;
+		final int index449 = (this.index + 449) % WELL19937AGenerator.STATE_SIZE_INTEGERS;
+		final int index622 = (this.index + 622) % WELL19937AGenerator.STATE_SIZE_INTEGERS;
+		final int index623 = (this.index + 623) % WELL19937AGenerator.STATE_SIZE_INTEGERS;
+		final int z0 = (this.state[index623] & 0xFFFFFFFE) | (this.state[index622] & 0x00000001);
+		final int z1 = (this.state[index0] ^ (this.state[index0] << 25))
+				^ (this.state[index70] ^ (this.state[index70] >>> 27));
+		final int z2 = (this.state[index179] >> 9) ^ (this.state[index449] ^ (this.state[index449] >>> 1));
+		this.state[index0] = z1 ^ z2;
+		this.state[index623] = z0 ^ (z1 ^ (z1 << 9)) ^ (z2 ^ (z2 << 21))
+				^ (this.state[index0] ^ (this.state[index0] >>> 21));
+		this.index = index623;
+		return this.state[this.index];
 	}
 
 }

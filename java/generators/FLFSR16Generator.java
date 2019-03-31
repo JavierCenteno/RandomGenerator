@@ -1,17 +1,18 @@
 package generators;
 
+import api.RandomGenerator;
 import api.RandomGenerator1;
 import util.ByteConverter;
 
 /**
  * Implementation of a fibonacci linear-feedback shift register PRNG with a
  * state of 16 bits and a period of 2^16 - 1 = 65535.
- * 
+ *
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
  * @see api.RandomGenerator
  * @since 1.0
- * 
+ *
  */
 public class FLFSR16Generator implements RandomGenerator1 {
 
@@ -25,7 +26,7 @@ public class FLFSR16Generator implements RandomGenerator1 {
 	/**
 	 * Size of this generator's seed in bytes.
 	 */
-	public static final int SEED_SIZE = STATE_SIZE;
+	public static final int SEED_SIZE = FLFSR16Generator.STATE_SIZE;
 
 	////////////////////////////////////////////////////////////////////////////////
 	// Instance fields
@@ -43,19 +44,19 @@ public class FLFSR16Generator implements RandomGenerator1 {
 	 * seed generator.
 	 */
 	public FLFSR16Generator() {
-		this(DEFAULT_SEED_GENERATOR.generateBytes(SEED_SIZE));
+		this(RandomGenerator.DEFAULT_SEED_GENERATOR.generateBytes(FLFSR16Generator.SEED_SIZE));
 	}
 
 	/**
 	 * Constructs a generator with the given seed.
-	 * 
+	 *
 	 * @param seed
 	 *                 A seed.
 	 * @throws IllegalArgumentException
 	 *                                      If the seed is too short.
 	 */
-	public FLFSR16Generator(byte[] seed) {
-		setSeed(seed);
+	public FLFSR16Generator(final byte[] seed) {
+		this.setSeed(seed);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -63,12 +64,12 @@ public class FLFSR16Generator implements RandomGenerator1 {
 
 	@Override
 	public int getSeedSize() {
-		return SEED_SIZE;
+		return FLFSR16Generator.SEED_SIZE;
 	}
 
 	@Override
 	public int getStateSize() {
-		return STATE_SIZE;
+		return FLFSR16Generator.STATE_SIZE;
 	}
 
 	@Override
@@ -77,8 +78,8 @@ public class FLFSR16Generator implements RandomGenerator1 {
 	}
 
 	@Override
-	public void setState(byte[] state) {
-		if (state.length < STATE_SIZE) {
+	public void setState(final byte[] state) {
+		if (state.length < FLFSR16Generator.STATE_SIZE) {
 			throw new IllegalArgumentException();
 		}
 		this.state = ByteConverter.bytesToShort(state);

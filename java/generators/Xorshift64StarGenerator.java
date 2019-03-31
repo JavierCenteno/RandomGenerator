@@ -4,13 +4,13 @@ import api.Abstract64RandomGenerator;
 
 /**
  * Implementation of a xorshift64* PRNG with a state of 64 bits.
- * 
+ *
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
  * @see api.RandomGenerator
  * @see generators.Xorshift64Generator
  * @since 1.0
- * 
+ *
  */
 public class Xorshift64StarGenerator extends Abstract64RandomGenerator {
 
@@ -27,13 +27,13 @@ public class Xorshift64StarGenerator extends Abstract64RandomGenerator {
 
 	/**
 	 * Constructs a generator with the given seed.
-	 * 
+	 *
 	 * @param seed
 	 *                 A seed.
 	 * @throws IllegalArgumentException
 	 *                                      If the seed is too short.
 	 */
-	public Xorshift64StarGenerator(byte[] seed) {
+	public Xorshift64StarGenerator(final byte[] seed) {
 		super(seed);
 	}
 

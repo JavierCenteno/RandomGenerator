@@ -1,5 +1,6 @@
 package generators;
 
+import api.RandomGenerator;
 import api.RandomGenerator32;
 import util.ByteConverter;
 
@@ -7,13 +8,13 @@ import util.ByteConverter;
  * Implementation of a permuted congruential generator XSH-RS PRNG. This
  * generator has a state of 64 bits and produces 32 random bits at a time. It is
  * slightly faster than its counterpart XSH-RR but produces worse results.
- * 
+ *
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
  * @see api.RandomGenerator
  * @see generators.PermutedCongruentialGeneratorXSHRR
  * @since 1.0
- * 
+ *
  */
 public class PermutedCongruentialGeneratorXSHRS implements RandomGenerator32 {
 
@@ -27,7 +28,7 @@ public class PermutedCongruentialGeneratorXSHRS implements RandomGenerator32 {
 	/**
 	 * Size of this generator's seed in bytes.
 	 */
-	public static final int SEED_SIZE = STATE_SIZE;
+	public static final int SEED_SIZE = PermutedCongruentialGeneratorXSHRS.STATE_SIZE;
 
 	////////////////////////////////////////////////////////////////////////////////
 	// Instance fields
@@ -45,19 +46,19 @@ public class PermutedCongruentialGeneratorXSHRS implements RandomGenerator32 {
 	 * seed generator.
 	 */
 	public PermutedCongruentialGeneratorXSHRS() {
-		this(DEFAULT_SEED_GENERATOR.generateBytes(SEED_SIZE));
+		this(RandomGenerator.DEFAULT_SEED_GENERATOR.generateBytes(PermutedCongruentialGeneratorXSHRS.SEED_SIZE));
 	}
 
 	/**
 	 * Constructs a generator with the given seed.
-	 * 
+	 *
 	 * @param seed
 	 *                 A seed.
 	 * @throws IllegalArgumentException
 	 *                                      If the seed is too short.
 	 */
-	public PermutedCongruentialGeneratorXSHRS(byte[] seed) {
-		setSeed(seed);
+	public PermutedCongruentialGeneratorXSHRS(final byte[] seed) {
+		this.setSeed(seed);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -65,19 +66,19 @@ public class PermutedCongruentialGeneratorXSHRS implements RandomGenerator32 {
 
 	@Override
 	public int getSeedSize() {
-		return SEED_SIZE;
+		return PermutedCongruentialGeneratorXSHRS.SEED_SIZE;
 	}
 
 	@Override
 	public int getStateSize() {
-		return STATE_SIZE;
+		return PermutedCongruentialGeneratorXSHRS.STATE_SIZE;
 	}
 
 	@Override
-	public void setSeed(byte[] seed) {
-		setState(seed);
-		this.state = 2 * this.state + 1;
-		generateUniformInteger();
+	public void setSeed(final byte[] seed) {
+		this.setState(seed);
+		this.state = (2 * this.state) + 1;
+		this.generateUniformInteger();
 	}
 
 	@Override
@@ -86,8 +87,8 @@ public class PermutedCongruentialGeneratorXSHRS implements RandomGenerator32 {
 	}
 
 	@Override
-	public void setState(byte[] state) {
-		if (state.length < STATE_SIZE) {
+	public void setState(final byte[] state) {
+		if (state.length < PermutedCongruentialGeneratorXSHRS.STATE_SIZE) {
 			throw new IllegalArgumentException();
 		}
 		this.state = ByteConverter.bytesToLong(state);
@@ -95,9 +96,9 @@ public class PermutedCongruentialGeneratorXSHRS implements RandomGenerator32 {
 
 	@Override
 	public int generateUniformInteger() {
-		long a = state;
-		int count = (int) (a >>> 61);
-		state = a * 6364136223846793005L;
+		long a = this.state;
+		final int count = (int) (a >>> 61);
+		this.state = a * 6364136223846793005L;
 		a ^= a >>> 22;
 		return (int) (a >>> (22 + count));
 	}

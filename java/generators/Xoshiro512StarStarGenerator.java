@@ -2,17 +2,18 @@ package generators;
 
 import java.util.Arrays;
 
+import api.RandomGenerator;
 import api.RandomGenerator64;
 import util.ByteConverter;
 
 /**
  * Implementation of a Xoshiro512** PRNG with a state of 512 bits.
- * 
+ *
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
  * @see api.RandomGenerator
  * @since 1.0
- * 
+ *
  */
 public class Xoshiro512StarStarGenerator implements RandomGenerator64 {
 
@@ -26,7 +27,7 @@ public class Xoshiro512StarStarGenerator implements RandomGenerator64 {
 	/**
 	 * Size of this generator's seed in bytes.
 	 */
-	public static final int SEED_SIZE = STATE_SIZE;
+	public static final int SEED_SIZE = Xoshiro512StarStarGenerator.STATE_SIZE;
 	private static final long[] JUMP = { 0x33ED89B6E7A353F9L, 0x760083D7955323BEL, 0x2837F2FBB5F22FAEL,
 			0x4B8C5674d309511CL, 0xB11AC47A7BA28C25L, 0xF1BE7667092BCC1CL, 0x53851EFDB6DF0AAFL, 0x1EBBC8B23EAF25DBL };
 
@@ -46,28 +47,28 @@ public class Xoshiro512StarStarGenerator implements RandomGenerator64 {
 	 * seed generator.
 	 */
 	public Xoshiro512StarStarGenerator() {
-		this(DEFAULT_SEED_GENERATOR.generateBytes(SEED_SIZE));
+		this(RandomGenerator.DEFAULT_SEED_GENERATOR.generateBytes(Xoshiro512StarStarGenerator.SEED_SIZE));
 	}
 
 	/**
 	 * Constructs a generator with the given seed.
-	 * 
+	 *
 	 * @param seed
 	 *                 A seed.
 	 * @throws IllegalArgumentException
 	 *                                      If the seed is too short.
 	 */
-	public Xoshiro512StarStarGenerator(byte[] seed) {
-		setSeed(seed);
+	public Xoshiro512StarStarGenerator(final byte[] seed) {
+		this.setSeed(seed);
 	}
 
 	/**
 	 * Constructs a copy of this generator.
-	 * 
+	 *
 	 * @param generator
 	 *                      A generator.
 	 */
-	public Xoshiro512StarStarGenerator(Xoshiro512StarStarGenerator generator) {
+	public Xoshiro512StarStarGenerator(final Xoshiro512StarStarGenerator generator) {
 		this.state = Arrays.copyOf(generator.state, generator.state.length);
 	}
 
@@ -76,12 +77,12 @@ public class Xoshiro512StarStarGenerator implements RandomGenerator64 {
 
 	@Override
 	public int getSeedSize() {
-		return SEED_SIZE;
+		return Xoshiro512StarStarGenerator.SEED_SIZE;
 	}
 
 	@Override
 	public int getStateSize() {
-		return STATE_SIZE;
+		return Xoshiro512StarStarGenerator.STATE_SIZE;
 	}
 
 	@Override
@@ -90,8 +91,8 @@ public class Xoshiro512StarStarGenerator implements RandomGenerator64 {
 	}
 
 	@Override
-	public void setState(byte[] state) {
-		if (state.length < STATE_SIZE) {
+	public void setState(final byte[] state) {
+		if (state.length < Xoshiro512StarStarGenerator.STATE_SIZE) {
 			throw new IllegalArgumentException();
 		}
 		this.state = ByteConverter.bytesToLongs(state);
@@ -99,26 +100,26 @@ public class Xoshiro512StarStarGenerator implements RandomGenerator64 {
 
 	@Override
 	public Xoshiro512StarStarGenerator split() {
-		Xoshiro512StarStarGenerator generator = new Xoshiro512StarStarGenerator(this);
+		final Xoshiro512StarStarGenerator generator = new Xoshiro512StarStarGenerator(this);
 		generator.jump();
 		return generator;
 	}
 
 	@Override
 	public long generateUniformLong() {
-		long x = state[1] * 5L;
-		long result = ((x << 7) | (x >>> 57)) * 9L;
-		long t = state[1] << 11;
-		state[2] ^= state[0];
-		state[5] ^= state[1];
-		state[1] ^= state[2];
-		state[7] ^= state[3];
-		state[3] ^= state[4];
-		state[4] ^= state[5];
-		state[0] ^= state[6];
-		state[6] ^= state[7];
-		state[6] ^= t;
-		state[7] = (state[7] << 21) | (state[7] >>> 43);
+		final long x = this.state[1] * 5L;
+		final long result = ((x << 7) | (x >>> 57)) * 9L;
+		final long t = this.state[1] << 11;
+		this.state[2] ^= this.state[0];
+		this.state[5] ^= this.state[1];
+		this.state[1] ^= this.state[2];
+		this.state[7] ^= this.state[3];
+		this.state[3] ^= this.state[4];
+		this.state[4] ^= this.state[5];
+		this.state[0] ^= this.state[6];
+		this.state[6] ^= this.state[7];
+		this.state[6] ^= t;
+		this.state[7] = (this.state[7] << 21) | (this.state[7] >>> 43);
 		return result;
 	}
 
@@ -135,29 +136,29 @@ public class Xoshiro512StarStarGenerator implements RandomGenerator64 {
 		long state5 = 0;
 		long state6 = 0;
 		long state7 = 0;
-		for (int i = 0; i < JUMP.length; ++i) {
+		for (int i = 0; i < Xoshiro512StarStarGenerator.JUMP.length; ++i) {
 			for (int j = 0; j < 64; ++j) {
-				if ((JUMP[i] & (1L << j)) != 0) {
-					state0 ^= state[0];
-					state1 ^= state[1];
-					state2 ^= state[2];
-					state3 ^= state[3];
-					state4 ^= state[4];
-					state5 ^= state[5];
-					state6 ^= state[6];
-					state7 ^= state[7];
+				if ((Xoshiro512StarStarGenerator.JUMP[i] & (1L << j)) != 0) {
+					state0 ^= this.state[0];
+					state1 ^= this.state[1];
+					state2 ^= this.state[2];
+					state3 ^= this.state[3];
+					state4 ^= this.state[4];
+					state5 ^= this.state[5];
+					state6 ^= this.state[6];
+					state7 ^= this.state[7];
 				}
-				generateUniformLong();
+				this.generateUniformLong();
 			}
 		}
-		state[0] = state0;
-		state[1] = state1;
-		state[2] = state2;
-		state[3] = state3;
-		state[4] = state4;
-		state[5] = state5;
-		state[6] = state6;
-		state[7] = state7;
+		this.state[0] = state0;
+		this.state[1] = state1;
+		this.state[2] = state2;
+		this.state[3] = state3;
+		this.state[4] = state4;
+		this.state[5] = state5;
+		this.state[6] = state6;
+		this.state[7] = state7;
 	}
 
 }

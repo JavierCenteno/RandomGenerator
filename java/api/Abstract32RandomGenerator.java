@@ -5,12 +5,12 @@ import util.ByteConverter;
 /**
  * This class offers a partial implementation of RandomGenerator for a generator
  * with 32 bits of state.
- * 
+ *
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
  * @see api.RandomGenerator32
  * @since 1.0
- * 
+ *
  */
 public abstract class Abstract32RandomGenerator implements RandomGenerator32 {
 
@@ -24,7 +24,7 @@ public abstract class Abstract32RandomGenerator implements RandomGenerator32 {
 	/**
 	 * Size of this generator's seed in bytes.
 	 */
-	public static final int SEED_SIZE = STATE_SIZE;
+	public static final int SEED_SIZE = Abstract32RandomGenerator.STATE_SIZE;
 
 	////////////////////////////////////////////////////////////////////////////////
 	// Instance fields
@@ -42,19 +42,19 @@ public abstract class Abstract32RandomGenerator implements RandomGenerator32 {
 	 * seed generator.
 	 */
 	public Abstract32RandomGenerator() {
-		this(DEFAULT_SEED_GENERATOR.generateBytes(SEED_SIZE));
+		this(RandomGenerator.DEFAULT_SEED_GENERATOR.generateBytes(Abstract32RandomGenerator.SEED_SIZE));
 	}
 
 	/**
 	 * Constructs a generator with the given seed.
-	 * 
+	 *
 	 * @param seed
 	 *                 A seed.
 	 * @throws IllegalArgumentException
 	 *                                      If the seed is too short.
 	 */
-	public Abstract32RandomGenerator(byte[] seed) {
-		setSeed(seed);
+	public Abstract32RandomGenerator(final byte[] seed) {
+		this.setSeed(seed);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -62,12 +62,12 @@ public abstract class Abstract32RandomGenerator implements RandomGenerator32 {
 
 	@Override
 	public int getSeedSize() {
-		return SEED_SIZE;
+		return Abstract32RandomGenerator.SEED_SIZE;
 	}
 
 	@Override
 	public int getStateSize() {
-		return STATE_SIZE;
+		return Abstract32RandomGenerator.STATE_SIZE;
 	}
 
 	@Override
@@ -76,8 +76,8 @@ public abstract class Abstract32RandomGenerator implements RandomGenerator32 {
 	}
 
 	@Override
-	public void setState(byte[] state) {
-		if (state.length < STATE_SIZE) {
+	public void setState(final byte[] state) {
+		if (state.length < Abstract32RandomGenerator.STATE_SIZE) {
 			throw new IllegalArgumentException();
 		}
 		this.state = ByteConverter.bytesToInteger(state);

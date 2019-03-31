@@ -1,16 +1,17 @@
 package generators;
 
+import api.RandomGenerator;
 import api.RandomGenerator32;
 import util.ByteConverter;
 
 /**
  * Implementation of a Xorwow PRNG with a state of 160 bits.
- * 
+ *
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
  * @see api.RandomGenerator
  * @since 1.0
- * 
+ *
  */
 public class XorwowGenerator implements RandomGenerator32 {
 
@@ -24,11 +25,11 @@ public class XorwowGenerator implements RandomGenerator32 {
 	/**
 	 * Size of this generator's state in bytes.
 	 */
-	public static final int STATE_SIZE = STATE_SIZE_INTEGERS * Integer.BYTES;
+	public static final int STATE_SIZE = XorwowGenerator.STATE_SIZE_INTEGERS * Integer.BYTES;
 	/**
 	 * Size of this generator's seed in bytes.
 	 */
-	public static final int SEED_SIZE = STATE_SIZE;
+	public static final int SEED_SIZE = XorwowGenerator.STATE_SIZE;
 
 	////////////////////////////////////////////////////////////////////////////////
 	// Instance fields
@@ -46,19 +47,19 @@ public class XorwowGenerator implements RandomGenerator32 {
 	 * seed generator.
 	 */
 	public XorwowGenerator() {
-		this(DEFAULT_SEED_GENERATOR.generateBytes(SEED_SIZE));
+		this(RandomGenerator.DEFAULT_SEED_GENERATOR.generateBytes(XorwowGenerator.SEED_SIZE));
 	}
 
 	/**
 	 * Constructs a generator with the given seed.
-	 * 
+	 *
 	 * @param seed
 	 *                 A seed.
 	 * @throws IllegalArgumentException
 	 *                                      If the seed is too short.
 	 */
-	public XorwowGenerator(byte[] seed) {
-		setSeed(seed);
+	public XorwowGenerator(final byte[] seed) {
+		this.setSeed(seed);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -66,12 +67,12 @@ public class XorwowGenerator implements RandomGenerator32 {
 
 	@Override
 	public int getSeedSize() {
-		return SEED_SIZE;
+		return XorwowGenerator.SEED_SIZE;
 	}
 
 	@Override
 	public int getStateSize() {
-		return STATE_SIZE;
+		return XorwowGenerator.STATE_SIZE;
 	}
 
 	@Override
@@ -80,8 +81,8 @@ public class XorwowGenerator implements RandomGenerator32 {
 	}
 
 	@Override
-	public void setState(byte[] state) {
-		if (state.length < STATE_SIZE) {
+	public void setState(final byte[] state) {
+		if (state.length < XorwowGenerator.STATE_SIZE) {
 			throw new IllegalArgumentException();
 		}
 		this.state = ByteConverter.bytesToIntegers(state);
@@ -89,18 +90,18 @@ public class XorwowGenerator implements RandomGenerator32 {
 
 	@Override
 	public int generateUniformInteger() {
-		int t = state[3];
+		int t = this.state[3];
 		t ^= t >>> 2;
 		t ^= t << 1;
-		state[3] = state[2];
-		state[2] = state[1];
-		int s = state[0];
-		state[1] = s;
+		this.state[3] = this.state[2];
+		this.state[2] = this.state[1];
+		final int s = this.state[0];
+		this.state[1] = s;
 		t ^= s;
 		t ^= s << 4;
-		state[0] = t;
-		state[4] += 362437;
-		return t + state[4];
+		this.state[0] = t;
+		this.state[4] += 362437;
+		return t + this.state[4];
 	}
 
 }
