@@ -2042,11 +2042,11 @@ public interface RandomGenerator {
 		// Distance from the highest multiple of max to the absolute maximum value of
 		// long
 		final long moduloBias = (Long.MIN_VALUE - max) % max;
-		// Maximum value without modulo bias, inclusive
+		// Maximum value without modulo bias, exclusive
 		final long unbiasedMaximum = Long.MIN_VALUE - moduloBias;
 		do {
 			result = this.generateUniformLong() & 0x7F_FF_FF_FF_FF_FF_FF_FFL;
-		} while (result > unbiasedMaximum);
+		} while (result >= unbiasedMaximum);
 		return result % max;
 	}
 
