@@ -2043,7 +2043,7 @@ public interface RandomGenerator {
 		// long
 		final long moduloBias = (Long.MIN_VALUE - max) % max;
 		// Maximum value without modulo bias, inclusive
-		final long unbiasedMaximum = Long.MAX_VALUE - moduloBias;
+		final long unbiasedMaximum = Long.MIN_VALUE - moduloBias;
 		do {
 			result = this.generateUniformLong() & 0x7F_FF_FF_FF_FF_FF_FF_FFL;
 		} while (result > unbiasedMaximum);
