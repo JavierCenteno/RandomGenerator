@@ -2571,13 +2571,13 @@ public interface RandomGenerator {
 
 	/**
 	 * Get a random floating point with a uniform distribution in the range [0.0,
-	 * 1.0].
+	 * 1.0).
 	 *
 	 * @return A random floating point with a uniform distribution in the range
-	 *         [0.0, 1.0].
+	 *         [0.0, 1.0).
 	 */
 	public default float generateUniformFloat() {
-		return this.generateUniformInteger((1 << 24) + 1) / (float) (1L << 24);
+		return this.generateUniformInteger((1 << 24)) / (float) (1L << 24);
 	}
 
 	/**
@@ -2603,7 +2603,7 @@ public interface RandomGenerator {
 	 * number.
 	 *
 	 * @param max
-	 *                Maximum value of the number, inclusive.
+	 *                Maximum value of the number, exclusive.
 	 * @return A random floating point with a uniform distribution between 0 and a
 	 *         number.
 	 * @throws IllegalArgumentException
@@ -2640,7 +2640,7 @@ public interface RandomGenerator {
 	 * @param min
 	 *                Minimum value of the number, inclusive.
 	 * @param max
-	 *                Maximum value of the number, inclusive.
+	 *                Maximum value of the number, exclusive.
 	 * @return A random floating point with a uniform distribution between two
 	 *         numbers.
 	 * @throws IllegalArgumentException
@@ -2712,7 +2712,7 @@ public interface RandomGenerator {
 	 * Get a random floating point with a Bates distribution between 0 and a number.
 	 *
 	 * @param max
-	 *                   Maximum value of the number, inclusive.
+	 *                   Maximum value of the number, exclusive.
 	 * @param number
 	 *                   Number of random numbers generated to create this result.
 	 * @return A random floating point with a Bates distribution between 0 and a
@@ -2756,7 +2756,7 @@ public interface RandomGenerator {
 	 * @param min
 	 *                   Minimum value of the number, inclusive.
 	 * @param max
-	 *                   Maximum value of the number, inclusive.
+	 *                   Maximum value of the number, exclusive.
 	 * @param number
 	 *                   Number of random numbers generated to create this result.
 	 * @return A random floating point with a Bates distribution between two
@@ -2868,7 +2868,7 @@ public interface RandomGenerator {
 	 * @param min
 	 *                 Minimum value of the number, inclusive.
 	 * @param max
-	 *                 Maximum value of the number, inclusive.
+	 *                 Maximum value of the number, exclusive.
 	 * @param mode
 	 *                 Most common value of the number.
 	 * @return A random floating point with a triangular distribution.
@@ -3160,13 +3160,13 @@ public interface RandomGenerator {
 
 	/**
 	 * Get a random double floating point with a uniform distribution in the range
-	 * [0.0, 1.0].
+	 * [0.0, 1.0).
 	 *
 	 * @return A random double floating point with a uniform distribution in the
-	 *         range [0.0, 1.0].
+	 *         range [0.0, 1.0).
 	 */
 	public default double generateUniformDouble() {
-		return this.generateUniformLong((1L << 53) + 1) / (double) (1L << 53);
+		return this.generateUniformLong((1L << 53)) / (double) (1L << 53);
 	}
 
 	/**
@@ -3192,7 +3192,7 @@ public interface RandomGenerator {
 	 * a number.
 	 *
 	 * @param max
-	 *                Maximum value of the number, inclusive.
+	 *                Maximum value of the number, exclusive.
 	 * @return A random double floating point with a uniform distribution between 0
 	 *         and a number.
 	 * @throws IllegalArgumentException
@@ -3230,7 +3230,7 @@ public interface RandomGenerator {
 	 * @param min
 	 *                Minimum value of the number, inclusive.
 	 * @param max
-	 *                Maximum value of the number, inclusive.
+	 *                Maximum value of the number, exclusive.
 	 * @return A random double floating point with a uniform distribution between
 	 *         two numbers.
 	 * @throws IllegalArgumentException
@@ -3303,7 +3303,7 @@ public interface RandomGenerator {
 	 * number.
 	 *
 	 * @param max
-	 *                   Maximum value of the number, inclusive.
+	 *                   Maximum value of the number, exclusive.
 	 * @param number
 	 *                   Number of random numbers generated to create this result.
 	 * @return A random double floating point with a Bates distribution between 0
@@ -3348,7 +3348,7 @@ public interface RandomGenerator {
 	 * @param min
 	 *                   Minimum value of the number, inclusive.
 	 * @param max
-	 *                   Maximum value of the number, inclusive.
+	 *                   Maximum value of the number, exclusive.
 	 * @param number
 	 *                   Number of random numbers generated to create this result.
 	 * @return A random double floating point with a Bates distribution between two
@@ -3468,7 +3468,7 @@ public interface RandomGenerator {
 	 * @param min
 	 *                 Minimum value of the number, inclusive.
 	 * @param max
-	 *                 Maximum value of the number, inclusive.
+	 *                 Maximum value of the number, exclusive.
 	 * @param mode
 	 *                 Most common value of the number.
 	 * @return A random double floating point with a triangular distribution.
