@@ -2114,10 +2114,10 @@ public interface RandomGenerator {
 	 * @return A random unsigned long integer with a uniform distribution between 0
 	 *         and a number.
 	 * @throws IllegalArgumentException
-	 *                                      If max is not larger than 0.
+	 *                                      If max is 0.
 	 */
 	public default long generateUniformUnsignedLong(final long max) {
-		if (0 >= max) {
+		if (0 == max) {
 			throw new IllegalArgumentException();
 		}
 		long result;
@@ -2165,7 +2165,7 @@ public interface RandomGenerator {
 	 * @return A random long integer with a uniform distribution between two
 	 *         numbers.
 	 * @throws IllegalArgumentException
-	 *                                      If min is not smaller than max.
+	 *                                      If min equals max.
 	 */
 	public default long generateUniformUnsignedLong(final long min, final long max) {
 		final long range = max - min;
