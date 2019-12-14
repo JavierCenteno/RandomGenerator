@@ -2106,6 +2106,92 @@ public interface RandomGenerator {
 	}
 
 	/**
+	 * Get a random unsigned long integer with a uniform distribution between 0 and
+	 * a number.
+	 *
+	 * @param max
+	 *                Maximum value of the number, exclusive.
+	 * @return A random unsigned long integer with a uniform distribution between 0
+	 *         and a number.
+	 * @throws IllegalArgumentException
+	 *                                      If max is not larger than 0.
+	 */
+	public default long generateUniformUnsignedLong(final long max) {
+		if (0 >= max) {
+			throw new IllegalArgumentException();
+		}
+		long result;
+		// Distance from the highest multiple of max to the long range
+		final long moduloBias = Long.remainderUnsigned(-max, max);
+		if (moduloBias == 0) {
+			result = this.generateLong();
+		} else {
+			// Maximum value without modulo bias, exclusive
+			// Note this would result in an infinite loop if moduloBias == 0
+			final long unbiasedMaximum = 0 - moduloBias;
+			do {
+				result = this.generateLong();
+			} while (Long.compareUnsigned(result, unbiasedMaximum) >= 0);// result >= unbiasedMaximum);
+		}
+		return Long.remainderUnsigned(result, max);
+	}
+
+	/**
+	 * Fills an array with the results of generateUniformUnsignedLong(long).
+	 *
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of
+	 *         generateUniformUnsignedLong(long).
+	 * @see generateUniformUnsignedLong(long)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default long[] generateUniformUnsignedLongs(final long max, final int size) {
+		final long[] result = new long[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = this.generateUniformUnsignedLong(max);
+		}
+		return result;
+	}
+
+	/**
+	 * Get a random long integer with a uniform distribution between two numbers.
+	 *
+	 * @param min
+	 *                Minimum value of the number, inclusive.
+	 * @param max
+	 *                Maximum value of the number, exclusive.
+	 * @return A random long integer with a uniform distribution between two
+	 *         numbers.
+	 * @throws IllegalArgumentException
+	 *                                      If min is not smaller than max.
+	 */
+	public default long generateUniformUnsignedLong(final long min, final long max) {
+		final long range = max - min;
+		return min + this.generateLong(range);
+	}
+
+	/**
+	 * Fills an array with the results of generateUniformUnsignedLong(long).
+	 *
+	 * @param size
+	 *                 The size of the array.
+	 * @return An array filled with the results of
+	 *         generateUniformUnsignedLong(long).
+	 * @see generateUniformUnsignedLong(long)
+	 * @throws NegativeArraySizeException
+	 *                                        If size is negative.
+	 */
+	public default long[] generateUniformUnsignedLongs(final long min, final long max, final int size) {
+		final long[] result = new long[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = this.generateUniformUnsignedLong(min, max);
+		}
+		return result;
+	}
+
+	/**
 	 * Get a random long integer with a Bates distribution between two numbers.
 	 *
 	 * @param min
